@@ -219,5 +219,4 @@ public class PlayGround {
         preSum[0] -= array[index];
         findMinDiff(index + 1, array, preSum, minDiff, totalSum, size);
     }
-
 }

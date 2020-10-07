@@ -6,14 +6,12 @@ public class AutoboxingAndUnboxing {
     char c;
     String s;
 
-    private final static AutoboxingAndUnboxing  singelton = new AutoboxingAndUnboxing();
+    private final static AutoboxingAndUnboxing singleton = new AutoboxingAndUnboxing();
     private AutoboxingAndUnboxing() {}
 
     int compareTo(int a, int b) {
         return a < b ? 1:-1;
     }
-
-
 
     public static void main(String[] args) {
         AutoboxingAndUnboxing myClass = new AutoboxingAndUnboxing();

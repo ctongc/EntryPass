@@ -17,23 +17,22 @@ public class BinarySearch {
      */
     public int binarySearch(int[] array, int target) {
         // assumptions: there can be duplicate elements in the array, return any of the indices i such that A[i] == T
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2; // (right + left) / 2 might cause overflow
             if (array[mid] == target) {
-                return mid; //return the index
+                return mid; // return the index
             } else if (array[mid] > target) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
             }
         }
-        // otherwise not found
         return -1;
     }
 
@@ -48,29 +47,28 @@ public class BinarySearch {
      */
     public int[] searchInSortedMatrix(int[][] matrix, int target) {
         // assumptions: The given matrix is not null, and has size of N * M, where N >= 0 and M >= 0.
-        // sanity check
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
-            return new int[] {-1, -1};
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return new int[]{-1, -1};
         }
+
         int row = matrix.length;
         int col = matrix[0].length;
         // stretched to 1D array
         int left = 0;
         int right = row * col - 1;
-
         while (left <= right) {
             int mid = left + (right - left) / 2;
             int r = mid / col; // r is the row of mid
             int c = mid % col; // c is the column of mid
             if (matrix[r][c] == target) {
-                return new int[] {r, c};
+                return new int[]{r, c};
             } else if (matrix[r][c] > target) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
             }
         }
-        return new int[] {-1, -1};
+        return new int[]{-1, -1};
     }
 
     /**
@@ -113,7 +111,6 @@ public class BinarySearch {
      * Space = O(1)
      */
     public int closestElementToTarget(int[] array, int target) {
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
@@ -257,7 +254,6 @@ public class BinarySearch {
      * Space = O(1)
      */
     public int lastOccurrence(int[] array, int target) {
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
@@ -309,10 +305,10 @@ public class BinarySearch {
         if (array.length == 0 || k == 0) {
             return new int[0];
         }
+        int[] result = new int[k];
         int left = largestSmallerOrEqual(array, target);
         int right = left + 1;
-
-        int[] result = new int[k];
+        
         for (int i = 0; i < k; i++) {
             if (left < 0) {
                 // there is no more left element

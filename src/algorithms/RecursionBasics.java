@@ -19,7 +19,7 @@ public class RecursionBasics {
      * Space = O(n) // it's n levels
      */
     public int fibonacci(int K) {
-        // 进入function之后首先check是否要停下
+        // base case. 进入function之后首先check是否要停下
         if (K <= 0) {
             return 0;
         } else if (K == 1) {
@@ -52,10 +52,10 @@ public class RecursionBasics {
 
         /* a ^ b = a ^ (b / 2) * a ^ (b / 2)
          * 1 why not return power(a, b/2) * power(a, b/2)?
-         *   runtime O(n) vs O(logn)
+         *   runtime O(n) vs O(logn) 后一半无需重复计算
          * 2 remember int / int 是向下取整 */
-        long half = simplePower(a, b / 2);
-        return b % 2 == 0 ? half * half :  half * half * a;
+        long halfResult = simplePower(a, b / 2);
+        return b % 2 == 0 ? halfResult * halfResult : halfResult * halfResult * a;
     }
 
     /**

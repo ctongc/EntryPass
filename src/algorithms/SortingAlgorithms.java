@@ -8,15 +8,14 @@ public class SortingAlgorithms {
     }
 
     /**
-     * Selection Sort
+     * Selection Sort an array a[] with size n.
      * 找到current index的最小值，然后再看下一个index
      * Time = O(n^2)
      * Space = O(1)
      */
-    public int[] selectionSort(int[] array) {
-        // sanity check
+    public void selectionSort(int[] array) {
         if (array == null || array.length == 0) {
-            return array;
+            return;
         }
 
         // iterate除了最后一个元素外的所有元素, 所以要length - 1
@@ -30,7 +29,6 @@ public class SortingAlgorithms {
             }
             swap(array, i, min);
         }
-        return array;
     }
 
     /**
@@ -40,15 +38,13 @@ public class SortingAlgorithms {
      * Time = O(nlogn)
      * Space = O(n) // due to the auxiliary space used to merge parts of the array
      */
-    public int[] mergeSort(int[] array) {
-        // sanity check
+    public void mergeSort(int[] array) {
         if (array == null || array.length == 0) {
-            return array;
+            return;
         }
         // create auxiliary array here to avoid using extra memory
         int[] aux = new int[array.length];
         mergeSort(array, aux, 0, array.length - 1);
-        return array;
     }
 
     private void mergeSort(int[] array, int[] aux, int left, int right) {
@@ -110,13 +106,11 @@ public class SortingAlgorithms {
      * Time = O(nlogn), worse case O(n^2)
      * Space = O(logn), worse case O(n)
      */
-    public int[] quickSort(int[] array) {
-        // sanity check
+    public void quickSort(int[] array) {
         if (array == null || array.length == 0) {
-            return array;
+            return;
         }
         quickSort(array, 0, array.length - 1);
-        return array;
     }
 
     private void quickSort(int[] array, int left, int right) {
@@ -135,7 +129,7 @@ public class SortingAlgorithms {
         int pivot = getPivotIndex(left, right);
         int pivotValue = array[pivot];
         int last = right;
-        // move pivot to the last
+        // move pivot to the rightmost position first
         swap(array, pivot, right--);
         while (left <= right) {
             if (array[left] < pivotValue) { // find elements on left that should be on right
@@ -163,7 +157,6 @@ public class SortingAlgorithms {
      * Space = O(1)
      */
     public int[] moveZero(int[] array) {
-        // sanity check
         if (array == null || array.length == 0) {
             return array;
         }
@@ -183,39 +176,39 @@ public class SortingAlgorithms {
 
     /**
      * Rainbow Sort
-     * 3个挡板 red green blue，4个区域a b c d，同向+相向而行
-     * a [0, red) red左边不包括red 全是-1
-     * b [red, green) red到green左侧不包括green 全是0.
-     *   green是这道题的current index
-     * c [green, blue] 为未探索区域
-     * d (blue, length - 1] blue右侧不包括green 全是1
+     * 3个挡板 neg zero one，4个区域a b c d，同向+相向而行
+     * a [0, neg) neg左边不包括red 全是-1
+     * b [neg, zero) neg到zero左侧不包括zero 全是0.
+     *   zero是这道题的current index
+     * c [zero, one] 为未探索区域
+     * d (one, length - 1] one右侧不包括zero 全是1
+     * Time = O(n)
+     * Space = O(1)
      */
-    public int[] rainbowSort(int[] array) {
-        // sanity check
+    public void rainbowSort(int[] array) {
         if (array == null || array.length == 0) {
-            return array;
+            return;
         }
-        int red = 0; // all number to the left of red [0, red) are all -1
-        int green = 0; // all number between red and blue [red, blue] are all 0
-        int blue = array.length - 1; // all number to the right of blue (blue, array.length - 1] are all 1
+        int neg = 0; // all number to the left of neg [0, neg) are all -1
+        int zero = 0; // all number between neg and one [neg, one] are all 0
+        int one = array.length - 1; // all number to the right of one (one, array.length - 1] are all 1
 
-        // green is the actually the current index, elements in [green, blue] are unsorted
-        while (green <= blue) {
-            if (array[green] == -1) {
-                // swap the first green with incoming red
+        // zero is the actually the current index, elements in [zero, one] are unsorted
+        while (zero <= one) {
+            if (array[zero] == -1) {
+                // swap the first zero with incoming neg
                 // current points to the next element
-                swap(array, red++, green++);
-            } else if (array[green] == 0) {
+                swap(array, neg++, zero++);
+            } else if (array[zero] == 0) {
                 // no swap is needed
-                green++;
+                zero++;
             } else {
-                // swap the last unsorted element with incoming blue
+                // swap the last unsorted element with incoming one
                 // keep the position of current index !!!!
-                // since the new array[green] is unsorted after the swap
-                swap(array, blue--, green);
+                // since the new array[zero] is unsorted after the swap
+                swap(array, one--, zero);
             }
         }
-        return array;
     }
 
     /**
@@ -241,6 +234,5 @@ public class SortingAlgorithms {
 
         System.out.println(Arrays.toString(array));
         System.out.println(Arrays.toString(array2));
-
     }
 }

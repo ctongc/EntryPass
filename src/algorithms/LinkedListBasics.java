@@ -39,9 +39,8 @@ class ListNode {
         }
         // now index <= 0 || head == null
         if (index < 0 || head == null) {
-            return null;
-        } // 否则跳npe
-
+            return null;  // 否则跳npe
+        }
         return head.value;
     }
 
@@ -79,7 +78,7 @@ class ListNode {
     }
 
     /**
-     * Assuming no duplicate values
+     * Assuming no duplicate values or remove first occurrence only
      * 1 -> 2 -> 3 -> null
      * remove(2)
      * 1 -> 3 -> null
@@ -87,8 +86,8 @@ class ListNode {
     public static ListNode remove(ListNode head, int value) {
         if (head == null) {
             return null;
-        } else if (head.value == value) { // remove head
-            return head.next;
+        } else if (head.value == value) {
+            return head.next; // remove head
         }
         ListNode current = head;
         while(current.next != null) {
@@ -154,7 +153,7 @@ public class LinkedListBasics {
      * Find the middle node of a given linked list.
      * When fast HIT the end of the linked list, slow is the mid point
      * if even list nodes, mid is the front one since we can get mid.next by mid and not vice versa
-     * REMEMBER to check fast.next.next as well so we don't need to check fast == null in while
+     * REMEMBER to check fast.next.next as well so we don't need to check fast == null in while loop
      * 双指针 vs 跑两遍 = online algorithm vs offline algorithm
      * 双指针任意时刻slow pointer都是fast pointer的1/2, 特别对于data stream数据流很关键
      * Time = O(n)
@@ -342,7 +341,7 @@ public class LinkedListBasics {
      * Partition Linked List
      * 根据target值, 将链表分成两部分: 前面的元素为小于x的, 后面部分为大于等于x的, 并且各个节点之间次序不变
      * 1 new两个dummy head, 一个拉比target小的元素的linkedList, 另一个拉比target大的元素的linkedList
-     * list 1: all elements.value < target, list 2: otherwise
+     *   list 1: all elements.value < target, list 2: otherwise
      * 2 iterate over every element in the given linked list
      *   case 1: if current.value < target.value, 加到list1中
      *   case 2: otherwise 加到list2中
@@ -372,11 +371,10 @@ public class LinkedListBasics {
         // head == null
         // append largeList to smallList
         smallCurrent.next = dummyLarge.next;
-        // cur the tail by let last element.next = null, don't forgot !!
+        // cut the tail by let last element.next = null, don't forgot!!
         largeCurrent.next = null;
         return dummySmall.next;
     }
-
 
     /**
      * Merge Sort Linked List
@@ -473,8 +471,8 @@ public class LinkedListBasics {
     /**
      * Check If Linked List Is Palindrome
      * Given a linked list, check whether it is a palindrome.
-     * Input:   1 -> 2 -> 3 -> 2 -> 1 -> null
-     * Output: true.
+     * Input:  1 -> 2 -> 3 -> 2 -> 1 -> null
+     * Output: true
      * Time = O(n)
      * Space = O(1)
      */
@@ -482,7 +480,6 @@ public class LinkedListBasics {
         if (head == null || head.next == null) {
             return true;
         }
-        // Write your solution here
         ListNode midNode = getMiddleNode(head);
         ListNode oldLast = reverseLinkedList(midNode.next);
         midNode.next = null; // cut the original LinkedList

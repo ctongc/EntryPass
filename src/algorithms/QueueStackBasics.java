@@ -73,13 +73,13 @@ class NodeQueue {
         if (head == null) {
             return null;
         }
-        ListNode newNode = head;
+        ListNode node = head;
         head = head.next;
         if (head == null) {
             tail = null;
         }
-        newNode.next = null; // clean up
-        return newNode.value;
+        node.next = null; // clean up
+        return node.value;
     }
 
     public Integer peek() {
@@ -233,40 +233,45 @@ class QueueByTwoStacks {
  * Time = O(1);
  * Space = O(n);
  *
- * 如果加的元素里重复的很多，那么minStack里只加一次minElement的tuple <minElement, current stack.size()>
- * 这样pop的时候，当stack.peekLast() == minStack.peekLast() 同时 stack.size() == minStack.peekLast.size()的时候才pop掉
- * 用another stack记录stack1.size也行
+ * 如果加的元素里重复的很多，那么minStack里只加一次minElement的tuple <minElement, current stack.size()> // 不是Min的个数
+ * 当stack.peekFirst() == minStack.peekFirst() && stack.size() == minStack.peekLast.size()的时候才minStack.pop()
+ * 用another stack记录global min加入stack2时的stack1.size()也行
  */
 class StackWithMin {
     // 两个stack同加同减
-    private Deque<Integer> stack;
-    private Deque<Integer> minStack;
+    final private Deque<Integer> stack;
+    final private Deque<Integer> minStack;
+
     public StackWithMin() {
         stack = new ArrayDeque<>();
         minStack = new ArrayDeque<>();
     }
 
     public int pop() {
-        minStack.pollFirst();
-        return stack.peekFirst() == null ? -1 : stack.pollFirst();
+        if (stack.peekFirst() == null) {
+            return -1;
+        }
+        Integer top = stack.pollFirst();
+        if (minStack.peekFirst().equals(top)) {
+            minStack.pollFirst();
+        }
+        return top;
     }
 
     public void push(int element) {
         stack.offerFirst(element);
-        Integer globalMin = minStack.peekFirst();
-        if (globalMin == null) {
+        // when value <= current min value in stack, push it to minStack
+        if (minStack.isEmpty() || element <= minStack.peekFirst()) {
             minStack.offerFirst(element);
-        } else {
-            minStack.offerFirst(Math.min(globalMin, element));
         }
     }
 
     public int top() {
-        return stack.peekFirst() == null ? -1 : stack.peekFirst();
+        return stack.isEmpty() ? -1 : stack.peekFirst();
     }
 
     public int min() {
-        return minStack.peekFirst() == null ? -1 : minStack.peekFirst();
+        return minStack.isEmpty() ? -1 : minStack.peekFirst();
     }
 }
 
@@ -282,6 +287,7 @@ public class QueueStackBasics {
     public void sortWithThreeStacks(LinkedList<Integer> s1) {
         Deque<Integer> s2 = new LinkedList<>(); // store the rest
         Deque<Integer> s3 = new LinkedList<>(); // store the min
+
         while (!s1.isEmpty()) {
             Integer globalMin = null;
             while (!s1.isEmpty()) {
@@ -426,10 +432,73 @@ public class QueueStackBasics {
      * 5678 || 1234
      * this could optimize the time complexity of remove() to amortized O(1)
      */
-    // TODO
+    public class DequeByThreeStacks {
+        final private Deque<Integer> left;
+        final private Deque<Integer> right;
+        final private Deque<Integer> buffer;
+
+        public DequeByThreeStacks() {
+            this.left = new ArrayDeque<>();
+            this.right = new ArrayDeque<>();
+            this.buffer = new ArrayDeque<>();
+        }
+
+        public void offerFirst(int element) {
+            left.offerFirst(element);
+        }
+
+        public void offerLast(int element) {
+            right.offerLast(element);
+        }
+
+        public Integer pollFirst() {
+            move(right, left);
+            return left.isEmpty() ? null : left.pollFirst();
+        }
+
+        public Integer peekFirst() {
+            move(right, left);
+            return left.isEmpty() ? null : left.peekFirst();
+        }
+
+        public Integer pollLast() {
+            move(left,right);
+            return right.isEmpty() ? null : right.pollFirst();
+        }
+
+        public Integer peekLast() {
+            move(left,right);
+            return right.isEmpty() ? null : right.peekFirst();
+        }
+
+        public int size() {
+            return left.size() + right.size();
+        }
+
+        public boolean isEmpty() {
+            return left.isEmpty() && right.isEmpty();
+        }
+
+        // when the destination stack is empty, move half of the elements from
+        // the source stack to the destination stack
+        private void move(Deque<Integer> src, Deque<Integer> dest) {
+            if (!dest.isEmpty()) {
+                return;
+            }
+            int halfSize = src.size() / 2;
+            for (int i = 0; i < halfSize; i++) {
+                buffer.offerFirst(src.pollFirst());
+            }
+            while (!src.isEmpty()) {
+                dest.offerFirst(src.pollFirst());
+            }
+            while (!buffer.isEmpty()) {
+                src.offerFirst(buffer.pollFirst());
+            }
+        }
+    }
 
     public static void main(String[] args) {
         QueueStackBasics ins = new QueueStackBasics();
-
     }
 }

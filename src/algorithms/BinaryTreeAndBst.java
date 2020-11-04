@@ -12,6 +12,7 @@ class TreeNode {
     public int key;
     public TreeNode left;
     public TreeNode right;
+    // public TreeNode parent;
     public TreeNode(int key) {
         this.key = key;
     }
@@ -120,13 +121,13 @@ public class BinaryTreeAndBst {
         TreeNode cur = root; // helper
         while (cur != null || !stack.isEmpty()) { // 3个traversal里唯一需要判断cur的
             // always try go to the left side to see if there is any node
-            // should be traversed before the cur node,
+            // that should be traversed before the cur node,
             // cur node is stored on stack since it has not been traversed yet
             if (cur != null) {
                 // 一路向左走到底
                 stack.offerFirst(cur);
                 cur = cur.left;
-            } else {
+            } else { // 左孩子都被打印过了的根
                 // if can not go left, meaning all the nodes on the left side of
                 // the top node on stack have been traversed, the next traversing
                 // node should be the top node on stack
@@ -140,7 +141,7 @@ public class BinaryTreeAndBst {
 
     /**
      * maintain a previous Node to recode the previous visiting node on the traversing path
-     * 第三次看见一个结点才打印
+     * 第三次看见一个节点才打印
      */
     public List<Integer> postOrderTraversal(TreeNode root) {
         List<Integer> postOrderList = new ArrayList<>();
@@ -338,7 +339,7 @@ public class BinaryTreeAndBst {
         }
         // 越往左越小, 越往右越大
         // 往左走, Node值域 (not change, 当前root的值)
-        // 往右走, Node值域 (当前root的值, no change)
+        // 往右走, Node值域 (当前root的值, not change)
         return isBST(root.left, min, root.key) && isBST(root.right, root.key, max);
     }
 
@@ -351,9 +352,6 @@ public class BinaryTreeAndBst {
      */
     public List<Integer> getRange(TreeNode root, int min, int max) {
         List<Integer> list = new ArrayList<>();
-        if (root == null) {
-            return list;
-        }
         getRange(list, root, min, max);
         return list;
     }
@@ -527,8 +525,9 @@ public class BinaryTreeAndBst {
     /**
      * Delete the target key K in the given binary search tree if the binary search tree contains K.
      * Return the root of the binary search tree.
-     * Time =
-     * Space =
+     * 1 findMin(), 2 delete(root, min), 3 root.value = min
+     * Time = O(height)
+     * Space = O(height)
      */
     public TreeNode deleteInBst(TreeNode root, int target) {
         if (root == null) {
@@ -565,7 +564,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * return the node that replace target */
+     * return the node that replace target
+     */
     private TreeNode deleteSmallestInRight(TreeNode root) {
         TreeNode prev = root;
         root = root.left;

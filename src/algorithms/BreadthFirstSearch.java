@@ -76,7 +76,7 @@ public class BreadthFirstSearch {
          * eg. n1 -> n2 -> n3
          * after run BFS on n1 you will mark n1 as group0, n2 as group1, n3 as group0
          * but when you run BFS on n2 (since you need to run DFS for EVERY NODE)
-         * n2's start group mark will be 0, so no deed to do BFS again */
+         * n2's start group mark will be 0, so no need to do BFS again */
         if (nodeGroup.containsKey(node)) {
             return true;
         }
@@ -124,15 +124,19 @@ public class BreadthFirstSearch {
         while (!queue.isEmpty()) {
             // generated, cur can't be null
             TreeNode cur = queue.poll();
+            // if any of the child is not present, set the flag to true
             // apply to left child
             if (cur.left == null) {
                 flag = true; // see a null, don't need to add to queue anymore
             } else if (flag) {
+                // if flag is set but still see cur has a left child
+                // the binary tree is not a completed one
                 return false;
             } else {
+                // if flag is not set and left child is present
                 queue.offer(cur.left);
             }
-            // apply to right child
+            // apply to right child with same logic
             if (cur.right == null) {
                 flag = true;
             } else if (flag) {
@@ -140,7 +144,6 @@ public class BreadthFirstSearch {
             } else {
                 queue.offer(cur.right);
             }
-
         }
         return true;
     }
@@ -148,9 +151,10 @@ public class BreadthFirstSearch {
     /**
      * Given a matrix of size N x M. For each row the elements are sorted in ascending order,
      * and for each column the elements are also sorted in ascending order. Find the Kth smallest number in it.
+     * Assume: k << n^2
      *
-     * Time = O(k log k) // for k element we doing log 3k
-     * Space = O(m*n) // for the visited[][]
+     * Time = O(klogk) // for k element we doing log 2k
+     * Space = O(k+m*n) // for the visited[][], can be optimized to O(k) if using hash table
      */
     public int kthSmallest(int[][] matrix, int k) {
         if (matrix == null || matrix.length == 0

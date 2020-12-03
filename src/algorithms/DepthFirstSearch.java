@@ -10,11 +10,11 @@ public class DepthFirstSearch {
      * Assumptions: there is no duplicate characters in the original set.
      * e.g. set = "abc", output = [“”, “a”, “ab”, “abc”, “ac”, “b”, “bc”, “c”]
      * Time = O(2 ^ n) // branch^depth - approximate the total nodes in last level
-     * Space = O(n) // each letters has a level
+     * Space = O(n) // each letter has a level
      */
     public List<String> findAllSubSets(String set) {
         List<String> result = new ArrayList<>();
-        if (set == null) { // set == null vs set == "" 要分清啊!!
+        if (set == null) {
             return result;
         }
         StringBuilder prefix = new StringBuilder();
@@ -24,7 +24,7 @@ public class DepthFirstSearch {
 
     private void findSubSets(String s, int index, StringBuilder prefix, List<String> result) {
         // DFS
-        if (index == s.length()) {
+        if (index == s.length()) { // base case
             result.add(prefix.toString());
             return; // MUST HAVE 触底反弹
         }
@@ -33,11 +33,11 @@ public class DepthFirstSearch {
 
         // case 1: add current character to the prefix
         prefix.append(s.charAt(index));
-        findSubSets(s, index + 1, prefix, result); //BP
+        findSubSets(s, index + 1, prefix, result); // 吃
         /* 在try同层不同的node时，需要回到母节点层，再下到下一层的右边node。
          * e.g. 从add 'c' 到add '', 需要回到"For b"层 (=把c从set里删掉)
          * 再下到"For c"层, add '' */
-        prefix.deleteCharAt(prefix.length() - 1); // remove the char just added, reset states
+        prefix.deleteCharAt(prefix.length() - 1); // 吐 remove the char just added, reset states
 
         // case 2: not add current character to the prefix
         findSubSets(s, index + 1, prefix, result);
@@ -60,12 +60,14 @@ public class DepthFirstSearch {
         return result;
     }
 
-    private void findPermutationsOfParentheses(int n, int leftCount, int rightCount,
-                                               StringBuilder prefix, List<String> result) {
-        // n stores total number of "pair of ()" need to add. So total levels == 2 * n  (2n positions)
-        // leftCount stores the number of left parenthesis '(' added so far
-        // rightCount stores the number of right parenthesis ')' added so far
-        // prefix stores the solution so far
+    /**
+     * n stores total number of "pair of ()" need to add. So total levels == 2 * n  (2n positions)
+     * leftCount stores the number of left parenthesis '(' added so far
+     * rightCount stores the number of right parenthesis ')' added so far
+     * prefix stores the solution so far
+     */
+    private void findPermutationsOfParentheses(
+            int n, int leftCount, int rightCount, StringBuilder prefix, List<String> result) {
         if (leftCount == n && rightCount == n) { // base case
             result.add(prefix.toString());
             // formatAndPrint(prefix.toString().toCharArray()); this is for print indent
@@ -147,7 +149,7 @@ public class DepthFirstSearch {
          * ...
          * level coins.length - 1 : how many smallest cent
          *
-         * terminate condition:
+         * termination condition:
          * NOTICE this could also be done at level == coins.length
          * but we end at the previous level to reduce the number of branches in DFS */
         if (level == coins.length - 1) {
@@ -180,6 +182,7 @@ public class DepthFirstSearch {
              // curSol[level] = 0;
              return;
          }
+         // money value on this level == coin[index]
          for (int i = 0; i <= moneyLeft / coins[level]; i++) {   // notice <=
              curSol[level] = i;
              getCombinationOf99Cents(moneyLeft - i * coins[level], coins, level + 1, curSol);
@@ -197,7 +200,7 @@ public class DepthFirstSearch {
      */
     public List<String> getAllPermutations(String set) {
         List<String> result = new ArrayList<>();
-        if (set == null) { // set == null vs set == "" 要分清啊!!
+        if (set == null) {
             return result;
         }
         char[] array = set.toCharArray();
@@ -209,11 +212,11 @@ public class DepthFirstSearch {
         // index is the current level that we are trying (第index个position放哪个字母)
         if (index == array.length) { // base case, all position filled with one char
             result.add(new String(array));
-            System.out.println(array);
+            // System.out.println(array);
             return;
         }
         // put each letter in the index-th position of the input string
-        for (int i = index; i < array.length; i++) { // index 从0开始, 但是每次从index开始!
+        for (int i = index; i < array.length; i++) { // index从0开始, 但是每次从index开始!
             // e.g 第0层, 所有字母跟第0个换一下
             // all the position(0, index - 1) are already chosen
             // all possible character could be place at index are from (index, array.length - 1)

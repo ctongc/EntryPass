@@ -261,7 +261,7 @@ public class HashTableBasics {
      * Given a composition with different kinds of words
      * return a list of the top K most frequent words in the composition.
      *
-     * Time = O(k + (n - k) log k)  // worst case (n^2) considering the hash function of map
+     * Time = O(nlogk) if we don't use heapify
      * Space = O(n)
      */
     public String[] topKFrequent(String[] combo, int k) {
@@ -395,7 +395,7 @@ public class HashTableBasics {
         for (int i : A) {
             mapA.put(i, mapA.getOrDefault(i, 0) + 1);
         }
-        HashMap<Integer, Integer> mapB = new HashMap<>();
+        Map<Integer, Integer> mapB = new HashMap<>();
         for (int i : B) {
             mapB.put(i, mapB.getOrDefault(i, 0) + 1);
         }
@@ -406,7 +406,7 @@ public class HashTableBasics {
             //        list.add(entry.getValue());
             //    }
             //}
-            // above will do two look ups: .containsKey() and a .get()
+            // above will do two look ups: mapB.containsKey() and mapB.get()
             // below will do only one look up
             Integer countInMapB = mapB.get(entry.getKey());
             if (countInMapB != null) {
@@ -452,8 +452,8 @@ public class HashTableBasics {
 
     /**
      * Binary search
-     * 当 m >>>>>> n时 用此方法 因为此时 O(nlogm) < (m + n)
-     * Time = O(n log m)
+     * 当 m <<< n时 用此方法 因为此时 O(mlogn) < O(m + n)
+     * Time = O(m log n)
      * Space = O(1)
      */
     public List<Integer> findCommonNumbers3(List<Integer> A, List<Integer> B) {

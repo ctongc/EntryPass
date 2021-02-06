@@ -12,7 +12,12 @@ import java.util.Objects;
  */
 class MyHashMap<K, V> {
 
-    static class MyEntry<K, V> { // if static, I can create an entry although there's no instance of hashmap
+    /* MyEntry is a static class of MyHashMap, since it is:
+     * very closely bonded to MyHashMap class
+     * we probably need to access this class outside from MyHashMap class
+     * if static, I can create an entry although there's no instance of MyHashMap
+     */
+    static class MyEntry<K, V> {
         private final K key;
         private V value;
         private MyEntry<K, V> next;
@@ -83,7 +88,6 @@ class MyHashMap<K, V> {
                 }
                 entry = entry.next;
             }
-
         }
         return false;
     }
@@ -155,7 +159,7 @@ class MyHashMap<K, V> {
         int hashNumber = key.hashCode();
         // return hashNumber >= 0 ? hashNumber : -hashNumber; might overflow since int = [-2^31, 2^31 - 1]
         // java's % return remainder rather than modules, the remainder can be negative
-        return hashNumber & 0x7FFFFFFF; // guarantee non-negative 01111111 1...1 1...1 1...1
+        return hashNumber & 0x7FFFFFFF; // guarantee non-negative 01111111 1...1 1...1 1...1 (2^31 - 1)
     }
 
     /* return the corresponding index of array */

@@ -3,13 +3,14 @@ package algorithms;
 import java.util.*;
 
 public class StringBasics {
+
     private StringBasics() {
     }
 
     /**
      * Remove Certain Characters
-     * Remove given characters in input string, the relative order of other
-     * characters should be remained. Return the new string after deletion. Do it in place.
+     * Remove given characters in input string, the relative order of other characters
+     * should be remained. Return the new string after deletion. Do it in place.
      * Time = O(n)
      * Space = O(n)
      */
@@ -19,7 +20,7 @@ public class StringBasics {
             return input;
         }
         // pro-processing: put all characters from t into a set
-        Set<Character> set = new HashSet<>();
+        Deque<Character> set = new ArrayDeque<>();
         for (int i = 0; i < t.length(); i++) {
             set.add(t.charAt(i));
         }
@@ -155,11 +156,11 @@ public class StringBasics {
     }
 
     /**
-     * Determine If One String Is Another's Substring
+     * Determine whether a String is a substring of another String
      * Determine if a small string is a substring of another large string.
      * Return the index of the first occurrence of the small string in the large string.
      * Return -1 if the small string is not a substring of the large string.
-     *
+     * <p>
      * Time = O(m + n)
      * Space = O(1)
      */
@@ -237,6 +238,8 @@ public class StringBasics {
     /**
      * recursion
      * base case i >= j
+     * Time = O(n)
+     * Space = O(n)
      */
     public String reverseString2(String input) {
         if (input == null || input.length() <= 1) {
@@ -252,6 +255,7 @@ public class StringBasics {
         if (left >= right) {
             return;
         }
+        // 虚线框框框在 a[ppl]e
         if (sArray[left] != sArray[right]) {
             swap(sArray, left, right);
         }
@@ -268,7 +272,6 @@ public class StringBasics {
      * Space = O(n)
      */
     public String reverseWords(String input) {
-
         if (input == null || input.length() == 0) {
             return input;
         }
@@ -279,8 +282,8 @@ public class StringBasics {
         reverse(chars, left, right);
         // step2: reverse each word
         int slow = 0;
-        for(int fast = 0; fast < chars.length; fast++) {
-            if(fast == chars.length - 1 || chars[fast + 1] == ' ') {
+        for (int fast = 0; fast < chars.length; fast++) {
+            if (fast == chars.length - 1 || chars[fast + 1] == ' ') {
                 reverse(chars, slow, fast);
                 slow = fast + 2;
             }
@@ -288,7 +291,7 @@ public class StringBasics {
         return new String(chars);
     }
 
-    private void reverse(char[] chars, int left, int right){
+    private void reverse(char[] chars, int left, int right) {
         while (left < right) {
             if (chars[left] != chars[right]) {
                 swap(chars, left, right);
@@ -301,10 +304,10 @@ public class StringBasics {
     /**
      * Right Shift By N Characters
      * Right shift a given string by n characters.
-     *
+     * <p>
      * Time = O(n)
      * Space = O(n)
-     * */
+     */
     public String rightShift(String input, int n) {
         // assumption: n >= 0
         if (input == null || input.length() == 0) {
@@ -328,15 +331,16 @@ public class StringBasics {
      * Given an original string input, and two strings S and T, replace all occurrences of S in input with T.
      * Time = O(n * n * m)
      * Space = O(n)
-     *
+     * <p>
      * can optimized by rabin karp or kmp to O(n) by find all match then replace => O(n)
      * notice replace from right to left with extended space
      */
     public String replaceString(String input, String s, String t) {
         StringBuilder sb = new StringBuilder();
         int fromIndex = 0;
+        // Returns the index within this string of the first occurrence of the specified substring
         int matchIndex = input.indexOf(s, fromIndex); // complexity O(m * n)
-        while (matchIndex != -1) {
+        while (matchIndex >= 0) {
             sb.append(input, fromIndex, matchIndex).append(t);
             fromIndex = matchIndex + s.length();
             matchIndex = input.indexOf(s, fromIndex);
@@ -352,7 +356,7 @@ public class StringBasics {
      * { N1, N2, N3, …, N2k+1 } → { N1, Nk+1, N2, Nk+2, N3, Nk+3, … , Nk, N2k, N2k+1 }
      * reverse engineering: ABCD1234 -> A1B2C3D4
      * Time = O(nlogn)
-     * Space = O(n)
+     * Space = O(logn)
      */
     public int[] reorder(int[] array) {
         if (array == null || array.length == 0) {
@@ -367,15 +371,15 @@ public class StringBasics {
     }
 
     private void convert(int[] a, int left, int right) {
-        int length = right - left + 1;
+        int length = right - left + 1; // how many elements in the section
         if (length <= 2) { // base case
             return;
         }
-        // calculate the mid points
-        // 0 1 2 3 4 5 6 7
-        // l   lm  m   rm
-        // 0 1 2 3 4 5 6 7 8 9
-        // l   lm    m   rm
+        /* calculate the mid points
+         * 0 1 2 3 4 5 6 7
+         * l   lm  m   rm
+         * 0 1 2 3 4 5 6 7 8 9
+         * l   lm    m   rm    */
         int mid = left + length / 2;
         int leftMid = left + length / 4;
         int rightMid = left + length * 3 / 4;
@@ -387,7 +391,7 @@ public class StringBasics {
         convert(a, left + 2 * (leftMid - left), right);
     }
 
-    private void reverse(int[] array, int left, int right){
+    private void reverse(int[] array, int left, int right) {
         while (left < right) {
             if (array[left] != array[right]) {
                 int temp = array[left];
@@ -401,21 +405,21 @@ public class StringBasics {
 
     /**
      * All Permutations II
-     * Given a string with possible duplicate characters, return a list with all permutations of the characters.
-     * e.g. Set = "aba", all permutations are ["aab", "aba", "baa"]
+     * Given a String with possible duplicate characters, return a list with all permutations of the characters.
+     * e.g. input = "aba", all permutations are ["aab", "aba", "baa"]
      * Time = O(n!)
      * Space = O(n ^ 2)
      */
-    public List<String> permutations(String set) {
+    public List<String> permutations(String s) {
         List<String> result = new ArrayList<>();
-        if (set == null) {
+        if (s == null) {
             return result;
         }
-        if (set.length() == 0) {
+        if (s.length() == 0) {
             result.add("");
             return result;
         }
-        char[] chars = set.toCharArray();
+        char[] chars = s.toCharArray();
         getAllPermutations(chars, 0, result);
         return result;
     }
@@ -436,8 +440,76 @@ public class StringBasics {
     }
 
     /**
+     * Compress String II
+     * Given a String, replace adjacent, repeated characters with the character followed by
+     * the number of repeated occurrences
+     * e.g. “abbcccc” → “a1b2c4”
+     */
+    public String compress(final String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        char[] array = input.toCharArray();
+        return encode(array);
+    }
+
+    private String encode(char[] input) {
+        /* Step 1: deal with the cases where the adjacent occurrence of the letters >= 2 */
+        int slow = 0;
+        int fast = 0;
+        int newLength = 0;
+        while (fast < input.length) {
+            int begin = fast;
+            while (fast < input.length && input[fast] == input[begin]) {
+                fast++;
+            }
+            input[slow++] = input[begin];
+            if (fast - begin == 1) {
+                newLength += 2;
+            } else {
+                int len = copyDigits(input, slow, fast - begin);
+                slow += len;
+                newLength += len + 1;
+            }
+        }
+        /* Step 2: deal with the cases where the adjacent occurrence of the letters == 1
+         * Notice: if it is required to do this in place, usually the input array is a
+         * sufficient large one, you will not need to allocate a new array. */
+        char[] result = new char[newLength];
+        fast = slow - 1;
+        slow = newLength - 1;
+        while (fast >= 0) {
+            if (Character.isDigit(input[fast])) {
+                while (fast >= 0 && Character.isDigit(input[fast])) {
+                    result[slow--] = input[fast--];
+                }
+            } else {
+                result[slow--] = '1';
+            }
+            result[slow--] = input[fast--];
+        }
+        return new String(result);
+    }
+
+    /**
+     * copy "count" as digits into "input", starting at "index"
+     */
+    private int copyDigits(char[] input, int index, int count) {
+        int len = 0;
+        for (int i = count; i > 0; i /= 10) {
+            index++;
+            len++;
+        }
+        for (int i = count; i > 0; i /= 10) {
+            int digit = i % 10;
+            input[--index] = (char)('0' + digit);
+        }
+        return len;
+    }
+
+    /**
      * Decompress String II
-     * Given a string in compressed form, decompress it to the original string.
+     * Given a String in compressed form, decompress it to the original string.
      * The adjacent repeated characters in the original string are compressed to
      * have the character followed by the number of repeated occurrences.
      * e.g. “a1c0b2c4” → “abbcccc”
@@ -445,9 +517,10 @@ public class StringBasics {
      * Space = O(n)
      */
     public String decompressString(String input) { // in-place
-        // assumptions: 1 the string is not null
-        // 2 the characters used in the original string are guaranteed to be 'a' = 'z'
-        // 3 there are no adjacent repeated characters with length > 9
+        /* assumptions:
+         * 1 the string is not null
+         * 2 the characters used in the original string are guaranteed to be 'a' = 'z'
+         * 3 there are no adjacent repeated characters with length > 9 */
         if (input.isEmpty()) {
             return input;
         }
@@ -475,9 +548,10 @@ public class StringBasics {
     }
 
     public String decompressString2(String input) { // using string builder
-        // assumptions: 1 the string is not null
-        // 2 the characters used in the original string are guaranteed to be 'a' = 'z'
-        // 3 there are no adjacent repeated characters with length > 9
+        /* assumptions:
+         * 1. the string is not null
+         * 2. the characters used in the original string are guaranteed to be 'a' = 'z'
+         * 3. there are no adjacent repeated characters with length > 9 */
         if (input.isEmpty()) {
             return input;
         }
@@ -503,14 +577,17 @@ public class StringBasics {
         if (input == null || input.length() == 0) {
             return 0;
         }
-        Set <Character> set = new HashSet<>();
+        final Set<Character> set = new HashSet<>();
         int slow = 0;
         int fast = 0; // [slow, fast - 1] is the sliding window
         int max = 0;
         while (fast < input.length()) {
             if (!set.add(input.charAt(fast))) {
+                // there is duplicate character, we need to move the slow pointer
                 set.remove(input.charAt(slow++));
             } else {
+                // there is no duplicate character, we can slide fast pointer and we
+                // have a new sliding window of [slow, fast) containing all distinct characters
                 fast++;
                 max = Math.max(max, fast - slow);
             }
@@ -522,97 +599,86 @@ public class StringBasics {
      * All Anagrams
      * Find all occurrence of anagrams of a given string s in a given string l.
      * Return the list of starting indices.
-     * e.g, sh = "ab", lo = "abcbac"
+     * e.g, s = "ab", l = "abcbac"
      * Time = O(n) // was O(n * m) but optimized to O(n) by the typesToMatch counter
      * Space = O(n)
      */
-    public List<Integer> allAnagrams(String sh, String lo) {
-        // assumption: sh is not null or empty
-        // lo is not null
+    public List<Integer> allAnagrams(String s, String l) {
+        // assumption: s is not null or empty, l is not null
         List<Integer> result = new ArrayList<>();
-        if (lo.isEmpty() || sh.length() > lo.length()) {
+        if (l.isEmpty() || s.length() > l.length()) {
             return result;
         }
-        int slow = 0;
-        int fast = sh.length() - 1; // [slow, fast] is the sliding window
-        Map<Character, Integer> map = new HashMap<>(); // stores the difference between sh and window
-        int typesMatch = 0; // when typesMatch == map.size() means the window covers all types of character
-        // pre-processing
-        for (int i = 0; i < sh.length(); i++) {
-            map.put(sh.charAt(i), map.getOrDefault(sh.charAt(i), 0) + 1);
-        }
-        for (int i = slow; i <= fast; i++) {
-            char c = lo.charAt(i);
-            Integer left = map.get(c);
-            if (left != null) {
-                map.put(c, left - 1);
-                if (left == 0) {
-                    typesMatch--;
-                }
-                if (left - 1 == 0) {
+        /* this map records for each of the distinct characters in s, how many characters are needed.
+         * e.g. s = "abbc", map = {'a' : 1, 'b' : 2, 'c' : 1}
+         * when we get an instance of 'a' in l, we let count of 'a' decremented by 1
+         * and only when the count is from 1 to 0, we have 'a' totally matched */
+        Map<Character, Integer> map = initializeMap(s);
+        /* typesMatch records how many distinct characters have been matched
+         * only when all the distinct characters are matched, A.K.A. match == map.size(). we found an anagram */
+        int typesMatch = 0;
+
+        /* we have a sliding window of size s.length(), and since the size is fixed,
+         * we only need to record the end index of the sliding window.
+         * also, when move the sliding window by one step from left to right, we ONLY need to:
+         * 1. remove the leftmost character at the previous sliding window
+         * 2. add the rightmost character at the current sliding window */
+        for (int i = 0; i < l.length(); i++) {
+            // handle the new added character(rightmost) at the current sliding window
+            char temp = l.charAt(i);
+            Integer count = map.get(temp);
+            if (count != null) {
+                // the number of needed count should be --
+                map.put(temp, count - 1);
+                // and only when the count is from 1 to 0, we find an additional match of distinct character
+                // so we have to make sure it's not added from -1 to 0
+                if (count == 1) {
                     typesMatch++;
                 }
             }
-        }
-        while (fast < lo.length()) {
-            // check match
-            if (typesMatch == map.size() && isMatch(map)) {
-                // add to result
-                result.add(slow);
-            }
-            fast++;
-            // if next window valid
-            if (fast < lo.length()) {
-                // window add next
-                char nextChar = lo.charAt(fast);
-                Integer left = map.get(nextChar);
-                if (left != null) {
-                    map.put(nextChar, left - 1);
-                    if (left == 0) {
+            // handle the leftmost character at the previous sliding window
+            if ( i >= s.length()) {
+                temp = l.charAt(i - s.length());
+                count = map.get(temp);
+                if (count != null) {
+                    // the number of needed count should be ++
+                    map.put(temp, count + 1);
+                    // and only when the count is from 0 to 1, we are short for one match of distinct character
+                    if (count == 0) {
                         typesMatch--;
-                    }
-                    if (left - 1 == 0) {
-                        typesMatch++;
-                    }
-                }
-                // window remove last
-                char lastChar = lo.charAt(slow);
-                left = map.get(lastChar);
-                if (left != null) {
-                    map.put(lastChar, left + 1);
-                    if (left == 0) {
-                        typesMatch--;
-                    }
-                    if (left + 1 == 0) {
-                        typesMatch++;
                     }
                 }
             }
-            slow++;
+            // for the current sliding window, if all the distinct characters are matched (the count are all zero)
+            // we found a new anagram
+            if (typesMatch == map.size()) {
+                result.add(i - s.length() + 1);
+            }
         }
         return result;
     }
 
-    private boolean isMatch(Map<Character, Integer> map) {
-        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
-            if(entry.getValue() != 0) {
-                return false;
-            }
+    private Map<Character, Integer> initializeMap(final String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
         }
-        return true;
+        return map;
     }
-
 
     public static void main(String[] args) {
         StringBasics ins = new StringBasics();
         String s = "bbbaabbbbcccctc";
         System.out.println(ins.deDuplication(s));
         System.out.println(ins.repeatDeDuplication(s));
-        String s2 = "  I  Love Yahoo   ";
-        System.out.println(ins.removeSpaces(s2));
-        String s3 = "eggeplp";
-        System.out.println(ins.reverseString2(s3));
-        ins.allAnagrams("aab","ababacbbaac");
+        String s2 = ins.removeSpaces("  I  Love Yahoo   ");
+        System.out.println(s2);
+        String s3 = ins.reverseString2("eggeplp");
+        System.out.println(s3);
+        List<Integer> list = ins.allAnagrams("aab", "ababacbbaac");
+        System.out.println(list);
+        String s4 = ins.compress("abbcccc");
+        System.out.println(s4);
     }
 
     private void swap(char[] sArray, int first, int second) {

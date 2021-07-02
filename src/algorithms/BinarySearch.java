@@ -6,7 +6,8 @@ public class BinarySearch {
      * 1 每一轮的search space必须缩小一半
      * 2 target不能被rule out
      */
-    private BinarySearch() {}
+    private BinarySearch() {
+    }
 
     /**
      * Classical Binary Search
@@ -205,7 +206,7 @@ public class BinarySearch {
          * 2 left == target, right != target
          * 3 left != target, right == target
          * 4 both left and right != target */
-        if(array[left] == target) { // check array[left] first
+        if (array[left] == target) { // check array[left] first
             return left;
         } else if (array[right] == target) {
             return right;
@@ -308,7 +309,7 @@ public class BinarySearch {
         int[] result = new int[k];
         int left = largestSmallerOrEqual(array, target);
         int right = left + 1;
-        
+
         for (int i = 0; i < k; i++) {
             if (left < 0) {
                 // there is no more left element
@@ -411,7 +412,7 @@ public class BinarySearch {
         return binarySearchInDict(dict, left, right, target);
     }
 
-    private int binarySearchInDict (Dictionary dict, int left, int right, int target) {
+    private int binarySearchInDict(Dictionary dict, int left, int right, int target) {
         while (left <= right) {
             int mid = left + (right - left) / 2;
             // dict.get(mid) could be null
@@ -422,6 +423,42 @@ public class BinarySearch {
                 left = mid + 1;
             } else {
                 return mid;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Search in shifted sorted array
+     * Suppose an array sorted in ascending order is shifted at some pivot unknown to you beforehand.
+     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2) You are given a target value to search.
+     * If found in the array return ints index, otherwise return -1.
+     * You may assume no duplicate exists in the array.
+     * Time = O(logn)
+     * Space = O(1)
+     */
+    public int searchInShiftedSortedArray(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
             }
         }
         return -1;

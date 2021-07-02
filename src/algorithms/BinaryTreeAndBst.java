@@ -1,9 +1,6 @@
 package algorithms;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
  * Definition for a binary tree node.
@@ -608,6 +605,22 @@ public class BinaryTreeAndBst {
             largest[0] = Math.max(largest[0], 1 + leftResult[0] + rightResult[0]);
         }
         return result;
+    }
+
+    /**
+     * Diagonal Sum of a Binary Tree
+     * Consider lines of slope -1 passing between nodes.
+     * Diagonal sum in a binary tree is sum of all node's data lying through these line.
+     * Given a Binary Tree, print all diagonal sums.
+     */
+    public void diagonalSum(TreeNode root, int level, Map<Integer, Integer> map) {
+        if (root == null) {
+            return;
+        }
+        // add the current node's value to the corresponding map entry
+        map.put(root.key, map.getOrDefault(level, 0) + root.key);
+        diagonalSum(root.left, level + 1, map);
+        diagonalSum(root.left, level, map);
     }
 
     public static void main(String[] args) {

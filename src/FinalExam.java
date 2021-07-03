@@ -241,13 +241,3 @@ public class FinalExam {
         System.out.println(solution.containCycle(new String[]{"ab", "ba", "acca"}));
     }
 }
-
-class TreeNode {
-    public int key;
-    public TreeNode left;
-    public TreeNode right;
-
-    public TreeNode(int key) {
-        this.key = key;
-    }
-}

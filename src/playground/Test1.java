@@ -1,3 +1,5 @@
+package playground;
+
 public class Test1 {
     public void permutationOfIfBlocks(int n) {
         if (n <= 0) {

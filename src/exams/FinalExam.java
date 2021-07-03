@@ -1,3 +1,5 @@
+package exams;
+
 import java.util.*;
 
 public class FinalExam {

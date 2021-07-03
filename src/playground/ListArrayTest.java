@@ -1,5 +1,7 @@
+package playground;
+
 /**
- * ListArrayTest.java - Lab 4
+ * playground.ListArrayTest.java - Lab 4
  * @author
  * @author
  * CIS 36B
@@ -77,7 +79,7 @@ public class ListArrayTest {
                 + test1.get(2));
         System.out.println("Should print [A, B, C, D]: " + test1);
 
-        System.out.println("\nAdding 1-20 in ListArray of size 15. Should resize to 20:");
+        System.out.println("\nAdding 1-20 in playground.ListArray of size 15. Should resize to 20:");
         for(int i = 1; i <= 20; i++) {
             test2.add("" + i);
         }

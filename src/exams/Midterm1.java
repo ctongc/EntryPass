@@ -1,3 +1,5 @@
+package exams;
+
 import java.util.*;
 
 class ListNode {
@@ -201,15 +203,6 @@ public class Midterm1 {
             }
         }
         return minHeap.peek().value;
-    }
-
-    public static void main(String[] args) {
-        Midterm1 m = new Midterm1();
-        String s = m.removeRedundantSpace("  I am  a   student   ");
-        System.out.println(s);
-        System.out.println("a b");
-        System.out.println(m.getKthSmallestSum(3, new int[]{1,3,4,5,6},new int[]{2,4,6,8}));
-        System.out.println(m.getKthSmallestSum2(3, new int[]{1,3,4,5,6},new int[]{2,4,6,8}));
     }
 }
 

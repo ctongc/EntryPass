@@ -1,5 +1,7 @@
+package playground;
+
 /**
- * ListArray.java - Lab 4
+ * playground.ListArray.java - Lab 4
  * @author
  * @author
  * CIS 36B
@@ -12,7 +14,7 @@ public class ListArray {
     /**Constructors*/
 
     /**
-     * Default constructor for ListArray
+     * Default constructor for playground.ListArray
      * Creates an empty array of length 10
      * Sets numElements to 0
      */
@@ -22,11 +24,11 @@ public class ListArray {
     }
 
     /**
-     * Constructor for ListArray
+     * Constructor for playground.ListArray
      * Creates an empty array of length size
      * Sets numElements to 0
      * @param size the initial size of the
-     * ListArray
+     * playground.ListArray
      */
     public ListArray(int size) {
         array = new String[size];
@@ -34,16 +36,16 @@ public class ListArray {
     }
 
     /**
-     * Copy constructor for ListArray
+     * Copy constructor for playground.ListArray
      * Creates a new list array of the
-     * same size as the ListArray passed
+     * same size as the playground.ListArray passed
      * in as a parameter, and copies the 
      * parameter's data into the new 
      * list array using a for loop
      * Also sets the numElements to be
      * the same as the parameter's 
      * numElements
-     * @param la the ListArray to copy
+     * @param la the playground.ListArray to copy
      */
 
     public ListArray(ListArray la) {

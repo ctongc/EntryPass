@@ -679,6 +679,20 @@ public class StringBasics {
         System.out.println(list);
         String s4 = ins.compress("abbcccc");
         System.out.println(s4);
+
+        System.out.println("~~~~~~~~~~~~~~~~~");
+        String ss1 = "abc";
+        String ss2 = "a";
+        String ss3 = s2 + "bc";
+        String ss4 = "a" + "bc";
+        String ss5 = s3.intern();
+        final String ss6 = "a";
+        String ss7 = ss6 + "bc";
+
+        System.out.println("ss1 == ss3: " + (ss1 == ss3));
+        System.out.println("ss1 == ss4: " + (ss1 == ss4));
+        System.out.println("ss1 == ss5: " + (ss1 == ss5));
+        System.out.println("ss1 == ss7: " + (ss1 == ss7));
     }
 
     private void swap(char[] sArray, int first, int second) {

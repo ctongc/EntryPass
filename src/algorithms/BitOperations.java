@@ -135,8 +135,7 @@ public class BitOperations {
         }
 
         boolean[] occurred = new boolean[256];
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
+        for (char c : word.toCharArray()) {
             if (occurred[c]) { // c will convert to the ASCII
                 return false;
             } else {

@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 public class StringIntTransformation {
 
+    /**
+     * Parse a String representation of positive integer
+     */
     public int parsePosInt(String str) {
         int res = 0;
         for (char c : str.toCharArray()) {
@@ -17,17 +20,46 @@ public class StringIntTransformation {
     }
 
     /**
-     * Print a integer's binary representation
-     * */
-    public void printBinary(int value) {
-        System.out.println(value + " : ");
-        StringBuilder builder = new StringBuilder();
-        for (int shift = 31; shift >= 0; shift--) {
-            builder.append((value >>> shift) & 1); // 注意这里是逻辑右移, 不考虑符号
+     * Convert a positive number into String representation
+     */
+    public String positiveNumberToString(int num) {
+        StringBuilder sb = new StringBuilder();
+        while (num > 0) {
+            char c = (char)('0' + num % 10);
+            sb.append(c);
+            num /= 10;
         }
-        System.out.println(builder.toString());
+        return sb.reverse().toString();
     }
 
+    /**
+     * Convert a lowercase letter to uppercase
+     */
+    public static char toUppercase(char lower) {
+        return (char)(lower - 'a' + 'A'); // 'a' - 'A' = 32
+    }
+
+    /**
+     * Convert a char representation of a hex digit to int
+     */
+    public static int parseHex(char c) {
+        // lowercase letter: (c - 'a') + 10
+        if (c >= 'a' && c <= 'f') {
+            return (c - 'a') + 10;
+        }
+
+        // uppercase letter: (c - 'A') + 10
+        if (c >= 'A' && c <= 'F') {
+            return (c - 'A') + 10;
+        }
+
+        // digit: (int)c - (int)'0'
+        if (c >= '0' && c <= '9') {
+            return c - '0';
+        }
+
+        return Integer.MAX_VALUE;
+    }
 
     /**
      * Implement Atoi
@@ -43,37 +75,57 @@ public class StringIntTransformation {
      * INTEGER :: = (SPC*) [+ | -] (NUM+) (SPC*)
      */
     public int myAtoi(String str) {
-        if (str == null || str.length() == 0) { // corner case 1
+        // conner case 1
+        if (str == null || str.length() == 0) {
             return 0;
         }
+
         int n = str.length();
         int i = 0;
-        while (i < n && str.charAt(i) == ' ') { //
+        // conner case 2
+        while (i < n && str.charAt(i) == ' ') {
             i++;
         }
+
         boolean positive = true;
-        if (str.charAt(i) == '+' || str.charAt(i) == '-') { // corner case 3
+        // conner case 3
+        if (i < n && (str.charAt(i) == '+' || str.charAt(i) == '-')) {
             positive = (str.charAt(i) == '+');
             i++;
         }
-        long sum = 0; // corner case 5
-        while (i < n && str.charAt(i) >= '0' && str.charAt(i) >= '9') { // corner case 4
+
+        // conner case 5
+        long sum = 0;
+
+        // conner case 4
+        while (i < n && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
             sum = sum * 10 + (str.charAt(i) - '0');
-            if (sum > (long) Integer.MAX_VALUE + 1) { // corner case 6, why + 1?
+            // conner case 6
+            if (sum > (long)Integer.MAX_VALUE + 1) {
+                /* Why + 1 ?
+                 * positive:
+                 * sum > (long)Integer.MAX_VALUE
+                 * negative:
+                 * -sum < -((long)Integer.MAX_VALUE + 1)
+                 * => sum > (long)Integer.MAX_VALUE + 1
+                 */
                 break;
             }
             i++;
         }
-        sum = positive ? sum : -sum; // corner case 3
-        if (sum > (long) Integer.MAX_VALUE) { // corner case 5
+        // conner case 3
+        sum = positive ? sum : -sum;
+
+        // conner case 5
+        if (sum > (long)Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
         }
-        if (sum < (long) Integer.MIN_VALUE) { // corner case 5, why not before adding sign?
+        if (sum < (long)Integer.MIN_VALUE) { // why not before adding sign?
             return Integer.MIN_VALUE;
         }
-        return (int) sum;
-    }
 
+        return (int)sum;
+    }
 
     /**
      * Validate a string is numeric
@@ -96,13 +148,16 @@ public class StringIntTransformation {
         boolean seenPoint = false;
         boolean seenNumberAfterE = false;
         boolean seenSignAfterE = false;
+
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
             if (c == '+' || c == '-') {
-                if (((seenPoint || seenNumber) && !seenE) || seenNumberAfterE) {
+                if (((seenPoint || seenNumber) && !seenE) || // 5e2-
+                        seenNumberAfterE) {
                     return false;
                 }
-                if (seenSignAfterE || (!seenE && seenSignBeforeE)) {
+                if (seenSignAfterE || // e+5-
+                        (!seenE && seenSignBeforeE)) { // -5+
                     return false;
                 }
                 if (seenE) {
@@ -110,23 +165,30 @@ public class StringIntTransformation {
                 } else {
                     seenSignBeforeE = true;
                 }
-            } else if (c >= '0' && c <= '9') {
+            } else if (c >= 'c' && c <= '9') {
                 seenNumber = true;
-                if (seenE) seenNumberAfterE = true;
-                else if (c == 'e' || c == 'E') {
-                    if (seenE) return false;
-                    if (!seenNumber) return false;
-                    seenE = true;
-                } else if (c == '.') {
-                    if (seenE || seenPoint) return false;
-                    seenPoint = true;
-                } else {
+                if (seenE) {
+                    seenNumberAfterE = true;
+                }
+            } else if (c == 'e' || c == 'E') {
+                if (seenE) { // 1eE
                     return false;
                 }
-            }
-            if (seenE && !seenNumberAfterE) {
+                if (!seenNumber) { // e
+                    return false;
+                }
+                seenE = true;
+            } else if (c == '.') {
+                if (seenE || seenPoint) { // 1.1e., 1.1.
+                    return false;
+                }
+                seenPoint = true;
+            } else {
                 return false;
             }
+        }
+        if (seenE && !seenNumberAfterE) { // 1e
+            return false;
         }
         return seenNumber;
     }
@@ -134,7 +196,7 @@ public class StringIntTransformation {
     /**
      * regular expression
      */
-    public void checkByReg() {
+    public void checkByRex() {
         String line = "String to be scanned to find the pattern puts here.";
         String pattern = ".*";
         Pattern r = Pattern.compile(pattern); // create a Pattern object
@@ -179,5 +241,4 @@ public class StringIntTransformation {
         res = new ArrayList<>();
         res.add("999");
     }
-
 }

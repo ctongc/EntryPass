@@ -35,26 +35,27 @@ public class RecursionBasics {
      * Space = O(log b)
      */
     public long power(int a, int b) {
+        // assume b >= 0, and if a = 0, b > 0
         if (a == 0) {
+            // b <= 0 -> error
             return 0;
         } else if (b < 0) {
-            return (long) (1.0 / (double) simplePower(a, -b)); // NOTICE using -b here
+            return (long) (1.0 / (double)powerHelper(a, -b)); // NOTICE using -b here
         } else {
-            return simplePower(a, b);
+            return powerHelper(a, b);
         }
     }
 
-    private long simplePower(int a, int b) {
+    private long powerHelper(int a, int b) {
         // need a long so that it won't be overflow
         if (b == 0) {
             return 1L; // long
         }
-
         /* a ^ b = a ^ (b / 2) * a ^ (b / 2)
          * 1 why not return power(a, b/2) * power(a, b/2)?
          *   runtime O(n) vs O(logn) 后一半无需重复计算
          * 2 remember int / int 是向下取整 */
-        long halfResult = simplePower(a, b / 2);
+        long halfResult = powerHelper(a, b / 2);
         return b % 2 == 0 ? halfResult * halfResult : halfResult * halfResult * a;
     }
 
@@ -202,7 +203,7 @@ public class RecursionBasics {
      */
 
     public int[][] spiralOrderGenerate(int m, int n) {
-        int matrix[][] = new int[m][n];
+        int[][] matrix = new int[m][n];
         if (m == 0 || n == 0) {
             return matrix;
         }
@@ -276,6 +277,24 @@ public class RecursionBasics {
     }
 
     /**
+     * Given a binary tree where all the right nodes are leaf nodes,
+     * flip it upside down and turn it into a tree with left leaf nodes
+     */
+    public TreeNode reverseTree(TreeNode root) {
+        if (root == null || root.left == null) {
+            return root;
+        }
+
+        TreeNode newRoot = reverseTree(root.left);
+        root.left.left = root.right;
+        root.left.right = root;
+        root.left = null;
+        root.right = null;
+
+        return newRoot;
+    }
+
+    /**
      * Given a string and an abbreviation, return if the string matches the given abbreviation.
      * Word “book” can be abbreviated to 4, b3, b2k, etc.
      *
@@ -286,72 +305,59 @@ public class RecursionBasics {
         return isMatch(input, pattern, 0, 0);
     }
 
-    private boolean isMatch(String input, String pattern, int i, int p) {
+    private boolean isMatch(String input, String pattern, int textStart, int patternStart) {
         // base case
         // only when we run out of input and pattern, there is a match
-        if (i == input.length() && p == pattern.length()) {
+        if (textStart == input.length() && patternStart == pattern.length()) {
             return true;
         }
         // if one reach the end but the other doesn't
-        if (i >= input.length() || p >= pattern.length()) {
+        if (textStart >= input.length() || patternStart >= pattern.length()) {
             return false;
         }
 
         /* recursive rule
          * case 1: pattern is not a digit
          * case 2: pattern is a digit */
-
-        if (!Character.isDigit(pattern.charAt(p))) {
-            if (input.charAt(i) != pattern.charAt(p)) {
+        if (!Character.isDigit(pattern.charAt(patternStart))) {
+            if (input.charAt(textStart) != pattern.charAt(patternStart)) {
                 return false;
             } else {
-                return isMatch(input, pattern, i + 1, p + 1);
+                return isMatch(input, pattern, textStart + 1, patternStart + 1);
             }
         } else {
             int num = 0;
-            while (p < pattern.length() && Character.isDigit(pattern.charAt(p))) {
-                num = num * 10 + (pattern.charAt(p) - '0');
-                p++;
+            while (patternStart < pattern.length() && Character.isDigit(pattern.charAt(patternStart))) {
+                num = num * 10 + (pattern.charAt(patternStart) - '0');
+                patternStart++;
             }
-            if (num + i > input.length()) {
+            if (num + textStart > input.length()) {
                 return false;
             } else {
-                return isMatch(input, pattern, i + num, p);
+                return isMatch(input, pattern, textStart + num, patternStart);
             }
         }
     }
 
     /**
-     * Given two nodes in a binary tree, find their lowest common ancestor.
+     * Given two nodes in a binary tree, find their lowest common ancestor
      *
      * Time = O(n) // traverse n nodes, might less than n when find one earlier
      * Space = O(height)
-     *
-     * 1 If return other node, then we know:
-     * 	- one and two are both in the tree
-     * 	- one and two 不直接隶属
-     * 2 If return one, then we know:  (same with return two)
-     * 	- Either two 隶属于 one
-     * 	- OR two is not in the tree  -- How do we know?
-     * 		- we can run findNode(root = one, two)
-     * OR just run LCA(root = one, two, two)
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode one, TreeNode two) {
         // base case: find nothing, find one, find two
         if (root == null || root == one || root == two) {
             return root;
         }
-        /* Step 1: what do you expect from your leftChild/rightChild?
-	     * Step 2: What do you want to do in the current layer?
-	     * Step 3: What do you want to report to your parent? */
 
         // step 1
         TreeNode leftNode = lowestCommonAncestor(root.left, one, two);
         TreeNode rightNode = lowestCommonAncestor(root.right, one, two);
 
-        /* Case 1 if left == null && right == null: return null to my parent
-         * Case 2 if either left or right return Non-null: return the NON-null side to my parent
-         * Case 3 if both left and right return NON-null (b and c are both found): return a */
+        /* Case 1 if left == null && right == null -> return null to my parent
+         * Case 2 if either left or right return NON-null -> return the NON-null side to my parent
+         * Case 3 if both left and right return NON-null (both found) -> return root */
 
         // step 2 & step 3
         if (leftNode == null && rightNode == null) {
@@ -362,18 +368,14 @@ public class RecursionBasics {
             return root;
         } else {
             // case 2
-            if (leftNode != null) {
-                return leftNode;
-            } else {
-                return rightNode;
-            }
+            return leftNode != null ? leftNode : rightNode;
         }
     }
 
     public static void main(String[] args) {
         RecursionBasics solution = new RecursionBasics();
         System.out.println(solution.fibonacci(5));
-        int array[][] = solution.spiralOrderGenerate(4,2);
+        int[][] array = solution.spiralOrderGenerate(4,2);
         for (int i = 0; i < 4; i++) {
             System.out.println(Arrays.toString(array[i]));
         }

@@ -271,7 +271,7 @@ public class DepthFirstSearch {
         }
         StringBuilder prefix = new StringBuilder(); // store each subsets
         char[] input = set.toCharArray();
-        Arrays.sort(input); //set is not sorted!
+        Arrays.sort(input); // set might not be sorted!
         findSubsetsII(input, 0, prefix, result);
         return result;
     }
@@ -282,13 +282,18 @@ public class DepthFirstSearch {
             result.add(prefix.toString());
             return;
         }
+
+        // case 1: add input[index]
         prefix.append(input[index]);
         findSubsetsII(input, index + 1, prefix, result);
         prefix.deleteCharAt(prefix.length() - 1);
-        // since it‘s already sorted
-        while (index + 1 < input.length && input[index] == input[index + 1]) {
+
+        // since it‘s already sorted, skip all subsequent duplicate letters
+        while (index < input.length - 1 && input[index] == input[index + 1]) {
             index++;
         }
+
+        // case 2: do not add input[index]
         findSubsetsII(input, index + 1, prefix, result);
     }
 

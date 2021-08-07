@@ -423,7 +423,9 @@ public class DepthFirstSearch {
 
     /**
      * Factor Combinations
-     * Given an integer number, return all possible combinations of the factors that can multiply to the target number.
+     * Given an integer number, return all possible combinations of the factors
+     * that can multiply to the target number
+     *
      * Time = n^m // O(log(n) ^ (number of factors)) , m is # of factors
      * Space = O(m)
      */
@@ -432,46 +434,47 @@ public class DepthFirstSearch {
         if (target < 3) {
             return result;
         }
-        List<Integer> factors = new ArrayList<>(); // preprocess, get all the factors
-        for (int i = target / 2; i > 1; i--) {
-            if (target % i == 0) {
-                factors.add(i);
-            }
-        }
+
+        List<Integer> factors = getFactors(target);
         List<Integer> cur = new ArrayList<>();
-        findAllCombo(target, 0, factors, target, cur, result);
+        getValidFactorCombinations(target, factors, 0, cur, result);
         return result;
     }
 
-    private void findAllCombo(int remain, int index, List<Integer> factors,
-                              int target, List<Integer> cur, List<List<Integer>> result) {
-        if (remain == 1) {
+    private void getValidFactorCombinations(int target, List<Integer> factors, int index,
+                                            List<Integer> cur, List<List<Integer>> result) {
+        if (target == 1) {
             result.add(new ArrayList<>(cur));
             return;
         }
         if (index == factors.size()) {
             return;
         }
+
         int factor = factors.get(index);
-        // no using current factor
-        findAllCombo(remain, index + 1, factors, target, cur, result);
-        // i indicates the number of current level's factor we used to form a solution
-        for (int i = 1; i <= Math.log(target) / Math.log(factor); i++) {
-            if (remain % Math.pow(factor, i) == 0) {
-                for (int j = 0; j < i; j++) {
-                    cur.add(factor);
-                }
-                int newRemain = (int) (remain / Math.pow(factor, i));
-                findAllCombo(newRemain, index + 1, factors, target, cur, result);
-                for (int j = 0; j < i; j++) {
-                    cur.remove(cur.size() - 1);
-                }
+        // not using current factor
+        getValidFactorCombinations(target, factors, index + 1, cur, result);
+        int size = cur.size();
+        while (target % factor == 0) {
+            cur.add(factor);
+            target /= factor;
+            getValidFactorCombinations(target, factors, index + 1, cur, result);
+        }
+        cur.subList(size, cur.size()).clear();
+    }
+
+    private List<Integer> getFactors(int target) {
+        List<Integer> factors = new ArrayList<>();
+        for (int i = target / 2; i > 1; i--) {
+            if (target % i == 0) {
+                factors.add(i);
             }
         }
+        return factors;
     }
 
     // 4^99
-    private void findAllCombo2(int cur, int index, List<Integer> factors,
+    private void getValidFactorCombinations2(int cur, int index, List<Integer> factors,
                                int target,  List<Integer> prefix, List<List<Integer>> result){
         if(cur == target){
             result.add(new ArrayList<>(prefix));
@@ -484,7 +487,7 @@ public class DepthFirstSearch {
 
         for(int i = index; i < factors.size(); i++) {
             prefix.add(factors.get(i));
-            findAllCombo2(cur * factors.get(i), i, factors, target, prefix, result);
+            getValidFactorCombinations2(cur * factors.get(i), i, factors, target, prefix, result);
             prefix.remove(prefix.size()-1);
         }
     }

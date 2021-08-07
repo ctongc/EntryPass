@@ -303,55 +303,117 @@ public class DepthFirstSearch {
      *
      * e.g l = 1, m = 1, n = 0, all the valid permutations are ["()<>", "(<>)", "<()>", "<>()"]
      *
-     * Time = O(2 ^ n)
+     * Time = O(m ^ n) // m is the branches, n is the number of brackets
      * Space = O(n)
      */
-    public List<String> validParentheses(int l, int m, int n) {
-        // sanity check
+    public List<String> findAllValidPermutationsOfParentheses2(int l, int m, int n) {
         if (l == 0 && m == 0 && n == 0) {
             return new ArrayList<>();
         }
-        char[] parenthesis = new char[]{'(', ')', '<', '>', '{', '}'};
+        char[] brackets = new char[]{'(', ')', '<', '>', '{', '}'};
         int[] remain = new int[]{l, l, m, m, n, n}; // {(, ), <, >, {, }}
         int targetLength = (l + m + n) * 2;
         Deque<Character> stack = new ArrayDeque<>();
         StringBuilder prefix = new StringBuilder();
         List<String> result = new ArrayList<>();
-        findValidCombo(targetLength, remain, parenthesis, stack, prefix, result);
+        findValidParenthesesCombo(targetLength, remain, brackets, stack, prefix, result);
         return result;
     }
 
-    private void findValidCombo(int targetLength, int[] remain, char[] parenthesis,
-                                Deque<Character> stack, StringBuilder prefix, List<String> result) {
+    private void findValidParenthesesCombo(int targetLength, int[] remain, char[] brackets,
+                                           Deque<Character> stack, StringBuilder prefix, List<String> result) {
         // base case
         if (prefix.length() == targetLength) {
             result.add(prefix.toString());
             return;
         }
-        // case 1: whenever we add one kind of left parenthesis:
-        //         we push it to the stack and add it to the solution prefix
-        // case 2: whenever we add one kind of right parenthesis
-        //         we first check whether it matches the top element of the stack
-        //         case 2.1: if matches: add it to the solution prefix AND stack.pop()
-        //         case 2.2: if not match: prune this branch (not calling the recursion function)
+
+         /* case 1: whenever we add a new left bracket:
+          *         check leftRemain, push it to the Stack and add it to the solution prefix
+          * case 2: whenever we add a new right bracket:
+          *         check whether it matches the top element of the stack
+          *         case 2.1: if matches, stack.pop(), add it to the solution prefix
+          *         case 2.2: if not match, prune this branch (do not call the recursion function) */
         for (int i = 0; i < remain.length; i++) {
-            if (i % 2 == 0) { // a left parenthesis
+            if (i % 2 == 0) { // a left bracket
                 if (remain[i] > 0) {
-                    stack.offerFirst(parenthesis[i]);
-                    prefix.append(parenthesis[i]);
+                    stack.offerFirst(brackets[i]);
+                    prefix.append(brackets[i]);
                     remain[i]--;
-                    findValidCombo(targetLength, remain, parenthesis, stack, prefix, result);
+                    findValidParenthesesCombo(targetLength, remain, brackets, stack, prefix, result);
                     stack.pollFirst();
                     prefix.deleteCharAt(prefix.length() - 1);
                     remain[i]++;
                 }
-            } else { // a right parenthesis
-                if(!stack.isEmpty() && stack.peekFirst() == parenthesis[i - 1]) {
+            } else { // a right brackets
+                if(!stack.isEmpty() && stack.peekFirst() == brackets[i - 1]) {
                     stack.pollFirst();
-                    prefix.append(parenthesis[i]);
+                    prefix.append(brackets[i]);
                     remain[i]--;
-                    findValidCombo(targetLength, remain, parenthesis, stack, prefix, result);
-                    stack.offerFirst(parenthesis[i - 1]); // NOTICE, which character we just polled?
+                    findValidParenthesesCombo(targetLength, remain, brackets, stack, prefix, result);
+                    stack.offerFirst(brackets[i - 1]); // NOTICE, which character we just polled?
+                    prefix.deleteCharAt(prefix.length() - 1);
+                    remain[i]++;
+                }
+            }
+        }
+    }
+
+    /**
+     * All Valid Permutations Of Parentheses III
+     * Get all valid permutations of l pairs of (), m pairs of <> and n pairs of {},
+     * subject to the priority restriction: {} higher than [] than ().
+     *
+     * Time = O(m ^ n) // m is the branches, n is the number of brackets
+     * Space = O(n)
+     */
+    public List<String> findAllValidPermutationsOfParentheses3(int l, int m, int n) {
+        if (l == 0 && m == 0 && n == 0) {
+            return new ArrayList<>();
+        }
+        char[] brackets = new char[]{'(', ')', '<', '>', '{', '}'};
+        int[] remain = new int[]{l, l, m, m, n, n}; // {(, ), <, >, {, }}
+        int targetLength = (l + m + n) * 2;
+        Deque<Integer> stack = new ArrayDeque<>();
+        StringBuilder prefix = new StringBuilder();
+        List<String> result = new ArrayList<>();
+        findParenthesesComboWithPriority(targetLength, remain, brackets, stack, prefix, result);
+        return result;
+    }
+
+    private void findParenthesesComboWithPriority(int targetLength, int[] remain, char[] brackets,
+                                                  Deque<Integer> stack, StringBuilder prefix, List<String> result) {
+        // base case
+        if (prefix.length() == targetLength) {
+            result.add(prefix.toString());
+            return;
+        }
+
+        /* case 1: whenever we add a new left bracket:
+         *         check leftRemain and whether the priority of current bracket ≥ the top of the Stack
+         *         then push it to the Stack and add it to the solution prefix
+         * case 2: whenever we add a new right bracket:
+         *         check whether it matches the top element of the stack
+         *         case 2.1: if matches, stack.pop(), add it to the solution prefix
+         *         case 2.2: if not match, prune this branch (do not call the recursion function) */
+        for (int i = 0; i < remain.length; i++) {
+            if (i % 2 == 0) { // a left bracket
+                if (remain[i] > 0 && (stack.isEmpty() || stack.peekFirst() > i)) {
+                    stack.offerFirst(i);
+                    prefix.append(brackets[i]);
+                    remain[i]--;
+                    findParenthesesComboWithPriority(targetLength, remain, brackets, stack, prefix, result);
+                    stack.pollFirst();
+                    prefix.deleteCharAt(prefix.length() - 1);
+                    remain[i]++;
+                }
+            } else { // a right brackets
+                if(!stack.isEmpty() && stack.peekFirst() == i - 1) {
+                    stack.pollFirst();
+                    prefix.append(brackets[i]);
+                    remain[i]--;
+                    findParenthesesComboWithPriority(targetLength, remain, brackets, stack, prefix, result);
+                    stack.offerFirst(i - 1); // NOTICE, which character we just polled?
                     prefix.deleteCharAt(prefix.length() - 1);
                     remain[i]++;
                 }

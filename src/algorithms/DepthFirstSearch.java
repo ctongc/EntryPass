@@ -217,7 +217,7 @@ public class DepthFirstSearch {
         }
         // put each letter in the index-th position of the input string
         for (int i = index; i < array.length; i++) { // index从0开始, 但是每次从index开始!
-            // e.g 第0层, 所有字母跟第0个换一下
+            // e.g. 第0层, 所有字母跟第0个换一下
             // all the position(0, index - 1) are already chosen
             // all possible character could be place at index are from (index, array.length - 1)
             swap(array, index, i); // swap remaining chars with index

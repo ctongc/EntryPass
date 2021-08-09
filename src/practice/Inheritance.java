@@ -84,7 +84,7 @@ class C extends B {}
 
 class D extends B {}
 
-public class InheritanceTest {
+public class Inheritance {
 
     public static void main(String[] args) {
         Parent child = new Child();

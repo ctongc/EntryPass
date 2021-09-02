@@ -77,7 +77,7 @@ public class Midterm2 {
             globalMax[0] = Math.max(globalMax[0], leftSum + rightSum + root.key);
             return Math.max(leftSum, rightSum) + root.key;
         }
-        return root.left == null ? root.key + rightSum: root.key + leftSum;
+        return root.left == null ? root.key + rightSum : root.key + leftSum;
     }
 
     /**

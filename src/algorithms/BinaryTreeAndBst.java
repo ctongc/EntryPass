@@ -196,18 +196,19 @@ public class BinaryTreeAndBst {
      * Check If Binary Tree Is Balanced
      * Check if a given binary tree is balanced.
      * A balanced binary tree is one in which the depths of every node’s left and right subtree differ by at most 1.
+     *
      * 只把value从下往上传递
      * 1 问左要值 问右要值
      * 2 在当前层计算
      * 3 返回给parent
-     * Height = log(n) levels
-     * each level time = O(n)
-     * This is not a optimal solution !!
-     * Time = O(n log n)
+     * Height = log(n) levels, each level time = O(n)
+     *
+     * This is not an optimal solution !!
+     * Time = O(nlogn)
      * Space = O(log n) // worst case, since it will return earlier when not balanced
      */
     public boolean isBalanced(TreeNode root) {
-        if (root == null) { // base case
+        if (root == null) {
             return true;
         }
         // post-order traversal

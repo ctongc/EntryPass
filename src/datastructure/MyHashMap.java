@@ -1,5 +1,7 @@
 package datastructure;
 
+import org.junit.runner.notification.RunListener;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -10,12 +12,13 @@ import java.util.Objects;
  * containsKey(K key), containsValue(V value) // check if the desired value is in the map. O(n)
  * remove(K key) - 麻烦 不提别写了
  */
+@RunListener.ThreadSafe
 class MyHashMap<K, V> {
-
-    /* MyEntry is a static class of MyHashMap, since it is:
-     * very closely bonded to MyHashMap class
-     * we probably need to access this class outside from MyHashMap class
-     * if static, I can create an entry although there's no instance of MyHashMap
+    /**
+     * MyEntry is a static class of MyHashMap, since it is:
+     * 1. very closely bonded to MyHashMap class
+     * 2. we probably need to access this class outside from MyHashMap class
+     * 3. if static, I can create an entry although there's no instance of MyHashMap
      */
     static class MyEntry<K, V> {
         private final K key;
@@ -26,6 +29,8 @@ class MyHashMap<K, V> {
             this.key = key;
             this.value = value;
         }
+
+        /* no obligation of considering concurrency here, leave it to the API */
 
         public K getKey() {
             return key;
@@ -53,14 +58,14 @@ class MyHashMap<K, V> {
 
     public MyHashMap(final int cap, final float loadFactor) {
         if (cap <= 0) {
-            throw new IllegalArgumentException("cap can not be <= 0");
+            throw new IllegalArgumentException("cap cannot be <= 0.");
         }
         this.array = (MyEntry<K, V>[]) new MyEntry[cap]; // 注意array创建的时候不能带有generic new MyEntry<K, V>[cap]
         this.size = 0;
         this.loadFactor = loadFactor;
     }
 
-    public boolean containsKey(final K key) {
+    public synchronized boolean containsKey(final K key) {
         // get the index of the key
         int index = getIndex(key);
         MyEntry<K, V> entry = array[index];
@@ -75,7 +80,7 @@ class MyHashMap<K, V> {
         return false;
     }
 
-    public boolean containsValue(final V value) {
+    public synchronized boolean containsValue(final V value) {
         if (isEmpty()) { // special case
             return false;
         }
@@ -92,8 +97,11 @@ class MyHashMap<K, V> {
         return false;
     }
 
-    /* if the key does not exists in the HashMap, return null */
-    public V get(final K key) {
+    /**
+     * get
+     * if the key does not exist in the HashMap, return null
+     */
+    public synchronized V get(final K key) {
         // same as containsKey
         // get the index of the key
         int index = getIndex(key);
@@ -109,10 +117,12 @@ class MyHashMap<K, V> {
         return null;
     }
 
-    /* insert/update
+    /**
+     * insert/update
      * if the key already exists in the HashMap, return the old corresponding value
-     * if key does not exists in the HashMap, return null */
-    public V put(final K key, final V value) {
+     * if key does not exist in the HashMap, return null
+     */
+    public synchronized V put(final K key, final V value) {
         int index = getIndex(key);
         MyEntry<K, V> head = array[index];
         MyEntry<K, V> cur = head;
@@ -130,27 +140,31 @@ class MyHashMap<K, V> {
         MyEntry<K, V> newEntry = new MyEntry<>(key, value);
         newEntry.next = head; // trick here, since head could be null
         array[index] = newEntry; // order matters!!
-        size++; // don't forgot
+        size++; // don't forget
         if (needRehashing()) {
             rehashing();
         }
         return null;
     }
 
-    public int size() {
+    public synchronized int size() {
         return size;
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return size == 0;
     }
 
-    public void clear() {
+    public synchronized void clear() {
         Arrays.fill(array, null);
         size = 0;
     }
 
-    /* return the hash# of the key, non-negative */
+    /* no synchronized needed on private method */
+
+    /**
+     * return the hash value of the key, non-negative
+     */
     private int hash(final K key) {
         // null key
         if (key == null) {
@@ -206,9 +220,12 @@ class MyHashMap<K, V> {
         }
     }
 
-    /* if the key exists, remove the <key, value> from the HashMap and return the value
-     * if key does not exists in the HashMap, return null */
-    private V remove(final K key) {
+    /**
+     * remove
+     * if the key exists, remove the <key, value> from the HashMap and return the value
+     * if key does not exist in the HashMap, return null
+     */
+    private synchronized V remove(final K key) {
         // 1. get index
         // 2. delete operation on the linked list
         // 3. size--
@@ -229,7 +246,9 @@ class MyHashMap<K, V> {
         return null;
     }
 
-    /* It is backed up by a HashMap instance */
+    /**
+     * HashSet is backed up by a HashMap instance
+     */
     static class MyHashSet<K> {
         private final MyHashMap<K, Object> map;
         // special object used for all the existing keys

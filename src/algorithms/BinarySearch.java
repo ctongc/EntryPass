@@ -1,14 +1,11 @@
 package algorithms;
 
+/**
+ * Binary search关键点
+ * 1 每一轮的search space必须缩小一半
+ * 2 target不能被rule out
+ */
 public class BinarySearch {
-    /**
-     * Binary search关键点
-     * 1 每一轮的search space必须缩小一半
-     * 2 target不能被rule out
-     */
-    private BinarySearch() {
-    }
-
     /**
      * Classical Binary Search
      * Given a target integer T and an integer array A sorted in ascending order
@@ -17,7 +14,8 @@ public class BinarySearch {
      * Space = O(1)
      */
     public int binarySearch(int[] array, int target) {
-        // assumptions: there can be duplicate elements in the array, return any of the indices i such that A[i] == T
+        /* assumptions: there can be duplicate elements in the array
+         * return any of the indices i such that A[i] == T */
         if (array == null || array.length == 0) {
             return -1;
         }
@@ -34,6 +32,7 @@ public class BinarySearch {
                 left = mid + 1;
             }
         }
+
         return -1;
     }
 
@@ -47,7 +46,8 @@ public class BinarySearch {
      * Space = O(1)
      */
     public int[] searchInSortedMatrix(int[][] matrix, int target) {
-        // assumptions: The given matrix is not null, and has size of N * M, where N >= 0 and M >= 0.
+        /* assumptions: The given matrix is not null
+         * and has size of N * M, where N >= 0 and M >= 0 */
         if (matrix.length == 0 || matrix[0].length == 0) {
             return new int[]{-1, -1};
         }
@@ -69,6 +69,7 @@ public class BinarySearch {
                 left = mid + 1;
             }
         }
+
         return new int[]{-1, -1};
     }
 
@@ -77,23 +78,23 @@ public class BinarySearch {
      * take advantage of it
      */
     public int binarySearch2(int[] array, int target) {
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
-        // this trick can avoid infinity loop
-        // if left + 1 == right, mid will === left
-        // so now it will stop when there are two elements left
+        /* this trick can avoid infinity loop
+         * if left + 1 == right, mid will === left
+         * then it will stop when there are two elements left */
         while (left + 1 < right) { // if left neighbors right -> terminate
             int mid = left + (right - left) / 2;
             if (array[mid] == target) {
                 return mid; // return the index
             } else if (array[mid] > target) {
-                right = mid; // right = mid - 1 WRONG
+                right = mid; // right = mid - 1? WRONG
             } else {
-                left = mid; // left = mid + 1 WRONG
+                left = mid; // left = mid + 1? WRONG
             }
         }
         if (array[left] == target) {
@@ -101,6 +102,7 @@ public class BinarySearch {
         } else if (array[right] == target) {
             return right;
         }
+
         return -1;
     }
 
@@ -115,6 +117,7 @@ public class BinarySearch {
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         // do binary search to find the target or where it should at
@@ -122,19 +125,20 @@ public class BinarySearch {
             int mid = left + (right - left) / 2;
             if (array[mid] == target) {
                 // if we find the target, it is the closest
-                return mid; // right = mid is also correct, right = mid - 1 WRONG
+                return mid; // right = mid is also correct, right = mid - 1? WRONG
             } else if (array[mid] > target) {
-                right = mid; // right = mid - 1 WRONG
+                right = mid; // right = mid - 1? WRONG
             } else {
-                left = mid; // left = mid + 1 OK
+                left = mid; // left = mid + 1? OK
             }
         }
-        // postprocessing
-        // now there will be 3 scenarios in this case
-        // 1 T < L < R
-        // 2 L < T < R
-        // 3 L < R < T
-        // the closest one will be the one has smaller abs value after subtract by the target
+
+        /* postprocessing
+         * now there will be 3 scenarios in this case
+         * 1 T < L < R
+         * 2 L < T < R
+         * 3 L < R < T
+         * the closest one will be the one has smaller abs value after subtract by the target */
         return Math.abs(target - array[left]) <= Math.abs(target - array[right]) ?
                 left : right;
     }
@@ -143,10 +147,10 @@ public class BinarySearch {
      * Closest In Sorted Array by the classic binary search
      */
     public int closestElementToTarget2(int[] array, int target) {
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         // do binary search to find the target or where it should at
@@ -161,6 +165,7 @@ public class BinarySearch {
                 left = mid + 1;
             }
         }
+
         /* now right < left and the target is not in the array
          * we have 3 scenarios
          * 1 left == 0 (include only one element in array)
@@ -183,24 +188,26 @@ public class BinarySearch {
      * Space = O(1)
      */
     public int firstOccurrence(int[] array, int target) {
-        // assumption: There can be duplicate elements in the array.
-        // sanity check
+        /* assumption: There can be duplicate elements in the array */
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left + 1 < right) {
             int mid = left + (right - left) / 2;
-            // if mid == target, there could be a same element on left
-            // if ask why mid but not mid +- 1, check if target could be ruled out
-            // here both are ok, but when array[mid] = target, right can't be mid - 1, might ruled out target
+            /* if mid == target, there could be a same element on left
+             * if ask why mid but not mid +- 1, check if target could be ruled out
+             * here both are ok, but when array[mid] = target
+             * right can't be mid - 1, since it might rule out target */
             if (array[mid] >= target) {
                 right = mid;
             } else {
                 left = mid;
             }
         }
+
         /* now we have two elements left, and there are 4 scenarios
          * 1 left == right == target
          * 2 left == target, right != target
@@ -218,10 +225,10 @@ public class BinarySearch {
      * First Occurrence by the classic binary search
      */
     public int firstOccurrence2(int[] array, int target) {
-        // sanity check
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left <= right) {
@@ -234,16 +241,15 @@ public class BinarySearch {
             } else {
                 left = mid + 1;
             }
-            // if left > right, means not found
-            if (left > right) {
-                return -1;
-            }
+
             // if found
             // since mid = left - 1, so left is the first occurrence of target if it equals the target
             if (array[left] == target) {
                 return left;
             }
         }
+
+        // if left > right, means not found
         return -1;
     }
 
@@ -258,6 +264,7 @@ public class BinarySearch {
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left + 1 < right) {
@@ -269,6 +276,7 @@ public class BinarySearch {
                 right = mid;
             }
         }
+
         // check array[right] first
         if (array[right] == target) {
             return right;
@@ -289,23 +297,27 @@ public class BinarySearch {
         if (array == null || array.length == 0) {
             return new int[]{-1, -1};
         }
+
         // using binary search twice, find the index of the first occurrence and the last occurrence
         int left = firstOccurrence(array, target);
         int right = lastOccurrence(array, target);
+
         return new int[]{left, right};
     }
 
     /**
      * K Closest In Sorted Array
-     * Given a target integer T, a non-negative integer K and an integer array A sorted in ascending order
-     * Find k elements that are closest elements to T in A
-     * Time = O(logn + k)  // can optimized to O(logn + logk)
+     * Given a target integer T, a non-negative integer K
+     * and an integer array A sorted in ascending order
+     * Find k elements that are the closest elements to T in A
+     * Time = O(logn + k)  // can be optimized to O(logn + logk)
      * Space = O(k)
      */
     public int[] kClosestInSortedArray(int[] array, int target, int k) {
         if (array.length == 0 || k == 0) {
             return new int[0];
         }
+
         int[] result = new int[k];
         int left = largestSmallerOrEqual(array, target);
         int right = left + 1;
@@ -323,6 +335,7 @@ public class BinarySearch {
                 result[i] = array[right++];
             }
         }
+
         return result;
     }
 
@@ -332,14 +345,16 @@ public class BinarySearch {
         while (left + 1 < right) {
             int mid = left + (right - left) / 2;
             if (array[mid] == target) {
-                left = mid; // don't return when find left but keep shrinking
+                left = mid; // right = mid => smallestLargerOrEqual
+                // don't return when find left but keep shrinking
             } else if (array[mid] < target) {
                 left = mid;
             } else {
                 right = mid;
             }
         }
-        if (array[right] <= target) {
+
+        if (array[right] <= target) { // order doesn't matter
             return right;
         }
         if (array[left] <= target) {
@@ -367,7 +382,8 @@ public class BinarySearch {
                 right = mid;
             }
         }
-        // post processing
+
+        // post-processing
         if (array[left] > target) {
             return left;
         }
@@ -378,7 +394,7 @@ public class BinarySearch {
     }
 
     /**
-     * Given a integer dictionary A of unknown size
+     * Given an integer dictionary A of unknown size
      * where the numbers in the dictionary are sorted in ascending order
      * determine if a given target integer T is in the dictionary
      * Return the index of T in A, return -1 if T is not in A.
@@ -389,14 +405,14 @@ public class BinarySearch {
     }
 
     public int search(Dictionary dict, int target) {
-        // Assumption: dictionary.get(i) will return null if index i is out of bounds
+        /* assumption: dictionary.get(i) will return null if index i is out of bounds */
         if (dict == null) {
             return -1;
         }
         int left = 0;
         int right = 1; // index
-        // find the right boundary of the binary search
-        // extends until we are sure the target is with in [left, right] range
+        /* find the right boundary of the binary search
+         * extends until we are sure the target is with in [left, right] range */
         while (dict.get(right) != null && dict.get(right) <= target) {
             if (dict.get(right) == target) {
                 return right;
@@ -407,6 +423,7 @@ public class BinarySearch {
                 right *= 2;
             }
         }
+
         // dict.get(right) == null || dict.get(right) > target
         // then run binary search to find the target
         return binarySearchInDict(dict, left, right, target);
@@ -425,6 +442,7 @@ public class BinarySearch {
                 return mid;
             }
         }
+
         return -1;
     }
 
@@ -441,6 +459,7 @@ public class BinarySearch {
         if (nums == null || nums.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = nums.length - 1;
         while (left <= right) {
@@ -461,10 +480,7 @@ public class BinarySearch {
                 }
             }
         }
+
         return -1;
-    }
-
-    public static void main(String[] args) {
-
     }
 }

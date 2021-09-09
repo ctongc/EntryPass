@@ -15,7 +15,7 @@ class GraphNode {
 public class BreadthFirstSearch {
     /**
      * Get Keys In Binary Tree Layer by Layer
-     * Get the list of list of keys in a given binary tree layer by layer.
+     * Get the list of keys in a given binary tree layer by layer.
      * Each layer is represented by a list of keys and the keys are traversed from left to right.
      * Time = O(n)
      * Space = O(n)
@@ -25,10 +25,11 @@ public class BreadthFirstSearch {
         if (root == null) {
             return result;
         }
+
         Queue<TreeNode> queue = new ArrayDeque<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
-            List<Integer> curLevel = new ArrayList<>(); // stores the nodes in curren level
+            List<Integer> curLevel = new ArrayList<>(); // stores the nodes in current level
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 // expanded
@@ -44,6 +45,7 @@ public class BreadthFirstSearch {
             }
             result.add(curLevel);
         }
+
         return result;
     }
 
@@ -58,28 +60,31 @@ public class BreadthFirstSearch {
         if (graph == null || graph.size() <= 2) {
             return true;
         }
+
         /* use 0 and 1 to denote two groups
          * the map contains the information of which group a node belongs to */
         HashMap<GraphNode, Integer> nodeGroup = new HashMap<>();
         /* Notice that you need to run DFS for EVERY NODE
-         * since its a graph and could have separate nodes */
+         * since it's a graph and could have separate nodes */
         for (GraphNode node : graph) {
             if (!checkGroup(node, nodeGroup)) {
                 return false;
             }
         }
+
         return true;
     }
 
     private boolean checkGroup(GraphNode node, HashMap<GraphNode, Integer> nodeGroup) {
         /* this if block is really important
-         * eg. n1 -> n2 -> n3
+         * e.g. n1 -> n2 -> n3
          * after run BFS on n1 you will mark n1 as group0, n2 as group1, n3 as group0
          * but when you run BFS on n2 (since you need to run DFS for EVERY NODE)
          * n2's start group mark will be 0, so no need to do BFS again */
         if (nodeGroup.containsKey(node)) {
             return true;
         }
+
         // BFS
         Queue<GraphNode> queue = new LinkedList<>();
         queue.offer(node);
@@ -103,6 +108,7 @@ public class BreadthFirstSearch {
             }
             groupNumber = groupNumber == 0 ? 1 : 0;
         }
+
         return true;
     }
 
@@ -117,6 +123,7 @@ public class BreadthFirstSearch {
         if (root == null) {
             return true;
         }
+
         boolean flag = false; // records if any null has been generated
         // BFS
         Queue<TreeNode> queue = new ArrayDeque<>();
@@ -145,6 +152,7 @@ public class BreadthFirstSearch {
                 queue.offer(cur.right);
             }
         }
+
         return true;
     }
 
@@ -153,20 +161,20 @@ public class BreadthFirstSearch {
      * and for each column the elements are also sorted in ascending order. Find the Kth smallest number in it.
      * Assume: k << n^2
      *
-     * Time = O(klogk) // for k element we doing log 2k
-     * Space = O(k+m*n) // for the visited[][], can be optimized to O(k) if using hash table
+     * Time = O(klogk) // for k elements we are doing log2k
+     * Space = O(k + m*n) // for the visited[][], can be optimized to O(k) if using hash table
      */
     public int kthSmallest(int[][] matrix, int k) {
         if (matrix == null || matrix.length == 0
                 || matrix[0] == null || matrix[0].length == 0) {
             return 0;
         }
+
         int rows = matrix.length;
         int columns = matrix[0].length;
-
         PriorityQueue<Cell> minHeap = new PriorityQueue<>(k, Comparator.comparingInt(Cell -> Cell.value));
-        // all the generated cells will be marked true,
-        // to avoid being generated more than once
+        /* all the generated cells will be marked true
+         * to avoid being generated more than once */
         boolean[][] visited = new boolean[rows][columns];
         minHeap.offer(new Cell(0, 0, matrix[0][0])); // first element
         visited[0][0] = true;
@@ -185,6 +193,7 @@ public class BreadthFirstSearch {
                 visited[cur.row][cur.column + 1] = true;
             }
         }
+
         return minHeap.peek().value;
     }
 
@@ -201,7 +210,7 @@ public class BreadthFirstSearch {
     }
 
     public static void main(String[] args) {
-        BreadthFirstSearch bfs = new BreadthFirstSearch();
+        final BreadthFirstSearch bfs = new BreadthFirstSearch();
 
         //[1, 2, 3, #, #, 4]
         TreeNode t1 = new TreeNode(1);

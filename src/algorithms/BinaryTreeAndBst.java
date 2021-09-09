@@ -10,13 +10,13 @@ class TreeNode {
     public TreeNode left;
     public TreeNode right;
     // public TreeNode parent;
+
     public TreeNode(int key) {
         this.key = key;
     }
 }
 
 public class BinaryTreeAndBst {
-
     /**
      * in-order traversal of a given binary tree
      * pre-order traversal of a given binary tree
@@ -36,39 +36,46 @@ public class BinaryTreeAndBst {
         preOrderTraversal(root, preOrderList);
         postOrderTraversal(root, postOrderList);
 
-        return inOrderList;
-        // return preOrderList;
-        // return postOrderList;
+        return inOrderList; // preOrderList; postOrderList;
     }
 
-    // node pre 左右
-    // 自己 左 右
+    /**
+     * preOrder -> node pre 左右
+     * 自己 左 右
+     */
     public void preOrderTraversal(TreeNode root, List<Integer> list) {
         if (root == null) {
             return;
         }
+
         list.add(root.key);
         preOrderTraversal(root.left, list);
         preOrderTraversal(root.right, list);
     }
 
-    // node in 左右
-    // 左 自己 右
+    /**
+     * inOrder -> node in 左右
+     * 左 自己 右
+     */
     public void inOrderTraversal(TreeNode root, List<Integer> list) {
         if (root == null) {
             return;
         }
+
         inOrderTraversal(root.left, list);
         list.add(root.key);
         inOrderTraversal(root.right, list);
     }
 
-    // node post 左右
-    // 左 右 自己
+    /**
+     * postOrder -> node post 左右
+     * 左 右 自己
+     */
     public void postOrderTraversal(TreeNode root, List<Integer> list) {
         if (root == null) {
             return;
         }
+
         preOrderTraversal(root.left, list);
         preOrderTraversal(root.right, list);
         list.add(root.key);
@@ -76,20 +83,21 @@ public class BinaryTreeAndBst {
 
     /**
      * iterative, pre-order traversal of a given binary tree
-     * return the list of keys of each node in the tree as it is pre-order traversed.
+     * return the list of keys of each node in the tree as it is pre-order traversed
      */
     public List<Integer> preOrderTraversal(TreeNode root) {
         List<Integer> preOrderList = new ArrayList<>();
         if (root == null) {
             return preOrderList;
         }
+
         Deque<TreeNode> stack = new ArrayDeque<>();
         stack.offerFirst(root);
         while (!stack.isEmpty()) {
             TreeNode cur = stack.pollFirst();
-            // the root is the top element
-            // once the root is traversed, we can print it directly
-            // and don't need to store it in the stack any more
+            /* the root is the top element
+             * once the root is traversed, we can print it directly
+             * and don't need to store it in the stack anymore */
             preOrderList.add(cur.key); // print
             // traverse left sub first
             // so the right sub should be retained in the stack before the left sub is done
@@ -100,13 +108,13 @@ public class BinaryTreeAndBst {
                 stack.offerFirst(cur.left);
             }
         }
+
         return preOrderList;
     }
 
     /**
      * iterative, in-order traversal of a given binary tree
      * return the list of keys of each node in the tree as it is in-order traversed.
-     *
      * 用左斜的斜线，向左一路撸到底
      */
     public List<Integer> inOrderTraversal(TreeNode root) {
@@ -114,25 +122,27 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return inOrderList;
         }
+
         Deque<TreeNode> stack = new ArrayDeque<>();
         TreeNode cur = root; // helper
         while (cur != null || !stack.isEmpty()) { // 3个traversal里唯一需要判断cur的
-            // always try go to the left side to see if there is any node
-            // that should be traversed before the cur node,
-            // cur node is stored on stack since it has not been traversed yet
+            /* always try go to the left side to see if there is any node
+             * that should be traversed before the cur node,
+             * cur node is stored on stack since it has not been traversed yet */
             if (cur != null) {
                 // 一路向左走到底
                 stack.offerFirst(cur);
                 cur = cur.left;
             } else { // 左孩子都被打印过了的根
-                // if can not go left, meaning all the nodes on the left side of
-                // the top node on stack have been traversed, the next traversing
-                // node should be the top node on stack
+                /* if it can not go left, meaning all the nodes on the left side of
+                 * the top node on stack have been traversed, the next traversing
+                 * node should be the top node on stack */
                 cur = stack.pollFirst();
                 inOrderList.add(cur.key); // print
                 cur = cur.right; // 向右走一步，再向左走到底
             }
         }
+
         return inOrderList;
     }
 
@@ -145,6 +155,7 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return postOrderList;
         }
+
         // store the nodes to be expanded later
         Deque<TreeNode> stack = new ArrayDeque<>();
         stack.offerFirst(root);
@@ -153,7 +164,7 @@ public class BinaryTreeAndBst {
             TreeNode cur = stack.peekFirst(); // don't poll it now
             // if we are going down, either left/right direction
             if (pre == null || cur == pre.left || cur == pre.right) {
-                // if we can still going down, go left first
+                // if we can still go down, go left first
                 if (cur.left != null) {
                     stack.offerFirst(cur.left);
                 } else if (cur.right != null) {
@@ -175,6 +186,7 @@ public class BinaryTreeAndBst {
             }
             pre = cur; // move pre to cur
         }
+
         return postOrderList;
     }
 
@@ -211,12 +223,14 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return true;
         }
+
         // post-order traversal
         int leftHeight = getHeight(root.left);
         int rightHeight = getHeight(root.right);
         if (Math.abs(leftHeight - rightHeight) > 1) {
             return false;
         }
+
         return isBalanced(root.left) && isBalanced(root.right);
     }
 
@@ -229,8 +243,8 @@ public class BinaryTreeAndBst {
         if (root == null) { // base case
             return true;
         }
-        // use -1 to denote the tree is not balanced
-        // >= 0 value means the tree is balanced and it is the height of the tree
+        /* use -1 to denote the tree is not balanced
+         * >= 0 value means the tree is balanced, and it is the height of the tree */
         return getHeight2(root) >= 0;
     }
 
@@ -238,6 +252,7 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return 0;
         }
+
         int leftHeight = getHeight2(root.left);
         // if left subtree is already not balanced, we do not need to continue, return -1 directly
         if (leftHeight == -1) {
@@ -250,6 +265,7 @@ public class BinaryTreeAndBst {
         if (Math.abs(leftHeight - rightHeight) > 1) {
             return -1;
         }
+
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
@@ -310,10 +326,10 @@ public class BinaryTreeAndBst {
 
     /**
      * Is Binary Search Tree Or Not
-     * Determine if a given binary tree is binary search tree.
+     * Determine if a given binary tree is binary search tree
      *
      * Assumption:
-     * 1 the keys stored in the binary search tree with in (Integer.MIN_VALUE, Integer.MAX_VALUE).
+     * 1 the keys stored in the binary search tree with in (Integer.MIN_VALUE, Integer.MAX_VALUE)
      * 2 no duplicate keys
      * Time = O(n)
      * Space = O(height)
@@ -325,19 +341,23 @@ public class BinaryTreeAndBst {
         return isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
+    /**
+     * 把value先从上往下传递，再从下往上传递
+     */
     private boolean isBST(TreeNode root, int min, int max) {
-        // 把value先从上往下传递，再从下往上传递
         if (root == null) {
             return true;
         }
-        // pre-order traversal
-        // 当前层只关心当前层, 不要管其它层
+
+        /* pre-order traversal
+         * 当前层只关心当前层, 不要管其它层 */
         if (root.key <= min || root.key >= max) {
             return false;
         }
-        // 越往左越小, 越往右越大
-        // 往左走, Node值域 (not change, 当前root的值)
-        // 往右走, Node值域 (当前root的值, not change)
+
+        /* 越往左越小, 越往右越大
+         * 往左走, Node值域 (not change, 当前root的值)
+         * 往右走, Node值域 (当前root的值, not change) */
         return isBST(root.left, min, root.key) && isBST(root.right, root.key, max);
     }
 
@@ -382,7 +402,6 @@ public class BinaryTreeAndBst {
      * Space = O(height)
      */
     public TreeNode searchInBst(TreeNode root, int target) {
-        // process root && terminate condition
         if (root == null || root.key == target) {
             return root;
         }
@@ -408,6 +427,7 @@ public class BinaryTreeAndBst {
                 root = root.right;
             }
         }
+
         // root == null || root.key == target
         return root;
     }
@@ -425,11 +445,13 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return new TreeNode(key);
         }
+
         if (root.key < key) {
             root.right = insertInBst(root.right, key);
         } else if (root.key > key) {
             root.left = insertInBst(root.left, key);
         }
+
         // 注意这里不是return null, 不然会被剪枝
         return root;
     }
@@ -448,7 +470,9 @@ public class BinaryTreeAndBst {
     private void insert(TreeNode root, int key) {
         if (root.key == key) {
             return;
-        } else if (key < root.key) {
+        }
+
+        if (key < root.key) {
             if (root.left == null) {
                 root.left = new TreeNode(key);
             } else {
@@ -473,6 +497,7 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return newNode;
         }
+
         TreeNode cur = root;
         while (cur.key != key) {
             if (cur.key > key) {
@@ -491,6 +516,7 @@ public class BinaryTreeAndBst {
                 }
             }
         }
+
         return root;
     }
 
@@ -498,6 +524,7 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return new TreeNode(key);
         }
+
         TreeNode cur = root;
         TreeNode parent = null;
         while (cur != null) {
@@ -517,6 +544,7 @@ public class BinaryTreeAndBst {
         } else {
             parent.right = newNode;
         }
+
         return root;
     }
 
@@ -531,6 +559,7 @@ public class BinaryTreeAndBst {
         if (root == null) {
             return root;
         }
+
         // find target node
         if (root.key > target) {
             root.left = deleteInBst(root.left, target);
@@ -539,6 +568,7 @@ public class BinaryTreeAndBst {
             root.right = deleteInBst(root.right, target);
             return root;
         }
+
         // guarantee root != null && root.key == target
         if (root.left == null) { // case 1 && 2
             return root.right;
@@ -546,13 +576,15 @@ public class BinaryTreeAndBst {
             return root.left;
         }
         // guarantee root.left != null && root.right != null
+
         // case 4.1
         if (root.right.left == null) {
             root.right.left = root.left;
             return root.right;
         }
+
         // case 4.2
-        // 1 find and delete smallest node in root.right
+        // 1 find and delete the smallest node in root.right
         TreeNode smallest = deleteSmallestInRight(root.right);
         // 2 connect the smallest node with root.left and root.right
         smallest.left = root.left;
@@ -573,12 +605,13 @@ public class BinaryTreeAndBst {
         }
         // root.left = null, root is the smallest one
         prev.left = prev.left.right;
+
         return root;
     }
 
     /**
-     * Given a binary tree, find the largest subtree which is a Binary Search Tree (BST),
-     * where largest means subtree with largest number of nodes in it.
+     * Given a binary tree, find the largest subtree which is a Binary Search Tree
+     * where "largest" means subtree with the largest number of nodes in it.
      * Time = O(n)
      * Space = O(height)
      */
@@ -589,10 +622,12 @@ public class BinaryTreeAndBst {
     }
 
     private int[] findLargest(TreeNode root, int[] largest) {
-        int[] result = new int[3]; // number of nodes in the subtree (inclusive), min value boundary, max value boundary
+        // [number of nodes in the subtree (inclusive), min value boundary, max value boundary]
+        int[] result = new int[3];
         if (root == null) {
             return result;
         }
+
         int[] leftResult = findLargest(root.left, largest);
         int[] rightResult = findLargest(root.right, largest);
         if (leftResult[0] == -1 || rightResult[0] == -1
@@ -605,6 +640,7 @@ public class BinaryTreeAndBst {
             result[2] = root.right == null ? root.key : rightResult[2];
             largest[0] = Math.max(largest[0], 1 + leftResult[0] + rightResult[0]);
         }
+
         return result;
     }
 
@@ -626,7 +662,7 @@ public class BinaryTreeAndBst {
 
     public static void main(String[] args) {
         BinaryTreeAndBst tree = new BinaryTreeAndBst();
-        //[1, 2, 3, #, #, 4]
+        // [1, 2, 3, #, #, 4]
         TreeNode t1 = new TreeNode(1);
         TreeNode t2 = new TreeNode(2);
         TreeNode t3 = new TreeNode(3);

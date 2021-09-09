@@ -662,7 +662,7 @@ public class BinaryTreeAndBst {
 
     public static void main(String[] args) {
         final BinaryTreeAndBst tree = new BinaryTreeAndBst();
-        
+
         // [1, 2, 3, #, #, 4]
         TreeNode t1 = new TreeNode(1);
         TreeNode t2 = new TreeNode(2);

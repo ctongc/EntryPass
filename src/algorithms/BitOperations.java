@@ -4,12 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BitOperations {
-
-    private BitOperations() {
-    }
-
     /**
-     * print binary representation of a int value
+     * print binary representation of an int value
      */
     public static void printBinary(int num) {
         System.out.print(num + " : ");
@@ -24,8 +20,8 @@ public class BitOperations {
      * Given a number x, test whether x's k-th bit is 1 (bit tester)
      */
     public int bitTester(int x, int k) { // bitGetter
-        // better than x & (1 << k) since the result could be 0 or 2^n
-        // (x >> k) & 1 could only be 00..00 or 00..01
+        /* better than x & (1 << k) since the result could be 0 or 2^n
+         * (x >> k) & 1 could only be 00..00 or 00..01 */
         return (x >> k) & 1; // == x[k], return that bit
     }
 
@@ -95,8 +91,8 @@ public class BitOperations {
         int c = a ^ b; // after XOR, only the bits are different will be 1
         int count = 0;
 
-        // using >>> 补0 而不是 >> 补符号位 and c != 0 as terminate condition
-        // else can't deal with a or b or c < 0
+        /* using >>> 补0 而不是 >> 补符号位 and c != 0 as terminate condition
+         * else can't deal with a or b or c < 0 */
         while (c != 0) {
             if ((c & 1) == 1) {
                 count++;
@@ -146,7 +142,7 @@ public class BitOperations {
     }
 
     public boolean containsAllUniqueChar3(String word) {
-        // Assume that the String is in ASCII representation
+        /* assume that the String is in ASCII representation */
         if (word == null || word.length() == 0) {
             return true;
         }
@@ -170,6 +166,7 @@ public class BitOperations {
                 occurred[row] |= (1 << col);
             }
         }
+
         return true;
     }
 
@@ -195,6 +192,7 @@ public class BitOperations {
              * x^bMask = ~b7 b6 b5 b4 b3 b2 b1 ~b0 */
             num ^= ((1 << i) | (1 << j)); // 100... | ...001 = 100...001 create the mask
         }
+
         return num;
     }
 
@@ -207,8 +205,8 @@ public class BitOperations {
         }
 
         char[] base = {'0', '1', '2', '3', '4',
-                '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F'};
+                       '5', '6', '7', '8', '9',
+                       'A', 'B', 'C', 'D', 'E', 'F'};
         StringBuilder sb = new StringBuilder();
         while (num > 0) {
             sb.append(base[num % 16]); // not the order is reversed
@@ -216,6 +214,7 @@ public class BitOperations {
         }
         sb.append("x0");
         sb.reverse();
+
         return sb.toString();
     }
 
@@ -238,6 +237,7 @@ public class BitOperations {
                 isLeading = false;
             }
         }
+
         return sb.toString();
     }
 

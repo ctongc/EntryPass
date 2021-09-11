@@ -340,7 +340,7 @@ public class RecursionBasics {
     /**
      * Given two nodes in a binary tree, find their lowest common ancestor
      *
-     * Time = O(n) // traverse n nodes, might less than n when find one earlier
+     * Time = O(n) -> traverse n nodes, might less than n when find one earlier
      * Space = O(height)
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode one, TreeNode two) {
@@ -349,25 +349,61 @@ public class RecursionBasics {
             return root;
         }
 
-        // step 1
         TreeNode leftNode = lowestCommonAncestor(root.left, one, two);
         TreeNode rightNode = lowestCommonAncestor(root.right, one, two);
 
         /* Case 1 if left == null && right == null -> return null to my parent
-         * Case 2 if either left or right return NON-null -> return the NON-null side to my parent
+         * Case 2 if either left or right returns NON-null -> return the NON-null side to my parent
          * Case 3 if both left and right return NON-null (both found) -> return root */
 
-        // step 2 & step 3
-        if (leftNode == null && rightNode == null) {
-            // case 1
-            return null;
-        } else if (leftNode != null && rightNode != null) {
-            // case 3
+        // case 1
+        if (leftNode != null && rightNode != null) {
             return root;
-        } else {
-            // case 2
-            return leftNode != null ? leftNode : rightNode;
         }
+
+        // case 2 & case 3
+        return leftNode != null ? leftNode : rightNode;
+    }
+
+    /**
+     * Find distance between two given keys of a Binary Tree
+     * Find the distance between two nodes in a binary tree, no parent pointers are given
+     * Distance between two nodes is the minimum number of edges
+     * to be traversed to reach one node from another
+     *
+     * Time = O(n)
+     * Space = O(height)
+     */
+    public int distanceFromTwoGivenKeys(TreeNode root, int k1, int k2) {
+        int[] nodeLevels = {-1, -1, -1};
+        lcaWithHeight(root, k1, k2, 0, nodeLevels);
+        int k1Level = nodeLevels[1];
+        int k2Level = nodeLevels[2];
+        int lcaLevel = nodeLevels[0] == -1 ? Math.min(k1Level, k2Level) : nodeLevels[0];
+        return k1Level + k2Level - 2 * lcaLevel;
+
+    }
+
+    private TreeNode lcaWithHeight(TreeNode root, int k1, int k2, int level, int[] nodeLevels) {
+        if (root == null) {
+            return root;
+        }
+
+        TreeNode leftNode = lcaWithHeight(root.left, k1, k2, level + 1, nodeLevels);
+        TreeNode rightNode = lcaWithHeight(root.right, k1, k2, level + 1, nodeLevels);
+
+        if (leftNode != null && rightNode != null) {
+            nodeLevels[0] = level;
+            return root;
+        } else if (root.key == k1) {
+            nodeLevels[1] = level;
+            return root;
+        } else if (root.key == k2) {
+            nodeLevels[2] = level;
+            return root;
+        }
+
+        return leftNode != null ? leftNode : rightNode;
     }
 
     /**

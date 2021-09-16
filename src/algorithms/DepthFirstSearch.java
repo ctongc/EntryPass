@@ -6,10 +6,12 @@ public class DepthFirstSearch {
 
     /**
      * All Subsets I
-     * Given a set of characters represented by a String, return a list containing all subsets of the characters.
-     * Assumptions: there is no duplicate characters in the original set.
+     * Given a set of characters represented by a String
+     * return a list containing all subsets of the characters
+     * Assumptions: there is no duplicate characters in the original set
      * e.g. set = "abc", output = [“”, “a”, “ab”, “abc”, “ac”, “b”, “bc”, “c”]
-     * Time = O(2 ^ n) // branch^depth - approximate the total nodes in last level
+     *
+     * Time = O(2^n) // branch^depth - approximate the total nodes in last level
      * Space = O(n) // each letter has a level
      */
     public List<String> findAllSubSets(String set) {
@@ -23,8 +25,7 @@ public class DepthFirstSearch {
     }
 
     private void findSubSets(String s, int index, StringBuilder prefix, List<String> result) {
-        // DFS
-        if (index == s.length()) { // base case
+        if (index == s.length()) {
             result.add(prefix.toString());
             return; // MUST HAVE 触底反弹
         }
@@ -61,14 +62,15 @@ public class DepthFirstSearch {
     }
 
     /**
-     * n stores total number of "pair of ()" need to add. So total levels == 2 * n  (2n positions)
+     * n stores total number of "pair of ()" need to add
+     * So total levels == 2 * n  (2n positions)
      * leftCount stores the number of left parenthesis '(' added so far
      * rightCount stores the number of right parenthesis ')' added so far
      * prefix stores the solution so far
      */
     private void findPermutationsOfParentheses(
             int n, int leftCount, int rightCount, StringBuilder prefix, List<String> result) {
-        if (leftCount == n && rightCount == n) { // base case
+        if (leftCount == n && rightCount == n) {
             result.add(prefix.toString());
             // formatAndPrint(prefix.toString().toCharArray()); this is for print indent
             return; // MUST HAVE 触底反弹
@@ -144,7 +146,8 @@ public class DepthFirstSearch {
          return result;
     }
 
-    private void getComboOfCoins(int moneyLeft, int[] coins, int level, List<Integer> cur, List<List<Integer>> result) {
+    private void getComboOfCoins(
+            int moneyLeft, int[] coins, int level, List<Integer> cur, List<List<Integer>> result) {
         /* level 0 : how many biggest cent of coins we gonna use
          * ...
          * level coins.length - 1 : how many smallest cent
@@ -182,6 +185,7 @@ public class DepthFirstSearch {
              // curSol[level] = 0;
              return;
          }
+         
          // money value on this level == coin[index]
          for (int i = 0; i <= moneyLeft / coins[level]; i++) {   // notice <=
              curSol[level] = i;
@@ -209,17 +213,20 @@ public class DepthFirstSearch {
     }
 
     private void getAllPermutations(char[] array, int index, List<String> result) {
-        // index is the current level that we are trying (第index个position放哪个字母)
-        if (index == array.length) { // base case, all position filled with one char
+        /* index is the current level that we are trying (第index个position放哪个字母)
+         * all position filled with one char
+         * Notice that can't be index == array.length - 1, "" -> [] not [""] */
+        if (index == array.length) {
             result.add(new String(array));
             // System.out.println(array);
             return;
         }
+
         // put each letter in the index-th position of the input string
         for (int i = index; i < array.length; i++) { // index从0开始, 但是每次从index开始!
-            // e.g. 第0层, 所有字母跟第0个换一下
-            // all the position(0, index - 1) are already chosen
-            // all possible character could be place at index are from (index, array.length - 1)
+            /* e.g. 第0层, 所有字母跟第0个换一下
+             * all the position(0, index - 1) are already chosen
+             * all possible character could be place at index are from (index, array.length - 1) */
             swap(array, index, i); // swap remaining chars with index
             getAllPermutations(array, index + 1, result);
             swap(array, index, i); // swap it back for reset (吃了吐)
@@ -244,6 +251,7 @@ public class DepthFirstSearch {
         findMinDiff(0, array, preSum, minDiff, totalSum, 0);
         return minDiff[0];
     }
+
     private void findMinDiff(int index, int[] array, int[] preSum, int[] minDiff, int totalSum, int size) {
         if (index == array.length) {
             if (size > 0 && size < array.length - 1) {
@@ -277,7 +285,6 @@ public class DepthFirstSearch {
     }
 
     private void findSubsetsII(char[] input, int index, StringBuilder prefix, List<String> result) {
-        // base case
         if (index == input.length) {
             result.add(prefix.toString());
             return;
@@ -322,7 +329,6 @@ public class DepthFirstSearch {
 
     private void findValidParenthesesCombo(int targetLength, int[] remain, char[] brackets,
                                            Deque<Character> stack, StringBuilder prefix, List<String> result) {
-        // base case
         if (prefix.length() == targetLength) {
             result.add(prefix.toString());
             return;
@@ -383,7 +389,6 @@ public class DepthFirstSearch {
 
     private void findParenthesesComboWithPriority(int targetLength, int[] remain, char[] brackets,
                                                   Deque<Integer> stack, StringBuilder prefix, List<String> result) {
-        // base case
         if (prefix.length() == targetLength) {
             result.add(prefix.toString());
             return;
@@ -473,7 +478,8 @@ public class DepthFirstSearch {
         return factors;
     }
 
-    // 4^99
+    /**
+     * 4^99 version, not recommended */
     private void getValidFactorCombinations2(int cur, int index, List<Integer> factors,
                                int target,  List<Integer> prefix, List<List<Integer>> result){
         if(cur == target){
@@ -494,7 +500,8 @@ public class DepthFirstSearch {
 
     /**
      * All Permutations II
-     * Given a string with possible duplicate characters, return a list with all permutations of the characters.
+     * Given a string with possible duplicate characters
+     * return a list with all permutations of the characters
      * e.g. Set = "aba", all permutations are ["aab", "aba", "baa"]
      * Time = O(n!)
      * Space = O(n ^ 2)
@@ -536,15 +543,17 @@ public class DepthFirstSearch {
      * Space = O(n)
      */
     public List<List<Integer>> nQueens(int n) {
-        //the result of how to put n queens on a board
+        // the result of how to put n queens on a board
         List<List<Integer>> res = new ArrayList<>();
         if (n <= 0) {
             return res;
         }
+
         /* cur will be a list of size n, and cur[i] is the column number
          * where the queen on row i positioned
          * index =  0  1  2  3  ...   // row number
          * cur   = {1, 3, 5, 7, ...}  // column number */
+
         List<Integer> cur = new ArrayList<Integer>(); // store the cur result
         // actually we don't need to pass a variable curRow
         // since cur.size() will be the current row number
@@ -558,6 +567,7 @@ public class DepthFirstSearch {
             res.add(new ArrayList<Integer>(cur));
             return; // 可以不写
         }
+
         for (int i = 0; i < n; i++) {
             // check if putting a queen on current row at column i is valid
             if(isValid(cur, i)) {

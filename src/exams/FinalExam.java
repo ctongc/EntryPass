@@ -5,73 +5,75 @@ import java.util.*;
 public class FinalExam {
 
     /**
-     * Given a string, we can insert at most one empty space between each pair of adjacent letters.
-     * Print all permutations of strings after insertions of empty spaces.
+     * Recruiting Event Schedules
+     * Our company is organizing a series of university recruiting events. Each day,
+     * we host an event at one university, but sometimes we want to take a break for
+     * one day before moving onto the next university.
+     * Given a sequence of universities, print all possible schedules of the recruiting events.
+     * Input: a String of universities. Each university is represented as a single capital letter.
+     * Output: all possible schedules. An underscore '_' means we take a break
+     * e.g.
      * Input: str = "ABC"
-     * Output:
-     * ABC
-     * AB_C
-     * A_BC
-     * A_B_C
+     * Output: ABC, AB_C, A_BC, A_B_C
      *
      * Time = O(2^n) // n = s.length() - 2
      * Space = O(n)
      */
-    void printStringWithSpace(String s) {
+    public void printUniversitySchedule(final String s) {
         if (s == null || s.length() <= 1) {
             System.out.println(s);
             return;
         }
-        StringBuilder prefix = new StringBuilder(); // store each formed string
-        addSpaceToString(s, 0, prefix);
+        final StringBuilder prefix = new StringBuilder(); // store each formed String
+        printStringWithSpace(s, 0, prefix);
     }
 
-    private void addSpaceToString(String s, int index, StringBuilder prefix) {
-        /* 一共 array.length() - 1 层, 因为末尾不能再加空格了 */
-
-        // base case
+    private void printStringWithSpace(final String s, final int index, final StringBuilder prefix) {
+        // 一共 array.length() - 1 层, 因为末尾不能再加空格了
         if (index == s.length() - 1) {
-            // 手动处理最后一层可以减少最后一层一半的叉
             prefix.append(s.charAt(index));
             System.out.println(prefix);
             prefix.deleteCharAt(prefix.length() - 1);
-            return; // 如果不加会出界
+            return; // MUST HAVE, 触底反弹
         }
 
-        /* 每一层每个node两个叉，左叉加空格，右杈不加 */
+        /* 每一层每个node两个叉，左叉加字母和下划线，右杈只加字母不加下划线 */
 
         prefix.append(s.charAt(index)); // 加字母
 
-        // 加空格走左杈
-        prefix.append(" ");
-        addSpaceToString(s, index + 1, prefix);
-        // 删空格走右叉
-        prefix.deleteCharAt(prefix.length() - 1);
-        addSpaceToString(s, index + 1, prefix);
+        // 加下划线走左杈
+        prefix.append("_");
+        printStringWithSpace(s, index + 1, prefix);
+        prefix.deleteCharAt(prefix.length() - 1); // 删下划线
 
-        // 删掉当前字母，回到上一层
-        prefix.deleteCharAt(prefix.length() - 1);
+        // 不加下划线走右叉
+        printStringWithSpace(s, index + 1, prefix);
 
-        /* 想想冯诺依曼体系 现在知道为啥要删2次了吗
-         * 要装作这层没发生过！A_的substring走完了 才会开始走A的 */
+        prefix.deleteCharAt(prefix.length() - 1); // 删字母
+        /* 为啥删了2次? 想想冯诺依曼体系
+         * 要装作这层没发生过! A_的所有substring走完了, 才会开始走A的 */
     }
 
     /**
-     * Given the binary Tree and the two nodes say ‘a’ and ‘b’
-     * determine whether the two nodes are cousins of each other or not.
-     * Two nodes are cousins of each other if they are at same level and have different parents.
+     * Cousins in a Binary Tree
+     * In a binary tree, two nodes are cousins of each other if they are at the same
+     * level and have different parents.
+     * Given a Binary Tree and two nodes, determine whether the two nodes are cousins
+     * of each other or not.
      *
-     * Assumption: Both TreeNodeC a and TreeNodeC b are not null
+     * Assumption: Both TreeNodes are not null
      *
      * Time = O(n) // 遍历每个节点
-     * Space = O(n) // queue
+     * Space = O(n) // Queue
      */
-    boolean isCousin(TreeNode root, TreeNode a, TreeNode b) {
+    public boolean isCousin(final TreeNode root, final TreeNode a, final TreeNode b) {
         if (root == null) {
             return false;
         }
-        Queue<TreeNode> queue = new ArrayDeque<>();
+
+        final Queue<TreeNode> queue = new ArrayDeque<>();
         queue.offer(root);
+
         while(!queue.isEmpty()) {
             int count = 0; // when count == 2, find both a and b
             int size = queue.size();
@@ -83,9 +85,9 @@ public class FinalExam {
                 if (cur.right != null) {
                     queue.add(cur.right);
                 }
-                // a and b are siblings not cousins
+                // if a and b are siblings not cousins
                 if (cur.left == a && cur.right == b
-                        || cur.left == a && cur.right == b ) {
+                        || cur.left == b && cur.right == a ) {
                     return false;
                 }
                 if (cur == a || cur == b) {
@@ -96,17 +98,63 @@ public class FinalExam {
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * How to cut/split the number into a minimum number of items
-     * such that each item is equal to an integer's square value.
+     * Time = O(n)
+     * Space = O(height)
+     */
+    public boolean isCousin2(final TreeNode root, final TreeNode a, final TreeNode b) {
+        if (root == null) {
+            return false;
+        }
+        boolean[] result = new boolean[1];
+        isCousinDFS(root, a, b, 0, result);
+        return result[0];
+    }
+
+    /**
+     * 1. ask left and right, did you find a or b? - semantic of the return value
+     * 2. if found both && their level + 1 != current level, they are cousin
+     * 3. return the level to the parents
+     *
+     * Time = O(n)
+     * Space = O(height)
+     */
+    private int isCousinDFS(final TreeNode root, final TreeNode a, final TreeNode b, int level, boolean[] result) {
+        if (root == null) {
+            return 0;
+        }
+        if (root == a || root == b) {
+            return level;
+        }
+
+        int left = isCousinDFS(root.left, a, b, level + 1, result);
+        int right = isCousinDFS(root.right, a, b, level + 1, result);
+
+        if (left == right && left > level + 1) {
+            result[0] = true;
+        }
+
+        return left == 0 ? right : left;
+    }
+
+    /**
+     * Packing Up the Swags
+     * Our company is going to distribute swags at the recruiting event. We will put
+     * the swags into square-shaped boxes. All boxes have to be completely filled so
+     * that the swags wouldn't break during transportation.
+     * e.g. a box can contain 1 swag, 4 swags, 9 swags, etc. (can be sufficiently large)
+     * However, if there are 10 swags, we have to put them into multiple boxes.
+     * e.g. split them into four boxes: 4, 4, 1, 1; or just two boxes: 9, 1
+     * Given the number of swags, what is the minimum number of boxes to pack them up
      *
      * Time = O(num^maxRoot) // 实际上要比这个小
      * Space = O(maxRoot)
      */
-    int splitNum(int num) {
+    public int splitNum(final int num) {
         if (num <= 1) {
             return num;
         }
@@ -122,7 +170,8 @@ public class FinalExam {
         return min[0];
     }
 
-    private void getLeastSplit(int valueLeft, int level, int[] roots, int[] cuts, int[] min) {
+    private void getLeastSplit(final int valueLeft, final int level,
+                               final int[] roots, final int[] cuts, final int[] min) {
 
         if (level == roots.length - 1) {
             // 手动处理最后一层
@@ -142,86 +191,94 @@ public class FinalExam {
     }
 
     /**
-     * How to cut/split the number into a minimum number of items
-     * such that each item is equal to an integer's square value.
-     *
      * Time = O(n^1.5) // O(n)*O(sqrt(n))
      * Space =
      */
-    int splitNum2(int num) {
+    int splitNum2(final int num) {
         if (num <= 1) {
             return num;
         }
+
         // M[i]的物理意义是第i个数可以被分成的最少个数的平方数之和
         int[] M = new int[num + 1];
         M[0] = 0;
-        M[1] = 1; // base case
+        M[1] = 1;
+
         for (int i = 2; i <= num; i++) {
-            M[i] = num;
-            // 左大段 + 右小段
+            M[i] = i;
+            // 左大段 + 右小段(不可分割)
             for (int j = 1; j * j <= i; j++) {
-                M[i] = Math.min(M[i], M[i - j*j] + 1);
+                M[i] = Math.min(M[i], M[i - j * j]);
             }
         }
+
         return M[num];
     }
 
     /**
-     * Given an array of strings, find if all the strings can be chained to form a circle.
-     * Two string s1 and s2 can be chained, iff the last letter of s1is identical to the first letter of s2.
+     * Q4 Infinite Loop Around the Dinner Table
+     * After the event, our company will take the students out for dinner. The restaurant
+     * has a large round table that can fit any whole party. We want to know if we can
+     * arrange the students so that the names of all students around the table form an
+     * "infinite loop". For each pair of neighboring students s1 and s2, the last letter
+     * of s1's name must be identical to the first letter of s2's name.
+     * e.g. "Alice" and "Eric" can sit together, but "Alice" and "Bob" cannot.
+     * Given an array of names, determine if it is possible to arrange the students at
+     * the round table in this way.
      *
-     * Assumption: each string in arr is not null and length > 0
+     * Assumption: each String in names is not null and length > 0
+     *
      * Time = O(n!)
      * Space = O(n)
      */
-    public boolean containCycle(String[] array) {
-        if (array == null || array.length == 0) {
+    public boolean canChain(final String[] names) {
+        if (names == null || names.length == 0) {
             return false;
         }
-        if (array.length == 1) {
-            String s = array[0];
-            return s.charAt(0) == s.charAt(s.length() - 1);
-        }
         // start from the second string
-        return containCycleHelper(array, 1);
+        return chainCheck(names, 1);
     }
 
-    private boolean containCycleHelper(String[] input, int index){
-        if (index == input.length) {
-            // check if the last string can chain the first string
-            return isValid(input[index - 1], input[0]);
+    private boolean chainCheck(final String[] names, final int index) {
+        if (index == names.length) {
+            // check if the last String can chain the first String
+            return isValid(names[index - 1], names[0]);
         }
 
-        for (int i = index; i < input.length; i++) {
-            if (isValid(input[index - 1], input[i])) {
-                swap(input, index, i);
-                if (containCycleHelper(input, index + 1)) {
+        /* all the elements should be used, the relative order can be changed
+         * all permutation -> swap-swap */
+        for (int i = index; i < names.length; i++) {
+            // swap only when s1's last char == s2's first char
+            if (isValid(names[index - 1], names[i])) {
+                swap(names, index, i);
+                if (chainCheck(names, index + 1)) {
                     return true;
                 }
-                swap(input, index, i);
+                swap(names, index, i);
             }
         }
+
         return false;
     }
 
-    private boolean isValid(String one, String two) {
+    private boolean isValid(final String one, final String two) {
         return one.charAt(one.length() - 1) == two.charAt(0);
     }
 
-    private static void swap(String[] array, int a, int b) {
+    private void swap(final String[] array, final int a, final int b) {
         String temp = array[a];
         array[a] = array[b];
         array[b] = temp;
     }
 
     public static void main(String[] args) {
-        FinalExam solution = new FinalExam();
-        solution.printStringWithSpace("ABC");
-        //     6
-        //   /   \
-        //  3     5
-        // / \   / \
-        //7   8 1   2
+        final FinalExam solution = new FinalExam();
+        solution.printUniversitySchedule("ABC");
+        //      6
+        //    /   \
+        //   3     5
+        //  / \   / \
+        // 7   8 1   2
         TreeNode t1 = new TreeNode(6);
         TreeNode t2 = new TreeNode(3);
         TreeNode t3 = new TreeNode(5);
@@ -235,11 +292,13 @@ public class FinalExam {
         t2.right = t5;
         t3.left = t6;
         t3.right = t7;
-        System.out.println(solution.isCousin(t1,t4,t6));
+        System.out.println(solution.isCousin(t1, t4, t6));
+        System.out.println(solution.isCousin2(t1, t4, t6));
 
         System.out.println(solution.splitNum(13));
         System.out.println(solution.splitNum2(13));
 
-        System.out.println(solution.containCycle(new String[]{"ab", "ba", "acca"}));
+        System.out.println(solution.canChain(new String[]{"ab", "ba", "acca"}));
+        System.out.println(solution.canChain(new String[]{"aba"}));
     }
 }

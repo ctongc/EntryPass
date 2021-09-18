@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class BitOperations {
     /**
-     * print binary representation of an int value
+     * Print binary representation of an int value.
      */
     public static void printBinary(int num) {
         System.out.print(num + " : ");
@@ -17,7 +17,7 @@ public class BitOperations {
     }
 
     /**
-     * Given a number x, test whether x's k-th bit is 1 (bit tester)
+     * Given a number x, test whether x's k-th bit is 1 (bit tester).
      */
     public int bitTester(int x, int k) { // bitGetter
         /* better than x & (1 << k) since the result could be 0 or 2^n
@@ -26,7 +26,7 @@ public class BitOperations {
     }
 
     /**
-     * Given a number x, set x's k-th bit to 1 (bit setter)
+     * Given a number x, set x's k-th bit to 1 (bit setter).
      */
     public int bitSetter(int x, int k) {
         // int bitSetter = 1;
@@ -36,7 +36,7 @@ public class BitOperations {
     }
 
     /**
-     * Given a number x, set x's k-th bit to 0 (bit reSetter)
+     * Given a number x, set x's k-th bit to 0 (bit reSetter).
      */
     public int bitReSetter(int x, int k) {
         // int bitReSetter = 1;
@@ -47,7 +47,8 @@ public class BitOperations {
     }
 
     /**
-     * Determine whether a num x is a power of 2
+     * Determine whether a num x is a power of 2.
+     *
      * Time = O(# of bits)
      * Space = O(1)
      */
@@ -108,7 +109,7 @@ public class BitOperations {
 
     /**
      * Determine if the characters of a given string are all unique.
-     * The value of valid characters are from 0 to 255
+     * The value of valid characters are from 0 to 255.
      */
     public boolean containsAllUniqueChar(String word) {
         if (word == null || word.length() == 0) {
@@ -197,7 +198,7 @@ public class BitOperations {
     }
 
     /**
-     * Given a non-negative number x, get the hexadecimal representation of x in String type
+     * Given a non-negative number x, get the hexadecimal representation of x in String type.
      */
     public String integerToHex(int num) {
         if (num == 0) {

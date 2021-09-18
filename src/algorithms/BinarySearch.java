@@ -1,21 +1,22 @@
 package algorithms;
 
 /**
- * Binary search关键点
- * 1 每一轮的search space必须缩小一半
- * 2 target不能被rule out
+ * Binary search 关键点
+ * 1. 每一轮的search space必须缩小一半
+ * 2. target不能被rule out
  */
 public class BinarySearch {
     /**
      * Classical Binary Search
-     * Given a target integer T and an integer array A sorted in ascending order
-     * find the index i such that A[i] == T or return -1 if there is no such index.
+     * Given a target integer T and an integer array A sorted in ascending order find
+     * the index i such that A[i] == T or return -1 if there is no such index.
+     *
      * Time = O(logn)
      * Space = O(1)
      */
     public int binarySearch(int[] array, int target) {
-        /* assumptions: there can be duplicate elements in the array
-         * return any of the indices i such that A[i] == T */
+        /* Assumptions: there can be duplicate elements in the array.
+         * Return any of the indices i such that A[i] == T */
         if (array == null || array.length == 0) {
             return -1;
         }
@@ -38,15 +39,17 @@ public class BinarySearch {
 
     /**
      * Search In Sorted Matrix I
-     * Given a 2D matrix that contains integers only, which each row is sorted in an ascending order.
-     * The first element of next row is larger than (or equal to) the last element of previous row.
-     * Given a target number, returning the position that the target locates within the matrix.
-     * If the target number does not exist in the matrix, return {-1, -1}.
+     * Given a 2D matrix that contains integers only, which each row is sorted in ascending
+     * order. The first element of next row is larger than (or equal to) the last element
+     * of previous row.
+     * Given a target number, returning the position that the target locates within the
+     * matrix. If the target number does not exist in the matrix, return {-1, -1}.
+     *
      * Time = O(log n*m)
      * Space = O(1)
      */
     public int[] searchInSortedMatrix(int[][] matrix, int target) {
-        /* assumptions: The given matrix is not null
+        /* Assumptions: The given matrix is not null
          * and has size of N * M, where N >= 0 and M >= 0 */
         if (matrix.length == 0 || matrix[0].length == 0) {
             return new int[]{-1, -1};
@@ -54,7 +57,7 @@ public class BinarySearch {
 
         int row = matrix.length;
         int col = matrix[0].length;
-        // stretched to 1D array
+        // stretched to a 1D array
         int left = 0;
         int right = row * col - 1;
         while (left <= right) {
@@ -75,7 +78,7 @@ public class BinarySearch {
 
     /**
      * binary search version 2
-     * take advantage of it
+     * Take advantage of it.
      */
     public int binarySearch2(int[] array, int target) {
         if (array == null || array.length == 0) {
@@ -84,9 +87,9 @@ public class BinarySearch {
 
         int left = 0;
         int right = array.length - 1;
-        /* this trick can avoid infinity loop
+        /* This trick can avoid infinity loop
          * if left + 1 == right, mid will === left
-         * then it will stop when there are two elements left */
+         * then it will stop when there are two elements left. */
         while (left + 1 < right) { // if left neighbors right -> terminate
             int mid = left + (right - left) / 2;
             if (array[mid] == target) {
@@ -108,8 +111,9 @@ public class BinarySearch {
 
     /**
      * Closest In Sorted Array
-     * Given a target integer T and an integer array A sorted in ascending order
-     * find the index i in A such that A[i] is closest to T.
+     * Given a target integer T and an integer array A sorted in ascending order, find
+     * the index i in A such that A[i] is closest to T.
+     *
      * Time = O(logn)
      * Space = O(1)
      */
@@ -133,12 +137,12 @@ public class BinarySearch {
             }
         }
 
-        /* postprocessing
-         * now there will be 3 scenarios in this case
-         * 1 T < L < R
-         * 2 L < T < R
-         * 3 L < R < T
-         * the closest one will be the one has smaller abs value after subtract by the target */
+        /* Postprocessing
+         * Now there will be 3 scenarios in this case:
+         * 1. T < L < R
+         * 2. L < T < R
+         * 3. L < R < T
+         * The closest one will be the one has smaller abs value after subtract by the target. */
         return Math.abs(target - array[left]) <= Math.abs(target - array[right]) ?
                 left : right;
     }
@@ -166,11 +170,10 @@ public class BinarySearch {
             }
         }
 
-        /* now right < left and the target is not in the array
-         * we have 3 scenarios
-         * 1 left == 0 (include only one element in array)
-         * 2 right == array.length - 1
-         * 3 normal right < left */
+        /* Now right < left and the target is not in the array, we have 3 scenarios:
+         * 1. left == 0 (include only one element in array)
+         * 2. right == array.length - 1
+         * 3. normal right < left */
         if (left == 0) {
             return left;
         } else if (right == array.length - 1) {
@@ -182,8 +185,9 @@ public class BinarySearch {
 
     /**
      * First Occurrence
-     * Given a target integer T and an integer array A sorted in ascending order,
-     * find the index of the first occurrence of T in A or return -1 if there is no such index.
+     * Given a target integer T and an integer array A sorted in ascending order, find
+     * the index of the first occurrence of T in A or return -1 if there is no such index.
+     *
      * Time = O(logn)
      * Space = O(1)
      */
@@ -197,10 +201,10 @@ public class BinarySearch {
         int right = array.length - 1;
         while (left + 1 < right) {
             int mid = left + (right - left) / 2;
-            /* if mid == target, there could be a same element on left
-             * if ask why mid but not mid +- 1, check if target could be ruled out
-             * here both are ok, but when array[mid] = target
-             * right can't be mid - 1, since it might rule out target */
+            /* If mid == target, there could be a same element on left.
+             * If ask why mid but not mid +- 1, check if target could be ruled out.
+             * Here both are ok, but when array[mid] = target, right can't be mid - 1,
+             * since it might rule out target */
             if (array[mid] >= target) {
                 right = mid;
             } else {
@@ -208,11 +212,11 @@ public class BinarySearch {
             }
         }
 
-        /* now we have two elements left, and there are 4 scenarios
-         * 1 left == right == target
-         * 2 left == target, right != target
-         * 3 left != target, right == target
-         * 4 both left and right != target */
+        /* Now we have two elements left, and there are 4 scenarios:
+         * 1. left == right == target
+         * 2. left == target, right != target
+         * 3. left != target, right == target
+         * 4. both left and right != target */
         if (array[left] == target) { // check array[left] first
             return left;
         } else if (array[right] == target) {
@@ -255,8 +259,9 @@ public class BinarySearch {
 
     /**
      * Last Occurrence
-     * Given a target integer T and an integer array A sorted in ascending order
-     * find the index of the last occurrence of T in A or return -1 if there is no such index.
+     * Given a target integer T and an integer array A sorted in ascending order, find
+     * the index of the last occurrence of T in A or return -1 if there is no such index.
+     *
      * Time = O(logn)
      * Space = O(1)
      */
@@ -288,8 +293,9 @@ public class BinarySearch {
 
     /**
      * Search For a Range
-     * Given an array of integers sorted in ascending order, find the starting and ending position
-     * of a given target value. If the target is not found in the array, return [-1, -1].
+     * Given an array of integers sorted in ascending order, find the starting and ending
+     * position of a given target value. If the target is not found in the array, return [-1, -1].
+     *
      * Time = O(log n)
      * Space = O(1)
      */
@@ -307,9 +313,9 @@ public class BinarySearch {
 
     /**
      * K Closest In Sorted Array
-     * Given a target integer T, a non-negative integer K
-     * and an integer array A sorted in ascending order
-     * Find k elements that are the closest elements to T in A
+     * Given a target integer T, a non-negative integer K and an integer array A sorted
+     * in ascending order. Find k elements that are the closest elements to T in A.
+     *
      * Time = O(logn + k)  // can be optimized to O(logn + logk)
      * Space = O(k)
      */
@@ -365,7 +371,8 @@ public class BinarySearch {
 
     /**
      * Smallest Element that is Larger than Target
-     * Find the smallest element that is larger than a target number
+     * Find the smallest element that is larger than a target number.
+     *
      * Time = O(logn)
      * Space = O(1)
      */
@@ -394,10 +401,9 @@ public class BinarySearch {
     }
 
     /**
-     * Given an integer dictionary A of unknown size
-     * where the numbers in the dictionary are sorted in ascending order
-     * determine if a given target integer T is in the dictionary
-     * Return the index of T in A, return -1 if T is not in A.
+     * Given an integer dictionary A of unknown size, where the numbers in the dictionary
+     * are sorted in ascending order. Determine if a given target integer T is in the
+     * dictionary. Return the index of T in A, return -1 if T is not in A.
      */
     interface Dictionary {
         // the dictionary only has .get() method, no .size()
@@ -405,13 +411,13 @@ public class BinarySearch {
     }
 
     public int search(Dictionary dict, int target) {
-        /* assumption: dictionary.get(i) will return null if index i is out of bounds */
+        /* Assumption: dictionary.get(i) will return null if index i is out of bounds */
         if (dict == null) {
             return -1;
         }
         int left = 0;
         int right = 1; // index
-        /* find the right boundary of the binary search
+        /* Find the right boundary of the binary search,
          * extends until we are sure the target is with in [left, right] range */
         while (dict.get(right) != null && dict.get(right) <= target) {
             if (dict.get(right) == target) {
@@ -448,10 +454,11 @@ public class BinarySearch {
 
     /**
      * Search in shifted sorted array
-     * Suppose an array sorted in ascending order is shifted at some pivot unknown to you beforehand.
-     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2) You are given a target value to search.
-     * If found in the array return ints index, otherwise return -1.
-     * You may assume no duplicate exists in the array.
+     * Suppose an array sorted in ascending order is shifted at some pivot unknown to
+     * you beforehand. (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2)
+     * You are given a target value to search, if found in the array return ints index,
+     * otherwise return -1. You may assume no duplicate exists in the array.
+     *
      * Time = O(logn)
      * Space = O(1)
      */

@@ -18,10 +18,10 @@ class TreeNode {
 
 public class BinaryTreeAndBst {
     /**
-     * in-order traversal of a given binary tree
-     * pre-order traversal of a given binary tree
-     * post-order traversal of a given binary tree
-     * return the list of keys of each node in the tree as it is in-order traversed.
+     * In-order traversal of a given binary tree
+     * Pre-order traversal of a given binary tree
+     * Post-order traversal of a given binary tree
+     * Return the list of keys of each node in the tree as it is in-order traversed.
      */
     public List<Integer> treeTraversal(TreeNode root) {
         List<Integer> inOrderList = new ArrayList<>();
@@ -82,8 +82,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * iterative, pre-order traversal of a given binary tree
-     * return the list of keys of each node in the tree as it is pre-order traversed
+     * Iterative, pre-order traversal of a given binary tree.
+     * Return the list of keys of each node in the tree as it is pre-order traversed.
      */
     public List<Integer> preOrderTraversal(TreeNode root) {
         List<Integer> preOrderList = new ArrayList<>();
@@ -95,9 +95,8 @@ public class BinaryTreeAndBst {
         stack.offerFirst(root);
         while (!stack.isEmpty()) {
             TreeNode cur = stack.pollFirst();
-            /* the root is the top element
-             * once the root is traversed, we can print it directly
-             * and don't need to store it in the stack anymore */
+            /* The root is the top element, once the root is traversed, we can print it
+             * directly and don't need to store it in the stack anymore. */
             preOrderList.add(cur.key); // print
             // traverse left sub first
             // so the right sub should be retained in the stack before the left sub is done
@@ -113,8 +112,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * iterative, in-order traversal of a given binary tree
-     * return the list of keys of each node in the tree as it is in-order traversed.
+     * Iterative, in-order traversal of a given binary tree.
+     * Return the list of keys of each node in the tree as it is in-order traversed.
      * 用左斜的斜线，向左一路撸到底
      */
     public List<Integer> inOrderTraversal(TreeNode root) {
@@ -126,17 +125,17 @@ public class BinaryTreeAndBst {
         Deque<TreeNode> stack = new ArrayDeque<>();
         TreeNode cur = root; // helper
         while (cur != null || !stack.isEmpty()) { // 3个traversal里唯一需要判断cur的
-            /* always try go to the left side to see if there is any node
-             * that should be traversed before the cur node,
-             * cur node is stored on stack since it has not been traversed yet */
+            /* Always try go to the left side to see if there is any node that should
+             * be traversed before the cur node, cur node is stored on stack since it
+             * has not been traversed yet. */
             if (cur != null) {
                 // 一路向左走到底
                 stack.offerFirst(cur);
                 cur = cur.left;
             } else { // 左孩子都被打印过了的根
-                /* if it can not go left, meaning all the nodes on the left side of
+                /* If it can not go left, meaning all the nodes on the left side of
                  * the top node on stack have been traversed, the next traversing
-                 * node should be the top node on stack */
+                 * node should be the top node on stack. */
                 cur = stack.pollFirst();
                 inOrderList.add(cur.key); // print
                 cur = cur.right; // 向右走一步，再向左走到底
@@ -147,7 +146,7 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * maintain a previous Node to recode the previous visiting node on the traversing path
+     * Maintain a previous Node to recode the previous visiting node on the traversing path.
      * 第三次看见一个节点才打印
      */
     public List<Integer> postOrderTraversal(TreeNode root) {
@@ -193,6 +192,7 @@ public class BinaryTreeAndBst {
     /**
      * Height of Binary Tree
      * Find the height of binary tree.
+     *
      * Time = O(n)  // n is the total number in the tree
      * Space = O(height)  // worst case O(n)
      */
@@ -206,13 +206,13 @@ public class BinaryTreeAndBst {
 
     /**
      * Check If Binary Tree Is Balanced
-     * Check if a given binary tree is balanced.
-     * A balanced binary tree is one in which the depths of every node’s left and right subtree differ by at most 1.
+     * A balanced binary tree is one in which the depths of every node’s left and
+     * right subtree differ by at most 1.
      *
      * 只把value从下往上传递
-     * 1 问左要值 问右要值
-     * 2 在当前层计算
-     * 3 返回给parent
+     * 1. 问左要值 问右要值
+     * 2. 在当前层计算
+     * 3. 返回给parent
      * Height = log(n) levels, each level time = O(n)
      *
      * This is not an optimal solution !!
@@ -235,7 +235,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * optimal solution
+     * Optimal solution
+     *
      * Time = O(n)
      * Space = O(height)
      */
@@ -270,7 +271,7 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * Check if a given binary tree is symmetric.
+     * Check if a given binary tree is symmetric
      *              10
      *           5a | 5b
      *        1a 3a | 3b 1b
@@ -279,6 +280,7 @@ public class BinaryTreeAndBst {
      * case 2 left == null && right != null
      * case 3 left != null && right == null
      * case 4 left != null && right != null
+     *
      * Time = O(n)
      * Space = O(height)
      */
@@ -301,14 +303,16 @@ public class BinaryTreeAndBst {
             // case 4
             return false;
         }
-        // 注意对称轴的位置 是左的左和右的右 左的右和右的左
+        // 注意对称轴的位置: 左的左和右的右, 的右和右的左
         return isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left);
     }
 
     /**
      * Tweaked Identical Binary Trees
-     * Determine whether two given binary trees are identical assuming any number of ‘tweak’s are allowed.
-     * A tweak is defined as a swap of the children of one node in the tree.
+     * Determine whether two given binary trees are identical assuming any number of
+     * "tweak"s are allowed. A tweak is defined as a swap of the children of one node
+     * in the tree.
+     *
      * Time = O(n ^ 2)  // Quadra tree = 4 ^ (log_2(n))
      * Space = O(height)
      */
@@ -320,17 +324,19 @@ public class BinaryTreeAndBst {
         } else if (one.key != two.key) {
             return false;
         }
+
         return isTweakedIdentical(one.left, two.left) && isTweakedIdentical(one.right, two.right) // case 1
                 || isTweakedIdentical(one.left, two.right) && isTweakedIdentical(one.right, two.left);  // case 2
     }
 
     /**
      * Is Binary Search Tree Or Not
-     * Determine if a given binary tree is binary search tree
+     * Determine if a given binary tree is binary search tree.
      *
      * Assumption:
-     * 1 the keys stored in the binary search tree with in (Integer.MIN_VALUE, Integer.MAX_VALUE)
-     * 2 no duplicate keys
+     * 1. the keys stored in the binary search tree with in (Integer.MIN_VALUE, Integer.MAX_VALUE)
+     * .2 no duplicate keys
+     *
      * Time = O(n)
      * Space = O(height)
      */
@@ -363,8 +369,9 @@ public class BinaryTreeAndBst {
 
     /**
      * Get Keys In Binary Search Tree In Given Range
-     * Get the list of keys in a given binary search tree in a given range[min, max] in ascending order
-     * both min and max are inclusive.
+     * Get the list of keys in a given binary search tree in a given range[min, max] in
+     * ascending order, both min and max are inclusive.
+     *
      * Time = O(n) // worst case, better answer O(height + # of nodes in the range of [min, max])
      * Space = O(height)
      */
@@ -395,9 +402,10 @@ public class BinaryTreeAndBst {
 
     /**
      * Search In Binary Search Tree
-     * Find the target key K in the given binary search tree, return the node
-     * that contains the key if K is found, otherwise return null.
-     * recursive
+     * Find the target key K in the given binary search tree, return the node that
+     * contains the key if K is found, otherwise return null.
+     *
+     * recursive way
      * Time = O(height)
      * Space = O(height)
      */
@@ -415,7 +423,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * iterative
+     * Iterative way.
+     *
      * Time = O(height)
      * Space = O(1)
      */
@@ -434,10 +443,11 @@ public class BinaryTreeAndBst {
 
     /**
      * Insert In Binary Search Tree
-     * Insert a key in a binary search tree if the binary search tree does not already contain the key.
-     * Return the root of the binary search tree.
+     * Insert a key in a binary search tree if the binary search tree does not already
+     * contain the key. Return the root of the binary search tree.
      * insert只管insert 不要管调整
      * insert不是在找到坑的那一步插入，而是返回到父节点插入
+     *
      * Time = O(height)
      * Space = O(height)
      */
@@ -457,7 +467,7 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * recursive and remove redundant operation
+     * Recursive and remove redundant operation.
      */
     public TreeNode insertInBst2(TreeNode root, int key) {
         if (root == null) {
@@ -488,7 +498,8 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * iterative
+     * Iterative way
+     *
      * Time = O(height)
      * Space = O(1)
      */
@@ -549,9 +560,12 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * Delete the target key K in the given binary search tree if the binary search tree contains K.
-     * Return the root of the binary search tree.
-     * 1 findMin(), 2 delete(root, min), 3 root.value = min
+     * Delete the target key K in the given binary search tree if the binary search
+     * tree contains K. Return the root of the binary search tree.
+     * 1. findMin()
+     * 2. delete(root, min)
+     * 3. root.value = min
+     *
      * Time = O(height)
      * Space = O(height)
      */
@@ -594,7 +608,7 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * return the node that replace target
+     * Return the node that replace target.
      */
     private TreeNode deleteSmallestInRight(TreeNode root) {
         TreeNode prev = root;
@@ -610,8 +624,9 @@ public class BinaryTreeAndBst {
     }
 
     /**
-     * Given a binary tree, find the largest subtree which is a Binary Search Tree
+     * Given a binary tree, find the largest subtree which is a Binary Search Tree,
      * where "largest" means subtree with the largest number of nodes in it.
+     *
      * Time = O(n)
      * Space = O(height)
      */
@@ -646,8 +661,8 @@ public class BinaryTreeAndBst {
 
     /**
      * Diagonal Sum of a Binary Tree
-     * Consider lines of slope -1 passing between nodes.
-     * Diagonal sum in a binary tree is sum of all node's data lying through these line.
+     * Consider lines of slope -1 passing between nodes. Diagonal sum in a binary
+     * tree is sum of all node's data lying through these line.
      * Given a Binary Tree, print all diagonal sums.
      */
     public void diagonalSum(TreeNode root, int level, Map<Integer, Integer> map) {
@@ -657,7 +672,7 @@ public class BinaryTreeAndBst {
         // add the current node's value to the corresponding map entry
         map.put(root.key, map.getOrDefault(level, 0) + root.key);
         diagonalSum(root.left, level + 1, map);
-        diagonalSum(root.left, level, map);
+        diagonalSum(root.right, level, map);
     }
 
     public static void main(String[] args) {

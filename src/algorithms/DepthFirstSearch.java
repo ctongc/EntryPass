@@ -6,8 +6,8 @@ public class DepthFirstSearch {
 
     /**
      * All Subsets I
-     * Given a set of characters represented by a String
-     * return a list containing all subsets of the characters
+     * Given a set of characters represented by a String, return a list containing all
+     * subsets of the characters.
      * Assumptions: there is no duplicate characters in the original set
      * e.g. set = "abc", output = [“”, “a”, “ab”, “abc”, “ac”, “b”, “bc”, “c”]
      *
@@ -35,7 +35,7 @@ public class DepthFirstSearch {
         // case 1: add current character to the prefix
         prefix.append(s.charAt(index));
         findSubSets(s, index + 1, prefix, result); // 吃
-        /* 在try同层不同的node时，需要回到母节点层，再下到下一层的右边node。
+        /* 在try同层不同的node时，需要回到母节点层，再下到下一层的右边node.
          * e.g. 从add 'c' 到add '', 需要回到"For b"层 (=把c从set里删掉)
          * 再下到"For c"层, add '' */
         prefix.deleteCharAt(prefix.length() - 1); // 吐 remove the char just added, reset states
@@ -48,6 +48,7 @@ public class DepthFirstSearch {
      * All Valid Permutations Of Parentheses I
      * Given n pairs of parentheses “()”, return a list with all the valid permutations.
      * e.g. n = 3, all valid permutations are ["((()))", "(()())", "(())()", "()(())", "()()()"]
+     *
      * Time = O(2 ^ (2n)) // branch 2, depth 2n (2n levels)
      * Space = O(2 * n) // 2n levels, but need another n to form the StringBuilder
      */
@@ -76,8 +77,8 @@ public class DepthFirstSearch {
             return; // MUST HAVE 触底反弹
         }
 
-        /* n个括号, 2n个position, 所以2n层。
-         * 每层每个node两个杈，考虑当前位置加什么括号, 左杈加左括号，右杈加右括号 */
+        /* n个括号, 2n个position, 所以2n层.
+         * 每层每个node两个杈，考虑当前位置加什么括号, 左杈加左括号, 右杈加右括号. */
 
         // case 1: add '(' on this level
         if (leftCount < n) {
@@ -87,9 +88,8 @@ public class DepthFirstSearch {
         }
 
         // case 2: add ')' on this level
-        /* Restriction: whenever we want to insert a new ')'
-         * we need to make sure the number of '(' added so far
-         * is larger than the number of ')' added so far. */
+        /* Restriction: whenever we want to insert a new ')', we need to make sure the
+         * number of '(' added so far is larger than the number of ')' added so far. */
         if (leftCount > rightCount) { // no need to check if rightCount < n
             prefix.append(')');
             findPermutationsOfParentheses(n, leftCount, rightCount + 1, prefix, result);
@@ -127,7 +127,8 @@ public class DepthFirstSearch {
     }
 
     /**
-     * Given a number of different denominations of coins (e.g., 1 cent, 5 cents, 10 cents, 25 cents),
+     * Given a number of different denominations of coins
+     * (e.g., 1 cent, 5 cents, 10 cents, 25 cents),
      * get all the possible ways to pay a target number of cents.
      * Assumption: target >= 0, coins not null and no coin value < 1
      *
@@ -146,19 +147,18 @@ public class DepthFirstSearch {
          return result;
     }
 
-    private void getComboOfCoins(
-            int moneyLeft, int[] coins, int level, List<Integer> cur, List<List<Integer>> result) {
-        /* level 0 : how many biggest cent of coins we gonna use
+    private void getComboOfCoins(int moneyLeft, int[] coins, int level,
+                                 List<Integer> cur, List<List<Integer>> result) {
+        /* level 0 : how many biggest cent of coins will be used
          * ...
          * level coins.length - 1 : how many smallest cent
          *
          * termination condition:
-         * NOTICE this could also be done at level == coins.length
-         * but we end at the previous level to reduce the number of branches in DFS */
+         * NOTICE this could also be done at level == coins.length, but we end at the
+         * previous level to reduce the number of branches in DFS */
         if (level == coins.length - 1) {
             /* since it's still in the process of DFS
-             * we still need to follow the rule in this condition block (吃了吐)
-             */
+             * we still need to follow the rule in this condition block (吃了吐) */
             if (moneyLeft % coins[coins.length - 1] == 0) { // smallest coin might not be 1
                 cur.add(moneyLeft / coins[coins.length - 1]);
                 // need a new copy of list since the original list will still be edited during DFS
@@ -235,9 +235,10 @@ public class DepthFirstSearch {
 
     /**
      * Two Subsets With Min Difference
-     * Given a set of n integers, divide the set in two subsets such that the difference of the sum
-     * of two subsets is as minimum as possible.
-     * Return the minimum difference(absolute value).
+     * Given a set of n integers, divide the set in two subsets such that the
+     * difference of the sum of two subsets is as minimum as possible. Return the
+     * minimum difference(absolute value).
+     *
      * Time = (2 ^ n)
      * Space = O(n)
      */
@@ -307,7 +308,6 @@ public class DepthFirstSearch {
     /**
      * All Valid Permutations Of Parentheses II
      * Get all valid permutations of l pairs of (), m pairs of <> and n pairs of {}.
-     *
      * e.g l = 1, m = 1, n = 0, all the valid permutations are ["()<>", "(<>)", "<()>", "<>()"]
      *
      * Time = O(m ^ n) // m is the branches, n is the number of brackets
@@ -395,7 +395,7 @@ public class DepthFirstSearch {
         }
 
         /* case 1: whenever we add a new left bracket:
-         *         check leftRemain and whether the priority of current bracket ≥ the top of the Stack
+         *         check leftRemain and whether the priority of current bracket ≥ the top of the Stack,
          *         then push it to the Stack and add it to the solution prefix
          * case 2: whenever we add a new right bracket:
          *         check whether it matches the top element of the stack
@@ -428,8 +428,8 @@ public class DepthFirstSearch {
 
     /**
      * Factor Combinations
-     * Given an integer number, return all possible combinations of the factors
-     * that can multiply to the target number
+     * Given an integer number, return all possible combinations of the factors that
+     * can multiply to the target number.
      *
      * Time = n^m // O(log(n) ^ (number of factors)) , m is # of factors
      * Space = O(m)
@@ -479,7 +479,8 @@ public class DepthFirstSearch {
     }
 
     /**
-     * 4^99 version, not recommended */
+     * 4^99 version, not recommended
+     */
     private void getValidFactorCombinations2(int cur, int index, List<Integer> factors,
                                int target,  List<Integer> prefix, List<List<Integer>> result){
         if(cur == target){
@@ -500,9 +501,10 @@ public class DepthFirstSearch {
 
     /**
      * All Permutations II
-     * Given a string with possible duplicate characters
-     * return a list with all permutations of the characters
+     * Given a string with possible duplicate characters, return a list with all
+     * permutations of the characters.
      * e.g. Set = "aba", all permutations are ["aab", "aba", "baa"]
+     *
      * Time = O(n!)
      * Space = O(n ^ 2)
      */
@@ -536,8 +538,8 @@ public class DepthFirstSearch {
     }
 
     /**
-     * Get all valid ways of putting N Queens on an N * N chessboard
-     * so that no two Queens threaten each other.
+     * Get all valid ways of putting N Queens on an N * N chessboard so that no two
+     * Queens threaten each other.
      *
      * Time = O(n ^ n)  // O(n * n!)
      * Space = O(n)
@@ -549,8 +551,8 @@ public class DepthFirstSearch {
             return res;
         }
 
-        /* cur will be a list of size n, and cur[i] is the column number
-         * where the queen on row i positioned
+        /* cur will be a list of size n, and cur[i] is the column number where the
+         * queen on row i positioned
          * index =  0  1  2  3  ...   // row number
          * cur   = {1, 3, 5, 7, ...}  // column number */
 

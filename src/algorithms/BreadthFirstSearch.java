@@ -15,8 +15,9 @@ class GraphNode {
 public class BreadthFirstSearch {
     /**
      * Get Keys In Binary Tree Layer by Layer
-     * Get the list of keys in a given binary tree layer by layer.
-     * Each layer is represented by a list of keys and the keys are traversed from left to right.
+     * Get the list of keys in a given binary tree layer by layer. Each layer is
+     * represented by a list of keys and the keys are traversed from left to right.
+     *
      * Time = O(n)
      * Space = O(n)
      */
@@ -50,9 +51,10 @@ public class BreadthFirstSearch {
     }
 
     /**
-     * Determine if an undirected graph is bipartite.
+     * Determine if an undirected graph is bipartite
      * A bipartite graph is one in which the nodes can be divided into two groups
      * such that no nodes have direct edges to nodes in the same group.
+     *
      * Time = O(n + e) // since run DFS for each node + check each edge once
      * Space = O(n)
      */
@@ -76,9 +78,9 @@ public class BreadthFirstSearch {
     }
 
     private boolean checkGroup(GraphNode node, HashMap<GraphNode, Integer> nodeGroup) {
-        /* this if block is really important
+        /* This if block is really important
          * e.g. n1 -> n2 -> n3
-         * after run BFS on n1 you will mark n1 as group0, n2 as group1, n3 as group0
+         * After run BFS on n1 you will mark n1 as group0, n2 as group1, n3 as group0
          * but when you run BFS on n2 (since you need to run DFS for EVERY NODE)
          * n2's start group mark will be 0, so no need to do BFS again */
         if (nodeGroup.containsKey(node)) {
@@ -113,9 +115,11 @@ public class BreadthFirstSearch {
     }
 
     /**
-     * Check if a given binary tree is completed.
-     * A complete binary tree is one in which every level of the binary tree is completely filled
-     * except possibly the last level. Furthermore, all nodes are as far left as possible.
+     * Check if a given binary tree is completed
+     * A complete binary tree is one in which every level of the binary tree is
+     * completely filled except possibly the last level. Furthermore, all nodes
+     * are as far left as possible.
+     *
      * Time = O(n)
      * Space = O(n)
      */
@@ -157,8 +161,9 @@ public class BreadthFirstSearch {
     }
 
     /**
-     * Given a matrix of size N x M. For each row the elements are sorted in ascending order,
-     * and for each column the elements are also sorted in ascending order. Find the Kth smallest number in it.
+     * Given a matrix of size N x M. For each row the elements are sorted in ascending
+     * order, and for each column the elements are also sorted in ascending order.
+     * Find the Kth smallest number in it.
      * Assume: k << n^2
      *
      * Time = O(klogk) // for k elements we are doing log2k
@@ -173,8 +178,7 @@ public class BreadthFirstSearch {
         int rows = matrix.length;
         int columns = matrix[0].length;
         PriorityQueue<Cell> minHeap = new PriorityQueue<>(k, Comparator.comparingInt(Cell -> Cell.value));
-        /* all the generated cells will be marked true
-         * to avoid being generated more than once */
+        /* All the generated cells will be marked true to avoid being generated more than once. */
         boolean[][] visited = new boolean[rows][columns];
         minHeap.offer(new Cell(0, 0, matrix[0][0])); // first element
         visited[0][0] = true;
@@ -182,8 +186,8 @@ public class BreadthFirstSearch {
         for (int i = 0; i < k - 1; i++) {
             // expand node[i][j]         -poll O(log n)
             Cell cur = minHeap.poll();
-            // 	1 generate [i + 1][j]    -offer O(log n)
-            // 	2 generate [i][j + 1]    -offer O(log n)
+            // 	1. generate [i + 1][j]    -offer O(log n)
+            // 	2. generate [i][j + 1]    -offer O(log n)
             if (cur.row + 1 < rows && !visited[cur.row + 1][cur.column]) {
                 minHeap.offer(new Cell(cur.row + 1, cur.column, matrix[cur.row + 1][cur.column]));
                 visited[cur.row + 1][cur.column] = true;
@@ -212,7 +216,7 @@ public class BreadthFirstSearch {
     public static void main(String[] args) {
         final BreadthFirstSearch bfs = new BreadthFirstSearch();
 
-        //[1, 2, 3, #, #, 4]
+        // [1, 2, 3, #, #, 4]
         TreeNode t1 = new TreeNode(1);
         TreeNode t2 = new TreeNode(2);
         TreeNode t3 = new TreeNode(3);

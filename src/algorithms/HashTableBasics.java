@@ -3,7 +3,6 @@ package algorithms;
 import java.util.*;
 
 class TopKComparator implements Comparator<Map.Entry<String, Integer>> {
-
     @Override
     public int compare(Map.Entry<String, Integer> s1, Map.Entry<String, Integer> s2) {
         if (s1.getValue() == s2.getValue()) {
@@ -14,14 +13,10 @@ class TopKComparator implements Comparator<Map.Entry<String, Integer>> {
 }
 
 public class HashTableBasics {
-
-    private HashTableBasics() {
-    }
-
     /**
      * Top K Frequent Words
-     * Given a composition with different kinds of words
-     * return a list of the top K most frequent words in the composition.
+     * Given a composition with different kinds of words, return a list of the top K
+     * most frequent words in the composition.
      *
      * Time = O(nlogk) if we don't use heapify
      * Space = O(n)
@@ -30,6 +25,7 @@ public class HashTableBasics {
         if (combo == null || combo.length == 0) {
             return new String[0];
         }
+
         Map<String, Integer> lookup = new HashMap<>();
         for (String s : combo) {
             lookup.put(s, lookup.getOrDefault(s, 0) + 1);
@@ -48,20 +44,24 @@ public class HashTableBasics {
         for(int i = minHeap.size() - 1; i >= 0; i--) {
             result[i] = minHeap.poll().getKey();
         }
+
         return result;
     }
 
     /**
      * Missing Number I
-     * Given an integer array of size N - 1, containing all the numbers from 1 to N except one, find the missing number.
+     * Given an integer array of size N - 1, containing all the numbers from 1 to N
+     * except one, find the missing number.
+     *
      * Using Hashset
-     * Time =  O(n) in average
+     * Time = O(n) in average
      * Space = O(n)
      */
     public int findMissingNumber(int[] array) {
         if (array == null || array.length == 0) {
             return 1;
         }
+
         Set<Integer> set = new HashSet<>();
         for (int i : array) {
             set.add(i);
@@ -73,11 +73,13 @@ public class HashTableBasics {
                 return i;
             }
         }
+
         return n;
     }
 
     /**
-     * Using boolean array
+     * Using boolean array.
+     *
      * Time =  O(n)
      * Space = O(n)
      */
@@ -98,8 +100,9 @@ public class HashTableBasics {
     }
 
     /**
-     * Using sum
-     * Time =  O(n)
+     * Using sum.
+     *
+     * Time = O(n)
      * Space = O(1)
      */
     public int findMissingNumber3(int[] array) {
@@ -116,10 +119,11 @@ public class HashTableBasics {
     }
 
     /**
-     * Using bit operation
+     * Using bit operation.
      * 0 ^ x = x, x ^ x = 0
-     * Time: O(n)
-     * Space: O(1)
+     *
+     * Time = O(n)
+     * Space = O(1)
      */
     public int findMissingNumber4(int[] array) {
         if (array == null || array.length == 0) {
@@ -140,15 +144,16 @@ public class HashTableBasics {
 
     /**
      * Common Numbers Of Two Sorted Arrays
-     * Find all numbers that appear in both of two sorted arrays (the two arrays are all sorted in ascending order).
-     * using Hashset
+     * Find all numbers that appear in both of two sorted arrays (the two arrays are
+     * all sorted in ascending order).
+     * Using Hashset
      *
      * Time = O(max(m, n)
      * Space = O(min(m, n))
      */
     public List<Integer> findCommonNumbers(List<Integer> A, List<Integer> B) {
-        // assumption: 1 both list are not null
-        // 2 there could be duplicated elements
+        /* Assumption: 1. both list are not null
+         * 2. there could be duplicated elements */
         List<Integer> list = new ArrayList<>();
         if (A.isEmpty() || B.isEmpty()) {
             return list;
@@ -167,8 +172,8 @@ public class HashTableBasics {
             //    for(int i = 0; i < appear; i++) {
             //        list.add(entry.getValue());
             //    }
-            //}
-            // above will do two look ups: mapB.containsKey() and mapB.get()
+            // }
+            // above will do two look-ups: mapB.containsKey() and mapB.get()
             // below will do only one look up
             Integer countInMapB = mapB.get(entry.getKey());
             if (countInMapB != null) {
@@ -178,18 +183,20 @@ public class HashTableBasics {
                 }
             }
         }
+
         return list;
     }
 
     /**
      * Using double pointer
      * 当 O(m) == O(n) 时，选用此方法
-     * Time O(m + n)
-     * Space O(1)
+     *
+     * Time = O(m + n)
+     * Space = O(1)
      */
     public List<Integer> findCommonNumbers2(List<Integer> A, List<Integer> B) {
-        // assumption: 1 both list are not null
-        // 2 there could be duplicated elements
+        /* Assumption: 1. both list are not null
+         * 2. there could be duplicated elements */
         List<Integer> list = new ArrayList<>();
         if (A.isEmpty() || B.isEmpty()) {
             return list;
@@ -208,6 +215,7 @@ public class HashTableBasics {
                 indexB++;
             }
         }
+
         // indexA == A.size() || indexB == B.size() then no common numbers left
         return list;
     }
@@ -219,8 +227,8 @@ public class HashTableBasics {
      * Space = O(1)
      */
     public List<Integer> findCommonNumbers3(List<Integer> A, List<Integer> B) {
-        // assumption: 1 both list are not null
-        // 2 there could be duplicated elements
+        /* Assumption: 1. both list are not null
+         * 2. there could be duplicated elements */
         List<Integer> list = new ArrayList<>();
         if (A.isEmpty() || B.isEmpty()) {
             return list;
@@ -231,9 +239,10 @@ public class HashTableBasics {
             if (find != -1) {
                 // find i in A
                 list.add(i);
-                A.remove(new Integer(i)); // remove new Integer(i) from a in case duplicated
+                A.remove(Integer.valueOf(i)); // remove new Integer(i) from A in case duplicated
             }
         }
+
         return list;
     }
 

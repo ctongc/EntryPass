@@ -10,6 +10,7 @@ public class BitOperations {
     public static void printBinary(int num) {
         System.out.print(num + " : ");
         StringBuilder sb = new StringBuilder();
+        // Integer.toBinaryString(num);
         for (int shift = 31; shift >= 0; shift--) {
             sb.append((num >>> shift) & 1); // 注意这里是逻辑右移, unsigned shift补0
         }
@@ -210,7 +211,7 @@ public class BitOperations {
                        'A', 'B', 'C', 'D', 'E', 'F'};
         StringBuilder sb = new StringBuilder();
         while (num > 0) {
-            sb.append(base[num % 16]); // not the order is reversed
+            sb.append(base[num % 16]); // note the order is reversed
             num /= 16;
         }
         sb.append("x0");

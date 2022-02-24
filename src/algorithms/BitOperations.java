@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -313,5 +314,10 @@ public class BitOperations {
 
         System.out.println(0 - 'a');
         System.out.println(1 - 'b');
+
+        int[][] points = new int[10][10];
+        int[][] queries = new int[10][10];
+        int[] point = points[0];
+        int[] query = queries[0];
     }
 }

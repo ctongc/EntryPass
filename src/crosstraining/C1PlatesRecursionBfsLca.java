@@ -37,17 +37,17 @@ public class C1PlatesRecursionBfsLca {
         if (array == null || array.length <= 1) {
             return array;
         }
-        /* Slow: all elements to the left of the slow (including slow) pointer
+        /* Slow: all elements to the left of the slow (excluding slow) pointer
          * are the results for the elements that have been processed.
          * Fast: The current index that's being processed.
          * (all elements to the right side of the fast pointer have not been processed) */
-        int slow = 0;
+        int slow = 1;
         for (int fast = 1; fast < array.length; fast++) {
-            if (array[slow] != array[fast]) {
-                array[++slow] = array[fast];
+            if (array[fast] != array[slow - 1]) {
+                array[slow++] = array[fast];
             }
         }
-        return Arrays.copyOfRange(array, 0, slow + 1);
+        return Arrays.copyOfRange(array, 0, slow);
     }
 
     /**
@@ -149,7 +149,7 @@ public class C1PlatesRecursionBfsLca {
 
     /**
      * Given an array of random numbers, push all the "0s" to the right end of the array.
-     * The order of all designpatterns elements should be the same
+     * The order of all design patterns elements should be the same
      * 1 9 8 4 0 0 2 7 0 6 0 -> 1 9 8 4 2 7 6 0 0 0 0
      * Time = O(n)
      * Space = O(1)

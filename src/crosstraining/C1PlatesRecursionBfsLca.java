@@ -24,6 +24,16 @@ class TreeNodeP {
     }
 }
 
+class KnaryTreeNode {
+    int val;
+    List<KnaryTreeNode> children;
+
+    public KnaryTreeNode(int val, List<KnaryTreeNode> children) {
+        this.val = val;
+        this.children = children;
+    }
+}
+
 public class C1PlatesRecursionBfsLca {
 
     /**
@@ -33,7 +43,7 @@ public class C1PlatesRecursionBfsLca {
      * Time = O(n)
      * Space = O(n)  // O(slow + 1)
      */
-    public int[] arrayDedup1(int[] array) {
+    public int[] arrayDedupKeepOne1(int[] array) {
         if (array == null || array.length <= 1) {
             return array;
         }
@@ -42,12 +52,29 @@ public class C1PlatesRecursionBfsLca {
          * Fast: The current index that's being processed.
          * (all elements to the right side of the fast pointer have not been processed) */
         int slow = 1;
-        for (int fast = 1; fast < array.length; fast++) {
+        for (int fast = 1; fast < array.length; fast++) { // could fast start from 0? 想想fast的物理意义
             if (array[fast] != array[slow - 1]) {
                 array[slow++] = array[fast];
             }
         }
         return Arrays.copyOfRange(array, 0, slow);
+    }
+
+    public int[] arrayDedupKeepOne2(int[] array) {
+        if (array.length <= 1) {
+            return array;
+        }
+        /* Slow: all elements to the left of the slow (including slow) pointer
+         * are the results for the elements that have been processed.
+         * Fast: The current index that's being processed.
+         * (all elements to the right side of the fast pointer have not been processed) */
+        int slow = 0;
+        for (int fast = 1; fast < array.length; fast++) { // could fast start from 0? 想想fast的物理意义
+            if (array[fast] != array[slow]) {
+                array[++slow] = array[fast];
+            }
+        }
+        return Arrays.copyOfRange(array, 0, slow + 1);
     }
 
     /**
@@ -57,7 +84,7 @@ public class C1PlatesRecursionBfsLca {
      * Time = O(n)
      * Space = O(n)  // O(slow)
      */
-    public int[] arrayDedup2(int[] array) {
+    public int[] arrayDedupKeepTwo(int[] array) {
         if (array == null || array.length <= 2) {
             return array;
         }
@@ -67,8 +94,8 @@ public class C1PlatesRecursionBfsLca {
          * (all elements to the right side of the fast pointer have not been processed).
          * Initialize: slow = 2, fast = 2 */
         int slow = 2;
-        for (int fast = 2; fast < array.length; fast++) {
-            /* Case 1: a[f] == a[s - 2], we are sure a[f] == a[s - 1], not copy
+        for (int fast = 2; fast < array.length; fast++) { // could fast start from 0? 想想fast的物理意义
+            /* Case 1: a[f] == a[s - 2], we are sure a[f] == a[s - 1] (since sorted), not copy
              * Case 2: a[f] != a[s - 2], a[s] = a[f]; s++;*/
             if (array[slow - 2] != array[fast]) {
                 array[slow++] = array[fast];
@@ -78,13 +105,14 @@ public class C1PlatesRecursionBfsLca {
     }
 
     /**
-     * Given a sorted integer array, remove duplicate elements.
+     * Given an unsorted integer array, remove duplicate elements not repeatedly
      * For each group of elements with the same value DO NOT KEEP ANY of them
+     * e.g. abbbaz => aaz
      * Do it in-place
      * Time = O(n)
      * Space = O(n)  // O(slow)
      */
-    public int[] arrayDedup3(int[] array) {
+    public int[] arrayDedupNotRepeatedly(int[] array) {
         if (array == null || array.length <= 1) {
             return array;
         }
@@ -97,7 +125,6 @@ public class C1PlatesRecursionBfsLca {
         while (fast < array.length) {
             int begin = fast;
             while (fast < array.length && array[fast] == array[begin]) {
-                // System.out.println(fast);
                 fast++;
             }
             /* after the inner while loop, "fast" points to the first character after input[begin]
@@ -123,7 +150,7 @@ public class C1PlatesRecursionBfsLca {
      * Time = O(n)
      * Space = O(n)  // result array
      */
-    public int[] arrayDedup4(int[] array) {
+    public int[] arrayDedupRepeatedly(int[] array) {
         if (array == null || array.length <= 1) {
             return array;
         }
@@ -145,6 +172,29 @@ public class C1PlatesRecursionBfsLca {
             }
         }
         return Arrays.copyOfRange(array, 0, slow + 1);
+    }
+
+    public int[] arrayDedupRepeatedly2(int[] array) {
+        if (array == null || array.length <= 1) {
+            return array;
+        }
+        int slow = 0;
+        for (int fast = 0; fast < array.length; fast++) {
+            // using the left part of the original array as a stack
+            // and all elements to the left of slow (excluding slow) are the elements in the stack
+            // if the stack is empty (slow = 0), or if the new element is not the same as the top
+            // element of the stack, we can push the element into the stack.
+            if (slow == 0 || array[fast] != array[slow - 1]) {
+                array[slow++] = array[fast];
+            } else {
+                // otherwise, we ignore all consecutive duplicates and remove top element of the stack
+                while (fast + 1 < array.length && array[fast + 1] == array[slow - 1]) {
+                    fast++;
+                }
+                slow--;
+            }
+        }
+        return Arrays.copyOfRange(array, 0, slow);
     }
 
     /**
@@ -184,9 +234,10 @@ public class C1PlatesRecursionBfsLca {
         List<Integer> large = new ArrayList<>(); // store the larger elements in the divide process
         List<Integer> small = new ArrayList<>();
 
-        /* pre processing, divide all elements into two groups
+        /* pre-processing, divide all elements into two groups
          * this step takes O(n/2) comparisons */
         divide(array, large, small);
+
         int max = array[0];
         int min = array[0];
         /* find the largest in the large group and smallest in the small group
@@ -227,7 +278,7 @@ public class C1PlatesRecursionBfsLca {
      * Use the least number of comparisons to get the largest and 2nd largest number
      * in the given integer array. Return the largest number and 2nd largest number.
      *
-     * Total number of comparisons = O(n + logn) < O(2n) which compare each element with max and 2nd max
+     * Total number of comparisons = O(n + logn) < O(2n), which compare each element with max and 2nd max
      */
     public int[] largestAndSecondLargest(int[] array) {
         if (array == null || array.length < 2) {
@@ -239,7 +290,7 @@ public class C1PlatesRecursionBfsLca {
         }
         Map<Integer, List<Integer>> lookup = new HashMap<>();
         /* Binary reduction
-         * n/2 + n/4 + n/8 + … = n comparisons find the max */
+         * n/2 + n/4 + n/8 + … = n comparisons to find the max */
         while (elements.size() > 1) {
             int a = elements.remove(0);
             int b = elements.remove(0);
@@ -264,7 +315,7 @@ public class C1PlatesRecursionBfsLca {
         List<Integer> temp = lookup.getOrDefault(large, new ArrayList<>()); // store the smaller elements
         temp.add(small);
         lookup.put(large, temp);
-        if(large != small) { // int[]{1,1}
+        if(large != small) { // int[]{1, 1}
             lookup.remove(small);
         }
     }
@@ -349,7 +400,48 @@ public class C1PlatesRecursionBfsLca {
     }
 
     /**
+     * Given a BST and a target number x, find k nodes that are closest to the target number
+     *
+     * Time = O(n)
+     * Extra space = O(k)
+     */
+    public int[] kClosestNodes(TreeNode root, double target, int k) {
+        if (root == null || k < 1) {
+            return new int[0];
+        }
+        Deque<TreeNode> deque = new ArrayDeque<>(k);
+        BSTFind(root, target, k, deque);
+        int[] result = new int[deque.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = deque.pollFirst().key;
+        }
+        return result;
+    }
+
+    private void BSTFind(TreeNode root, double target, int k, Deque<TreeNode> result) {
+        if (root == null) {
+            return;
+        }
+
+        BSTFind(root.left, target, k, result);
+        if (result.size() < k) { // case 1
+                result.offerLast(root); // small -> large
+        } else {
+            if (Math.abs(root.key - target) < Math.abs(result.peekFirst().key - target)) { // case 2.1
+                result.pollFirst();
+                result.offerLast(root); // same here
+            } else { // case 2.2
+                return; // 剪枝
+            }
+        }
+        BSTFind(root.right, target, k, result);
+    }
+
+    /**
      * Classic LCA
+     *
+     * Time = O(n)
+     * Space = O(1)
      */
     public TreeNode lca(TreeNode root, TreeNode a, TreeNode b) {
         if (root == null || root == a || root == b) {
@@ -367,29 +459,36 @@ public class C1PlatesRecursionBfsLca {
 
     /**
      * LCA with parent node
+     * The given two nodes are not guaranteed to be in the binary tree
+     *
+     * Time = O(height)
+     * Space = O(1)
      */
     public TreeNodeP lcaWithParent(TreeNodeP one, TreeNodeP two) {
         // one == null return two is WRONG!
-        // since two could be not in the tree
+        // since two might be not in the tree
 
         int oneHeight = getHeightOfNode(one);
         int twoHeight = getHeightOfNode(two);
 
+        // small trick that can guarantee the first List is the longer list
         if (oneHeight > twoHeight) {
-            for (int i = 0; i < oneHeight - twoHeight; i++) {
-                one = one.parent;
-            }
+            return findCommonParent(one, two, oneHeight - twoHeight);
         } else {
-            for (int i = 0; i < twoHeight - oneHeight; i++) {
-                two = two.parent;
-            }
+            return findCommonParent(two, one, twoHeight - oneHeight);
         }
+    }
 
-        while (one != two && one != null) {
-            one = one.parent;
-            two = two.parent;
+    private TreeNodeP findCommonParent(TreeNodeP longer, TreeNodeP shorter, int lengthDiff) {
+        while (lengthDiff > 0) {
+            longer = longer.parent;
+            lengthDiff--;
         }
-        return one;
+        while (longer != shorter) {
+            longer = longer.parent;
+            shorter = shorter.parent;
+        }
+        return longer;
     }
 
     private int getHeightOfNode(TreeNodeP node) {
@@ -402,7 +501,7 @@ public class C1PlatesRecursionBfsLca {
     }
 
     /**
-     * Given K nodes in a binary tree, find their lowest common ancestor.
+     * Given K nodes in a binary tree, find their lowest common ancestor
      *
      * Time = O(n)
      * Space = O(height)
@@ -411,7 +510,7 @@ public class C1PlatesRecursionBfsLca {
         if (nodes == null || nodes.size() == 0) {
             return null;
         }
-        Set<TreeNode> set = new HashSet<>(nodes); // use a set to see if find a node
+        Set<TreeNode> set = new HashSet<>(nodes); // use set for O(1) find
         return getLca(root, set);
     }
 
@@ -433,6 +532,35 @@ public class C1PlatesRecursionBfsLca {
         return leftChild == null? rightChild : leftChild;
     }
 
+    /**
+     * LCA for two nodes in a k-naryTree
+     *
+     * Time = O(n)
+     * Space = O(1)
+     */
+    public KnaryTreeNode knaryLca(KnaryTreeNode root, KnaryTreeNode one, KnaryTreeNode two) {
+        if (root == null || root == one || root == two) {
+            return root;
+        }
+        /* Case 1: if LCA of all children return null, return null
+         * Case 2: if only one of them returns not null, return the result of that child
+         * Case 3: if more than one of them return non-null, returns root */
+        int count = 0;
+        KnaryTreeNode cur = null;
+        for (KnaryTreeNode child : root.children) {
+            cur = knaryLca(child, one, two);
+            if (cur != null) {
+                count++;
+            }
+            if (count > 1) {
+                return root;
+            }
+        }
+        if (count == 0) {
+            return null;
+        }
+        return cur;
+    }
 
     /**
      * Given two nodes in a binary tree, find their lowest common ancestor
@@ -444,37 +572,22 @@ public class C1PlatesRecursionBfsLca {
             return null;
         }
 
-        TreeNode result = getLca(root, one, two);
+        TreeNode result = lca(root, one, two);
 
         if (result != one && result != two && result != null) {
             return result;
         }
 
         if (result == one) {
-            if (two == null || getLca(one, two, two) != null) {
+            if (two == null || lca(one, two, two) != null) {
                 return result;
             }
         } else if (result == two) {
-            if (one == null || getLca(two, one, one) != null) {
+            if (one == null || lca(two, one, one) != null) {
                 return result;
             }
         }
         return null;
-    }
-
-    private TreeNode getLca(TreeNode root, TreeNode one, TreeNode two) {
-        if (root == null || root == one || root == two) {
-            return root;
-        }
-
-        TreeNode leftChild = getLca(root.left, one, two);
-        TreeNode rightChild = getLca(root.right, one, two);
-
-        if (leftChild != null && rightChild != null) {
-            return root;
-        }
-
-        return leftChild == null? rightChild : leftChild;
     }
 
     /**
@@ -495,11 +608,13 @@ public class C1PlatesRecursionBfsLca {
         }
     }
 
+    // below are not in Cross Training I
+
     /**
      * Sort in specified order
-     * Given two integer arrays A1 and A2, sort A1 in such a way that the relative order among the elements
-     * will be same as those are in A2. For the elements that are not in A2, append them in the right end
-     * of the A1 in an ascending order.
+     * Given two integer arrays A1 and A2, sort A1 in such a way that the relative order
+     * among the elements will be same as those are in A2. For the elements that are not in A2
+     * append them in the right end of the A1 in ascending order.
      *
      * eg. A1 = {2, 1, 2, 5, 7, 1, 9, 3}, A2 = {2, 1, 3}, A1 is sorted to {2, 2, 1, 1, 3, 5, 7, 9}
      *
@@ -541,7 +656,8 @@ public class C1PlatesRecursionBfsLca {
     }
 
     /**
-     * using statement lambda */
+     * using statement lambda
+     */
     public int[] sortInSpecialOrder2(int[] A1, int[] A2) {
         // assumptions: A1 != null && A2 != null, not duplicate elements in A2
         // preprocessing - for comparator
@@ -570,7 +686,10 @@ public class C1PlatesRecursionBfsLca {
     public static void main(String[] args) {
         C1PlatesRecursionBfsLca ins = new C1PlatesRecursionBfsLca();
         int[] array = {1,1,2,2,3,3,4};
-        System.out.println(Arrays.toString(ins.arrayDedup3(array)));
+        System.out.println(Arrays.toString(ins.arrayDedupKeepTwo(array)));
+
+        int[] array2 = {2,2,1,1};
+        System.out.println(Arrays.toString(ins.arrayDedupRepeatedly2(array2)));
 
         //int[][] matrix = {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
         int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};

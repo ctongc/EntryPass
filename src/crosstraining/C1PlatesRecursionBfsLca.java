@@ -608,83 +608,9 @@ public class C1PlatesRecursionBfsLca {
         }
     }
 
-    // below are not in Cross Training I
-
-    /**
-     * Sort in specified order
-     * Given two integer arrays A1 and A2, sort A1 in such a way that the relative order
-     * among the elements will be same as those are in A2. For the elements that are not in A2
-     * append them in the right end of the A1 in ascending order.
-     *
-     * eg. A1 = {2, 1, 2, 5, 7, 1, 9, 3}, A2 = {2, 1, 3}, A1 is sorted to {2, 2, 1, 1, 3, 5, 7, 9}
-     *
-     * Time = O(n)
-     * Space = O(n)
-     */
-    public int[] sortInSpecialOrder(int[] A1, int[] A2) {
-        // assumptions: A1 != null && A2 != null, not duplicate elements in A2
-        // pre-processing - for comparator
-        Integer[] A1I = new Integer[A1.length];
-        for (int i = 0; i < A1.length; i++) {
-            A1I[i] = A1[i];
-        }
-        Arrays.sort(A1I, new MyComparator(A2)); // Arrays.sort(T[], new MyComparator(..)) so need a transfer
-        for (int i = 0; i < A1.length; i++) {
-            A1[i] = A1I[i];
-        }
-        return A1;
-    }
-
-    private static class MyComparator implements Comparator<Integer> {
-        private Map<Integer, Integer> map;
-        public MyComparator(int[] order) {
-            map = new HashMap<>();
-            for (int i = 0; i < order.length; i++) {
-                map.put(order[i], i);
-            }
-        }
-
-        @Override
-        public int compare(Integer a, Integer b) {
-            if (map.containsKey(a) && map.containsKey(b)) {
-                return map.get(a) < map.get(b) ? -1 : 1;
-            } else if (!map.containsKey(a) && !map.containsKey(b)) {
-                return a < b ? -1 : 1;
-            }
-            return map.containsKey(a) ? -1 : 1;
-        }
-    }
-
-    /**
-     * using statement lambda
-     */
-    public int[] sortInSpecialOrder2(int[] A1, int[] A2) {
-        // assumptions: A1 != null && A2 != null, not duplicate elements in A2
-        // preprocessing - for comparator
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < A2.length; i++) {
-            map.put(A2[i], i);
-        }
-        Integer[] A1I = new Integer[A1.length];
-        for (int i = 0; i < A1.length; i++) {
-            A1I[i] = A1[i];
-        }
-        Arrays.sort(A1I, (a, b) -> {
-            if (map.containsKey(a) && map.containsKey(b)) {
-                return map.get(a) < map.get(b) ? -1 : 1;
-            } else if (!map.containsKey(a) && !map.containsKey(b)) {
-                return a < b ? -1 : 1;
-            }
-            return map.containsKey(a) ? -1 : 1;
-        });
-        for (int i = 0; i < A1.length; i++) {
-            A1[i] = A1I[i];
-        }
-        return A1;
-    }
-
     public static void main(String[] args) {
         C1PlatesRecursionBfsLca ins = new C1PlatesRecursionBfsLca();
+
         int[] array = {1,1,2,2,3,3,4};
         System.out.println(Arrays.toString(ins.arrayDedupKeepTwo(array)));
 
@@ -699,6 +625,7 @@ public class C1PlatesRecursionBfsLca {
             }
             System.out.println();
         }
+
         ins.rotateMatrix(matrix);
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
@@ -731,10 +658,8 @@ public class C1PlatesRecursionBfsLca {
         k2.left = k4;
         k2.right = k5;
         k3.right = k6;
-        TreeNodeP result = ins.lcaWithParent(null, k5);
+        ins.lcaWithParent(null, k5);
 
         System.out.println(ins.lowestCommonAncestor(n1,n5,n5).key);
-
-        ins.sortInSpecialOrder(new int[]{4,4,3,3,3}, new int[]{4});
     }
 }

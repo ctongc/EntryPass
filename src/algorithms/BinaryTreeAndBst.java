@@ -549,19 +549,22 @@ public class BinaryTreeAndBst {
                 return root;
             }
         }
+
+        // connect newNode to its parent
         TreeNode newNode = new TreeNode(key);
         if (key < parent.key) {
             parent.left = newNode;
         } else {
             parent.right = newNode;
         }
-
         return root;
     }
 
     /**
-     * Delete the target key K in the given binary search tree if the binary search
-     * tree contains K. Return the root of the binary search tree.
+     * Delete In Binary Search Tree
+     * Delete the target key K in the given binary search tree if the
+     * binary search tree contains K. Return the root of the binary search tree
+     *
      * 1. findMin()
      * 2. delete(root, min)
      * 3. root.value = min
@@ -620,6 +623,40 @@ public class BinaryTreeAndBst {
         // root.left = null, root is the smallest one
         prev.left = prev.left.right;
 
+        return root;
+    }
+
+    public TreeNode deleteInBst2(TreeNode root, int key) {
+        // base case
+        if (root == null) {
+            return root;
+        }
+        // what do you want from your child
+        if (root.key < key) {
+            root.right = deleteInBst(root.right, key);
+        } else if (root.key > key){
+            root.left = deleteInBst(root.left, key);
+        } else {
+            if (root.left == null && root.right == null) {
+                // case 1
+                return null;
+            } else if (root.left == null || root.right == null) {
+                // case 2 3
+                return root.left == null ? root.right : root.left;
+            } else {
+                // case 4
+                TreeNode smallest = findSmallestLarger(root.right);
+                root.key = smallest.key;
+                root.right = deleteInBst(root.right, smallest.key);
+            }
+        }
+        return root;
+    }
+
+    private TreeNode findSmallestLarger(TreeNode root) {
+        while (root.left != null) {
+            root = root.left;
+        }
         return root;
     }
 

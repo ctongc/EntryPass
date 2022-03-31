@@ -219,6 +219,10 @@ public class SortingAlgorithms {
      * Given n courses and the prerequisites of each course
      * find a valid order to take all the courses (aka topological order)
      *
+     * e.g. course 0 -> course 1 -> course 3
+     *               -> course 2 ->
+     * output: 0 1 2 3 or 0 2 1 3
+     *
      * Time = O(n + e)
      * Space = O(n)
      */

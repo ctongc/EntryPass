@@ -162,13 +162,39 @@ public class Comparators {
         for (int i : nums) {
             map.put(i, map.getOrDefault(i, 0) + 1);
         }
-        // 1,2,3 they are all equivalent
+        // 1,2,3,4 are equivalent
         PriorityQueue<Map.Entry<Integer, Integer>> minHeap1 = new PriorityQueue<>(3, Map.Entry.comparingByValue());
         PriorityQueue<Map.Entry<Integer, Integer>> minHeap2 = new PriorityQueue<>(3, Comparator.comparing(Map.Entry::getValue));
         PriorityQueue<Map.Entry<Integer, Integer>> minHeap3 = new PriorityQueue<>(3,
                 Comparator.comparing((Map.Entry<Integer, Integer> ele) -> ele.getValue()));
-
         PriorityQueue<Integer> minHeap4 = new PriorityQueue<>(3, Comparator.comparingInt(map::get));
+
+        // 1,2,3 are equivalent
+        PriorityQueue<List<Integer>> pq1 = new PriorityQueue<>(new Comparator<>() {
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                double dis1 = Math.sqrt(o1.get(0) * o1.get(0) + o1.get(1) * o1.get(1) + o1.get(2) * o1.get(2));
+                double dis2 = Math.sqrt(o2.get(0) * o2.get(0) + o2.get(1) * o2.get(1) + o2.get(2) * o2.get(2));
+                if (dis1 == dis2) {
+                    return 0;
+                }
+                return dis1 < dis2 ? -1 : 1;
+            }
+        });
+        PriorityQueue<List<Integer>> pq2 = new PriorityQueue<>((o1, o2) -> {
+            double dis1 = Math.sqrt(o1.get(0) * o1.get(0) + o1.get(1) * o1.get(1) + o1.get(2) * o1.get(2));
+            double dis2 = Math.sqrt(o2.get(0) * o2.get(0) + o2.get(1) * o2.get(1) + o2.get(2) * o2.get(2));
+            if (dis1 == dis2) {
+                return 0;
+            }
+            return dis1 < dis2 ? -1 : 1;
+        });
+        PriorityQueue<List<Integer>> pq3 = new PriorityQueue<>(
+                Comparator.comparing(
+                        (List<Integer> list) ->
+                                Math.sqrt(list.get(0)*list.get(0)
+                                        + list.get(0)*list.get(0)
+                                        + list.get(0)*list.get(0))));
 
         // Heapify
         List<ComparableCell> cellList = new ArrayList<>();

@@ -20,9 +20,9 @@ public class Leftover {
      * Given two integer arrays A1 and A2, sort A1 in such a way that the relative order
      * among the elements will be same as those are in A2. For the elements that are not in A2
      * append them in the right end of the A1 in ascending order.
-     *
+     * <p>
      * eg. A1 = {2, 1, 2, 5, 7, 1, 9, 3}, A2 = {2, 1, 3}, A1 is sorted to {2, 2, 1, 1, 3, 5, 7, 9}
-     *
+     * <p>
      * Time = O(n)
      * Space = O(n)
      */
@@ -42,6 +42,7 @@ public class Leftover {
 
     private static class MyComparator implements Comparator<Integer> {
         private Map<Integer, Integer> map;
+
         public MyComparator(int[] order) {
             map = new HashMap<>();
             for (int i = 0; i < order.length; i++) {
@@ -140,7 +141,7 @@ public class Leftover {
      * Check if a given binary tree is balanced.
      * A balanced binary tree is one in which the depths of every node’s
      * left and right subtree differ by at most 1.
-     *
+     * <p>
      * Time = O(n)
      * Space = O(height)
      */
@@ -217,7 +218,8 @@ public class Leftover {
     }
 
     private int getMaxPathSum2(TreeNode root, int[] maxSum) {
-        if (root == null) {            return 0;
+        if (root == null) {
+            return 0;
         }
         int leftPathSum = getMaxPathSum2(root.left, maxSum);
         int rightPathSum = getMaxPathSum2(root.right, maxSum);
@@ -324,7 +326,7 @@ public class Leftover {
         if (root == null) { // base case
             return;
         }
-        if(largestPrefix < 0) {
+        if (largestPrefix < 0) {
             // discard prefix sum
             largestPrefix = root.key;
         } else {
@@ -406,6 +408,7 @@ public class Leftover {
                 indexMap, inLeft + rootIndex + 1, inRight);
         return root;
     }
+
     /**
      * Reconstruct Binary Tree With Levelorder And Inorder
      * Given the levelorder and inorder traversal sequence of a binary tree, reconstruct the original tree.
@@ -544,299 +547,121 @@ public class Leftover {
     // Old C4
 
 
-
-
-
-        public ListNode reverseLinkedList(ListNode head) {
-            if (head == null || head.next == null) {
-                return head; // RETURN HEAD NOT NULL!!!
-            }
-            ListNode newHead = reverseLinkedList(head.next); // newHead is the last node not the next node
-            head.next.next = head; // leave the newHead pointer but operate head.next.next
-            head.next = null; // we have newHead points to head.nextNode so original head.next could point to null
-            return newHead;
+    public ListNode reverseLinkedList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head; // RETURN HEAD NOT NULL!!!
         }
+        ListNode newHead = reverseLinkedList(head.next); // newHead is the last node not the next node
+        head.next.next = head; // leave the newHead pointer but operate head.next.next
+        head.next = null; // we have newHead points to head.nextNode so original head.next could point to null
+        return newHead;
+    }
 
-        public ListNode reverseLinkedList2(ListNode head) {
-            if (head == null || head.next == null) {
-                return null;
-            }
-            ListNode pre = null;
-            while(head != null) {
-                ListNode nextNode = head.next;
-                head.next = pre;
-                pre = head;
-                head = nextNode;
-            }
-            return pre;
+    public ListNode reverseLinkedList2(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
         }
-
-        public ListNode reverseInPairs(ListNode head) {
-            if (head == null || head.next == null) {
-                return head;
-            }
-
-            ListNode newHead = head.next;
-            head.next = reverseInPairs(newHead.next);
-            newHead.next = head;
-            return newHead;
+        ListNode pre = null;
+        while (head != null) {
+            ListNode nextNode = head.next;
+            head.next = pre;
+            pre = head;
+            head = nextNode;
         }
+        return pre;
+    }
 
-        public ListNode reverseInPairs2(ListNode head) {
-            if (head == null || head.next == null) {
-                return head;
-            }
-
-            ListNode dummyHead = new ListNode(0);
-            dummyHead.next = head;
-            ListNode prev = dummyHead;
-            while (head != null && head.next != null) {
-                prev.next = head.next;
-                head.next = head.next.next;
-                prev.next.next = head;
-                prev = head;
-                head = head.next;
-            }
-            return dummyHead.next;
-        }
-
-        /**
-         * Reverse Binary Tree Upside Down
-         * Given a binary tree where all the right nodes are leaf nodes, flip it upside down
-         * and turn it into a tree with left leaf nodes as the root.
-         * Time = O(n)
-         * Space = O(height)
-         */
-        public TreeNode reverseBtUpsideDown1(TreeNode root) {
-            if (root == null || root.left == null) {
-                return root;
-            }
-            TreeNode newRoot = reverseBtUpsideDown1(root.left);
-            root.left.right = root.right;
-            root.left.left = root;
-            // don't forget to clean up
-            root.left = null;
-            root.right = null;
-            return newRoot;
-        }
-
-        public TreeNode reverseBtUpsideDown2(TreeNode root) {
-            if (root == null) {
-                return root;
-            }
-            // root is root of input tree
-            // newLeft is the root of new tree
-            // preRoot is the oldRoot of last level's input tree
-            // we deal with each level after store the information of the next level
-            TreeNode prevRoot = null;
-            TreeNode prevRight = null;
-            while (root != null) {
-                TreeNode newLeft = root.left; //will be the newRoot
-                TreeNode newRight = root.right;
-                root.right = prevRight;
-                root.left = prevRoot;
-                prevRoot = root;
-                prevRight = newRight;
-                root = newLeft;
-            }
-            return prevRoot;
-        }
-
-        public static ListNode createLinkedList(int n) {
-            List<ListNode> nodeList = new ArrayList<>();
-            for (int i = 1; i <= n; i++) {
-                ListNode newNode = new ListNode(i);
-                nodeList.add(newNode);
-            }
-            ListNode head = nodeList.remove(0);
-            ListNode cur = head;
-            for (ListNode node : nodeList) {
-                cur.next = node;
-                cur = node;
-            }
+    public ListNode reverseInPairs(ListNode head) {
+        if (head == null || head.next == null) {
             return head;
         }
 
-        public static void printLinkedList(ListNode head) {
-            while (head != null) {
-                System.out.println(head.value);
-                head = head.next;
-            }
+        ListNode newHead = head.next;
+        head.next = reverseInPairs(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+
+    public ListNode reverseInPairs2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
 
-    // Old C5
-
-    /**
-     * Largest Product Of Length
-     * Given a dictionary containing many words, find the largest product of two words’ lengths,
-     * such that the two words do not share any common characters.
-     * e.g.
-     * dictionary = [“abcde”, “abcd”, “ade”, “xy”], the largest product is 5 * 2 = 10 (by choosing “abcde” and “xy”)
-     * Time = O(n * (n + m)) // m is the average length of string
-     */
-    public int largestLengthProduct(String[] dict) {
-        // assumptions:
-        // 1 The words only contains characters of 'a' to 'z'
-        // 2 The dictionary is not null and does not contain null string, and has at least two strings
-        // 3 If there is no such pair of words, just return 0
-
-        // algorithm:
-        // iterate from the largest product pairs, check each pair if valid using bit mask
-        Arrays.sort(dict, Comparator.reverseOrder());
-        int[] bitMasks = new int[dict.length];
-        for (int i = 0; i < dict.length; i++) {
-            int bitMask = 0;
-            String s = dict[i];
-            for (int j = 0; j < s.length(); j++) {
-                // the 26 characters 'a' to 'z' are mapped to 0 - 25th bit
-                // use (char - 'a') since their values are in a consecutive range
-                // if char exists in the word, we set the bit at corresponding index to 1
-                bitMask |= 1 << (s.charAt(j) - 'a');
-            }
-            bitMasks[i] = bitMask;
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode prev = dummyHead;
+        while (head != null && head.next != null) {
+            prev.next = head.next;
+            head.next = head.next.next;
+            prev.next.next = head;
+            prev = head;
+            head = head.next;
         }
-        int result = 0;
-        for (int i = 1; i < dict.length; i++) {
-            for (int j = 0; j < i; j++) {
-                // check if valid
-                if((bitMasks[i] & bitMasks[j]) == 0) {
-                    // if two words do not share any common characters
-                    // the bit masks "and" result should be 0 since
-                    // there is no position such that in the two bit masks are all 1
-                    result = Math.max(dict[i].length() * dict[j].length(), result);
-                }
-            }
-        }
-        return result;
+        return dummyHead.next;
     }
 
     /**
-     * if use this to validate, the Time = O(n^2 * m)
+     * Reverse Binary Tree Upside Down
+     * Given a binary tree where all the right nodes are leaf nodes, flip it upside down
+     * and turn it into a tree with left leaf nodes as the root.
+     * Time = O(n)
+     * Space = O(height)
      */
-    private boolean isValid2(int p1, int p2, String[] dict) {
-        Set<Character> set = new HashSet<>();
-        for (int i = 0; i < dict[p1].length(); i++) { // NOTE dict[p1].toCharArray needs O(n) time
-            set.add(dict[p1].charAt(i));
+    public TreeNode reverseBtUpsideDown1(TreeNode root) {
+        if (root == null || root.left == null) {
+            return root;
         }
-        for (int i = 0; i < dict[p2].length(); i++) {
-            if (set.contains(dict[p2].charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+        TreeNode newRoot = reverseBtUpsideDown1(root.left);
+        root.left.right = root.right;
+        root.left.left = root;
+        // don't forget to clean up
+        root.left = null;
+        root.right = null;
+        return newRoot;
     }
 
-    /**
-     * Kth Smallest With Only 3, 5, 7 As Factors
-     * Find the Kth smallest number s such that s = 3 ^ x 5 ^ y 7 ^ z
-     * x > 0 and y > 0 and z > 0, x, y, z are all integers.
-     * Time = O(klogk)
-     * Space = O(k)
-     */
-    public long kthSmallestWith357(int k) {
-        // assumption: k >= 1
-        // algorithm: best first searcher
-        // maintain a minHeap then pop k times
-        PriorityQueue<Long> minHeap = new PriorityQueue<>();
-        Set<Long> visited = new HashSet<>(); // used to dedup
-        minHeap.offer(3 * 5 * 7L);
-        visited.add(3 * 5 * 7L);
-        long result = 0;
-        for (int i = 0; i < k; i++) {
-            result = minHeap.poll();
-            // for the state <x+1, y, z>, the actual value is *3
-            if (visited.add(3 * result)) {
-                minHeap.offer(3 * result);
-            }
-            if (visited.add(5 * result)) {
-                minHeap.offer(5 * result);
-            }
-            if (visited.add(7 * result)) {
-                minHeap.offer(7 * result);
-            }
+    public TreeNode reverseBtUpsideDown2(TreeNode root) {
+        if (root == null) {
+            return root;
         }
-        return result;
+        // root is root of input tree
+        // newLeft is the root of new tree
+        // preRoot is the oldRoot of last level's input tree
+        // we deal with each level after store the information of the next level
+        TreeNode prevRoot = null;
+        TreeNode prevRight = null;
+        while (root != null) {
+            TreeNode newLeft = root.left; //will be the newRoot
+            TreeNode newRight = root.right;
+            root.right = prevRight;
+            root.left = prevRoot;
+            prevRoot = root;
+            prevRight = newRight;
+            root = newLeft;
+        }
+        return prevRoot;
     }
 
-    /**
-     * Kth-closest Point To <0,0,0>
-     * Given three arrays sorted in ascending order. Pull one number from each array to form a coordinate <x,y,z>
-     * in a 3D space. Find the coordinates of the points that is k-th closest to <0,0,0>.
-     */
-    public class Coordinate implements Comparable<Coordinate> {
-        int xi;
-        int yi;
-        int zi;
-        double dist;
-        public Coordinate(int xi, int yi, int zi, int[] a, int[] b, int[] c) {
-            this.xi = xi;
-            this.yi = yi;
-            this.zi = zi;
-            this.dist = getDist(a[xi], b[yi], c[zi]);
+    public static ListNode createLinkedList(int n) {
+        List<ListNode> nodeList = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            ListNode newNode = new ListNode(i);
+            nodeList.add(newNode);
         }
-
-        private double getDist(int x, int y, int z) {
-            return Math.sqrt(x * x + y * y + z * z);
+        ListNode head = nodeList.remove(0);
+        ListNode cur = head;
+        for (ListNode node : nodeList) {
+            cur.next = node;
+            cur = node;
         }
-
-        @Override
-        public int compareTo(Coordinate c2) {
-            if (Double.compare(dist, c2.dist) == 0) {
-                return 0;
-            }
-            return Double.compare(dist, c2.dist) < 0 ? -1 : 1;
-        }
-
-        @Override
-        public int hashCode() {
-            return xi * 31 * 31 + yi * 31 + zi;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-            if (!(o instanceof Coordinate)) {
-                return false;
-            }
-            // o must be a coordinate, otherwise no o.x
-            Coordinate c = (Coordinate) o;
-            return xi == c.xi && yi == c.yi && zi == c.zi;
-        }
+        return head;
     }
 
-    public List<Integer> kthClosestToOrigin(int[] a, int[] b, int[] c, int k) {
-        // Assumptions: 1 the three given arrays are not null or empty
-        // 2 k >= 1 and k <= a.length * b.length * c.length
-        PriorityQueue<Coordinate> minHeap = new PriorityQueue<>();
-        Set<Coordinate> checked = new HashSet<>();
-        Coordinate cur = new Coordinate(0, 0, 0, a, b, c);
-        minHeap.offer(cur);
-        checked.add(cur);
-        while(k > 0) {
-            cur = minHeap.poll();
-            if (cur.xi + 1 < a.length) {
-                Coordinate point1 = new Coordinate(cur.xi + 1, cur.yi, cur.zi, a, b, c);
-                if (checked.add(point1)) {
-                    minHeap.offer(point1);
-                }
-            }
-            if (cur.yi + 1 < b.length) {
-                Coordinate point2 = new Coordinate(cur.xi, cur.yi + 1, cur.zi, a, b, c);
-                if (checked.add(point2)) {
-                    minHeap.offer(point2);
-                }
-            }
-            if (cur.zi + 1 < c.length) {
-                Coordinate point3 = new Coordinate(cur.xi, cur.yi, cur.zi + 1, a, b, c);
-                if (checked.add(point3)) {
-                    minHeap.offer(point3);
-                }
-            }
-            k--;
+    public static void printLinkedList(ListNode head) {
+        while (head != null) {
+            System.out.println(head.value);
+            head = head.next;
         }
-        return Arrays.asList(a[cur.xi], b[cur.yi], c[cur.zi]);
     }
 
     public static void main(String[] args) {
@@ -861,7 +686,5 @@ public class Leftover {
         dm.next = h;
         h = h.next.next;
         printLinkedList(dm);
-
-        String s = "a";
     }
 }

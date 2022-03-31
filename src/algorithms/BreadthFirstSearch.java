@@ -299,14 +299,23 @@ public class BreadthFirstSearch {
     }
 
     /**
+     * Largest product of two Strings with unique characters
      * Given a dictionary containing many words, find the largest product of two words’ lengths
      * such that the two words do not share any common characters
      *
-     * Time = O((1+n)*n/2*(logn) + n^2 * (log(n) + m)) // m is average length of a word
-     *      = O(n^2 * (log(n) + m))
+     * e.g. dictionary = [“abcde”, “abcd”, “ade”, “xy”]
+     * the largest product is 5 * 2 = 10 (by choosing “abcde” and “xy”)
+     *
+     * Time = O((1+n)*n/2*(logn) + n^2 * (log(n) + m))
+     *      = O(n^2 * (log(n) + m)) // m is average length of a word
      * Space = O(n^2) // worst case for heap
      */
-    public int largestProduct(String[] dict) {
+    public int largestProductOfTwoStrings(String[] dict) {
+        // assumptions:
+        // 1. the words only contains characters of 'a' to 'z'
+        // 2. the dictionary is not null and does not contain null string, and has at least two strings
+        // 3. if there is no such pair of words, just return 0
+
         // pre-processing
         Arrays.sort(dict, Collections.reverseOrder());
         PriorityQueue<ProductStringPair> pq = new PriorityQueue<>();
@@ -342,19 +351,12 @@ public class BreadthFirstSearch {
 
     /**
      * optimizing via bit mask to dedup
+     * iterate from the largest product pairs, check each pair if valid using bit mask
      */
     public int largestProduct2(String[] dict) {
         HashMap<String, Integer> bitMasks = getBitMasks(dict);
         // sort the dict by length of the words in descending order
-        Arrays.sort(dict, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                if (o1.length() == o2.length()) {
-                    return 0;
-                }
-                return o1.length() < o2.length() ? 1 : -1;
-            }
-        });
+        Arrays.sort(dict, Comparator.reverseOrder());
         int largest = 0;
         // note the order of constructing all the pairs
         // we make our best to try the largest product
@@ -419,26 +421,24 @@ public class BreadthFirstSearch {
         long firstEle = 3 * 5 * 7L;
         minHeap.offer(firstEle);
         visited.add(firstEle);
-        while (k > 1) {
-            long cur = minHeap.poll();
+        long cur = 0;
+        for (int i = 0; i < k; i++) {
+            cur = minHeap.poll();
             // for state<x+1, y, z>, the actual value is cur * 3
-            long xPlusOne = cur * 3;
+            if (visited.add(cur * 3)) {
+                minHeap.offer(cur * 3);
+            }
             // for state<x, y+1, z>, the actual value is cur * 5
-            long yPlusOne = cur * 5;
+            if (visited.add(cur * 5)) {
+                minHeap.offer(cur * 5);
+            }
             // for state<x, y, z+1>, the actual value is cur * 7
-            long zPlusOne = cur * 7;
-            if (visited.add(xPlusOne)) {
-                minHeap.offer(xPlusOne);
+            if (visited.add(cur * 7)) {
+                minHeap.offer(cur * 7);
             }
-            if (visited.add(yPlusOne)) {
-                minHeap.offer(yPlusOne);
-            }
-            if (visited.add(zPlusOne)) {
-                minHeap.offer(zPlusOne);
-            }
-            k--;
         }
-        return minHeap.peek();
+        // cur is the k-th element been polled from pq
+        return cur;
     }
 
     /**
@@ -474,7 +474,7 @@ public class BreadthFirstSearch {
         List<Integer> cur = Arrays.asList(0, 0, 0);
         closestPoint.offer(cur);
         visited.add(cur);
-        while (k > 1) {
+        for (int i = 0; i < k; i++) {
             cur = closestPoint.poll();
             List<Integer> pointNewI = Arrays.asList(cur.get(0) + 1, cur.get(1), cur.get(2));
             if (pointNewI.get(0) < a.length && visited.add(pointNewI)) {
@@ -488,9 +488,8 @@ public class BreadthFirstSearch {
             if (pointNewP.get(2) < c.length && visited.add(pointNewP)) {
                 closestPoint.offer(pointNewP);
             }
-            k--;
         }
-        cur = closestPoint.peek();
+        // cur is the k-th element been polled from pq
         return Arrays.asList(a[cur.get(0)], b[cur.get(1)], c[cur.get(2)]);
     }
 
@@ -595,7 +594,7 @@ public class BreadthFirstSearch {
         System.out.println(bfs.ladderLength("ymain", "oecij",
                 List.of("ymain", "ymann", "ymanj", "ymcnj", "yzcnj", "yycrj", "oecij", "yzcrj", "yycij", "xecij", "yecij")));
 
-        System.out.println(bfs.largestProduct(new String[]{"abcdefhi","ix","hj","x"}));
+        System.out.println(bfs.largestProductOfTwoStrings(new String[]{"abcdefhi","ix","hj","x"}));
 
         System.out.println(bfs.kthSmallest357(40));
 

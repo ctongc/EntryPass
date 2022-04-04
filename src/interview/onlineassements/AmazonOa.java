@@ -9,9 +9,8 @@ public class AmazonOa {
      * Time = O(nlogk)
      * Space = O(k)
      */
-
-    public List<List<Integer>> closestXdestinations(int numDestinations, List<List<Integer>> allLocations,
-                                             int numDeliveries) {
+    public List<List<Integer>> closestXDestinations(int numDestinations, List<List<Integer>> allLocations,
+                                                    int numDeliveries) {
         List<List<Integer>> deliveryPlan = new ArrayList<>(); // stores result
         // sanity check
         if (numDestinations == 0 && numDeliveries == 0) {
@@ -64,7 +63,7 @@ public class AmazonOa {
         while(!queue.isEmpty()) {
             int size = queue.size(); // how many places we can go in this step
             for (int i = 0; i < size; i++) {
-                Node cur = queue.poll(); // the place we dealing now
+                Node cur = queue.poll(); // the place we are dealing with now
                 if (area.get(cur.row).get(cur.col) == 9) { // delivered
                     return minDistance;
                 }
@@ -106,11 +105,14 @@ public class AmazonOa {
      * 选择飞机飞往里程, 和飞回里程, 要求里程的和不超过给定的最大里程限制, 但是两数和最大
      * 返回的是所有符合条件的列表
      */
+
     /**
      * 给log排序
      * 所有log都有字母和数字组成的标识符，标识符不参与排序，只是在两条log除了标识符以外完全相同的情况下
      * 要根据标识符的字典序进行排序。log有两种， 一种是单纯由字母构成，另一种是单纯由数字构成。如果是字母构成的log就根据字典序排序，
-     * 如果是数字则不需要排序，按照原来的顺序放在所有字母log的下面即可。*/
+     * 如果是数字则不需要排序，按照原来的顺序放在所有字母log的下面即可
+     */
+
     public static void main(String[] args) {
         AmazonOa ins = new AmazonOa();
 
@@ -121,7 +123,7 @@ public class AmazonOa {
         List<Integer> n5 = Arrays.asList(1, 9);
         List<Integer> n6 = Arrays.asList(0, 0);
         List<List<Integer>> input = Arrays.asList(n1,n2,n3,n4,n5,n6);
-        List<List<Integer>> res = ins.closestXdestinations(input.size(), input, 5);
+        List<List<Integer>> res = ins.closestXDestinations(input.size(), input, 5);
         for (List<Integer> l : res) {
             System.out.println(l.toString());
         }

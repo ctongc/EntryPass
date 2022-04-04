@@ -14,8 +14,9 @@ class ListNode {
      * 3 设计要从用户的角度出发: 有哪些接口, 参数是什么, 返回是什么 */
 
     /**
-     * 实际上java linkedlist里的size()是eager computation
-     * by keeping a field. 所以 Time = O(1) */
+     * 实际上java LinkedList里的size()是eager computation
+     * by keeping a field. 所以 Time = O(1)
+     */
     public static int size(ListNode head) {
         int size = 0;
         while (head != null) {
@@ -117,7 +118,7 @@ public class LinkedListBasics {
         ListNode prev = null;
         while (head != null) { // if using while (head.next != null) then it won't reverse the last element
             ListNode nextNode = head.next; // always store the new head first
-            head.next = prev; // reserve happens here
+            head.next = prev; // reserve happens here, 记住是在reverse head->prev而不是head.next->head
             prev = head; // move prev by one
             head = nextNode; // move current by one
         }
@@ -143,9 +144,9 @@ public class LinkedListBasics {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode newHead = reverseLinkedList2(head.next); // newHead is the last node of current linkedlist
+        ListNode newHead = reverseLinkedList2(head.next); // newHead is the last node of current linked list
         head.next.next = head; // head.next is the next node
-        head.next = null; // reset
+        head.next = null; // reset, now pev -> head <- originalNext
         return newHead;
     }
 
@@ -482,7 +483,7 @@ public class LinkedListBasics {
             return true;
         }
         ListNode midNode = getMiddleNode(head);
-        ListNode oldLast = reverseLinkedList(midNode.next);
+        ListNode oldLast = reverseLinkedList(midNode.next); // 注意midNode位置 1 M 3 4
         midNode.next = null; // cut the original LinkedList
         // note now the length of the second half <= length of first half
         // by the definition of palindrome, the middle 3 doesn't have an impact
@@ -499,9 +500,5 @@ public class LinkedListBasics {
             n2 = n2.next;
         }
         return true;
-    }
-
-    public static void main(String[] args) {
-
     }
 }

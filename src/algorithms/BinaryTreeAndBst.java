@@ -712,6 +712,34 @@ public class BinaryTreeAndBst {
         diagonalSum(root.right, level, map);
     }
 
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "null,";
+        }
+        return root.key + "," + serialize(root.left) + serialize(root.right);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] dataArray = data.split(",");
+        List<String> dataList = new ArrayList<>(Arrays.asList(dataArray));
+        return deserializer(dataList);
+    }
+
+    private TreeNode deserializer(List<String> dataList) {
+        if ("null".equals(dataList.get(0))) {
+            dataList.remove(0);
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(dataList.get(0)));
+        dataList.remove(0);
+        root.left = deserializer(dataList);
+        root.right = deserializer(dataList);
+        return root;
+    }
+
     public static void main(String[] args) {
         final BinaryTreeAndBst tree = new BinaryTreeAndBst();
 
@@ -724,5 +752,7 @@ public class BinaryTreeAndBst {
         t1.right = t3;
         t3.left = t4;
         tree.treeTraversal(t1);
+
+        System.out.println(tree.serialize(t1));
     }
 }

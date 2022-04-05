@@ -87,7 +87,7 @@ class MyHashMap<K, V> {
         for (MyEntry<K, V> entry : array) {
             while (entry != null) {
                 // check if the value equals
-                // note that entry.value and value both possibly to be null
+                // note that entry.value and value are both possibly to be null
                 if (equalsValue(entry.getValue(), value)) {
                     return true;
                 }
@@ -107,8 +107,8 @@ class MyHashMap<K, V> {
         int index = getIndex(key);
         MyEntry<K, V> entry = array[index];
         while (entry != null) {
-            // check if the key equals
-            // entry.key and key both possibly to be null
+            // check if two key equals
+            // entry.key and key are both possibly to be null
             if (equalsKey(entry.getKey(), key)) {
                 return entry.getValue();
             }
@@ -141,6 +141,7 @@ class MyHashMap<K, V> {
         newEntry.next = head; // trick here, since head could be null
         array[index] = newEntry; // order matters!!
         size++; // don't forget
+
         if (needRehashing()) {
             rehashing();
         }
@@ -202,9 +203,10 @@ class MyHashMap<K, V> {
     }
 
     private void rehashing() {
-        // new double size array
-        // for each node in the old array: do the put() operation to the the new larger array
-        // hence need to iterate each node within all single linked list
+        // create a new array with doubled length
+        // for EACH node in the old array: do the put() operation on the new larger array
+        // since rehash could change which bucket to store the node, even on the same link
+        // hence, need to iterate each node within all single LinkedList
         MyEntry<K, V>[] oldArray = array;
         array = (MyEntry<K, V>[]) new MyEntry[array.length * 2];
         for (MyEntry<K, V> entry : oldArray) {

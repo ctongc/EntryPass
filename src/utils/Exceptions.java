@@ -1,4 +1,4 @@
-package practice;
+package utils;
 
 import java.io.*;
 

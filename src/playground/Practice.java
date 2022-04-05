@@ -1,4 +1,4 @@
-package practice;
+package playground;
 
 import java.util.*;
 

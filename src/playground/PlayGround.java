@@ -82,7 +82,8 @@ public class PlayGround {
         return finalResult;
     }
 
-    private void ladderBuilder(String ew, List<String> wordList, HashSet<String> visited, List<String> prefix, int[] minLength, List<List<String>> result) {
+    private void ladderBuilder(String ew, List<String> wordList, HashSet<String> visited, List<String> prefix,
+                               int[] minLength, List<List<String>> result) {
         String lastAdded = prefix.get(prefix.size() - 1);
 
         // base case

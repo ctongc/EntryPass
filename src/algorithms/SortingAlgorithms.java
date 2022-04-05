@@ -7,9 +7,6 @@ import java.util.Queue;
 
 public class SortingAlgorithms {
 
-    private SortingAlgorithms() {
-    }
-
     /**
      * Selection Sort an array a[] with size n.
      * 找到current index的最小值，然后再看下一个index
@@ -24,7 +21,7 @@ public class SortingAlgorithms {
         // iterate除了最后一个元素外的所有元素, 所以要length - 1
         for (int i = 0; i < array.length - 1; i++) {
             int min = i;
-            // find the min element in unsorted subarray of (i, array.length - 1]
+            // find the min element in unsorted sub-array of (i, array.length - 1]
             for (int j = i + 1; j < array.length; j++) {
                 if (array[j] < array[min]) {
                     min = j;
@@ -88,12 +85,12 @@ public class SortingAlgorithms {
         }
         // auxLeft > mid || auxRight > right
 
-        // if we still have some elements remaining at the left side
+        // if we still have some elements remaining on the left side
         // we need to copy them to the original array
         while (auxLeft <= mid) {
             array[current++] = aux[auxLeft++];
         }
-        // no need to copy remaining elements at the right side
+        // no need to copy remaining elements on the right side
         // since they were already in the position
     }
 
@@ -149,7 +146,7 @@ public class SortingAlgorithms {
     }
 
     private int getPivotIndex(int left, int right) {
-        return left + (int) (Math.random() * (right - left + 1));  // +1 is a must have
+        return left + (int) (Math.random() * (right - left + 1));  // +1 is a must-have
     }
 
     /**
@@ -196,7 +193,7 @@ public class SortingAlgorithms {
         int zero = 0; // all number between neg and one [neg, one] are all 0
         int one = array.length - 1; // all number to the right of one (one, array.length - 1] are all 1
 
-        // zero is the actually the current index, elements in [zero, one] are unsorted
+        // zero is actually the current index, elements in [zero, one] are unsorted
         while (zero <= one) {
             if (array[zero] == -1) {
                 // swap the first zero with incoming neg

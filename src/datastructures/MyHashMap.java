@@ -1,4 +1,4 @@
-package datastructure;
+package datastructures;
 
 import org.junit.runner.notification.RunListener;
 

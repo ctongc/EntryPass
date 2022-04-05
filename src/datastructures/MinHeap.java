@@ -1,4 +1,4 @@
-package datastructure;
+package datastructures;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

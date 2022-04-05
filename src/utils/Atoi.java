@@ -1,4 +1,4 @@
-package practice;
+package utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringIntTransformation {
+public class Atoi {
 
     /**
      * Parse a String representation of positive integer
@@ -209,7 +209,7 @@ public class StringIntTransformation {
     }
 
     public static void main(String[] args) {
-        StringIntTransformation ins = new StringIntTransformation();
+        Atoi ins = new Atoi();
         int i1 = ins.parsePosInt("1024");
         int i2 = Integer.valueOf("1024");
         int i3 = (int) 'c';

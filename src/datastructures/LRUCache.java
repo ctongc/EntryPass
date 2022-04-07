@@ -99,25 +99,25 @@ public class LRUCache<K, V> {
      * remove the node from the Doubly linked list
      * but not eliminate the node
      */
-    private LRUNode<K, V> remove(LRUNode<K, V> LRUNode) {
+    private LRUNode<K, V> remove(LRUNode<K, V> node) {
         // update map!
-        map.remove(LRUNode.key);
+        map.remove(node.key);
 
-        if (LRUNode.prev != null) {
-            LRUNode.prev.next = LRUNode.next;
+        if (node.prev != null) {
+            node.prev.next = node.next;
         }
-        if (LRUNode.next != null) {
-            LRUNode.next.prev = LRUNode.prev;
+        if (node.next != null) {
+            node.next.prev = node.prev;
         }
-        if (head == LRUNode) {
-            head = LRUNode.next;
+        if (head == node) {
+            head = node.next;
         }
-        if (tail == LRUNode) {
-            tail = LRUNode.prev;
+        if (tail == node) {
+            tail = node.prev;
         }
-        LRUNode.prev = null;
-        LRUNode.next = null;
+        node.prev = null;
+        node.next = null;
 
-        return LRUNode;
+        return node;
     }
 }

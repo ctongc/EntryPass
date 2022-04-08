@@ -1,5 +1,7 @@
 package interview;
 
+import practice.Microsoft;
+
 import java.util.*;
 
 class ListNode {
@@ -728,6 +730,70 @@ public class MicrosoftCn {
         return result;
     }
 
+    static class TreeNodeP {
+        int val;
+        TreeNodeP left;
+        TreeNodeP right;
+        TreeNodeP parent;
+
+        TreeNodeP(int value) {
+            this.val = value;
+        }
+
+        TreeNodeP(int value, TreeNodeP parent) {
+            this.val = value;
+            this.parent = parent;
+        }
+
+        @Override
+        public String toString() {
+            return val + "";
+        }
+    }
+
+    // binary tree
+    // left, right, parent
+    // in order  left, self, right
+    //         1
+    //      2      3
+    //   4       6   7
+    // 8   9
+    //  10
+    // 8 10 4 9 2 1 6 3 7
+
+    // case 1 如果右边有, 往右走一步, 再往左走到底 打印
+    // case 2 右边没有
+    //      case 2.1 cur == cur.parent.left, 左边和自己已经全遍历完了
+    //      打印parent
+    //      case 2.2: cur == cur.parent.right, parent的左边和parent已经全遍历完了, 自己也遍历完了
+    //      往上找到parent是别的node的left的情况，打印该parent
+    public TreeNodeP nextNodeInOrderTraversal(TreeNodeP node) {
+        if (node == null) {
+            return null;
+        }
+
+        TreeNodeP cur = node;
+        if (cur.right != null) {
+            cur = cur.right;
+            while (cur.left != null) {
+                cur = cur.left;
+            }
+            return cur;
+        } else {
+            if (cur == cur.parent.left) {
+                return cur.parent;
+            } else {
+                while (cur.parent != null) {
+                    cur = cur.parent;
+                    if (cur.parent != null && cur == cur.parent.left) {
+                        return cur.parent;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         MicrosoftCn ins = new MicrosoftCn();
         System.out.println(ins.removeFive(15958));
@@ -753,5 +819,30 @@ public class MicrosoftCn {
         String s = "The quick brown fox jumps over the lazy dog";
         List<String> list = ins.printWords(s, 9);
         System.out.println(list);
+
+        //         1
+        //      2      3
+        //   4       6   7
+        // 8   9
+        //  10
+        // 8 10 4 9 2 1 6 3 7
+        TreeNodeP t1 = new TreeNodeP(1);
+        TreeNodeP t2 = new TreeNodeP(2, t1);
+        TreeNodeP t3 = new TreeNodeP(3, t1);
+        TreeNodeP t4 = new TreeNodeP(4, t2);
+        TreeNodeP t6 = new TreeNodeP(6, t3);
+        TreeNodeP t7 = new TreeNodeP(7, t3);
+        TreeNodeP t8 = new TreeNodeP(8, t4);
+        TreeNodeP t9 = new TreeNodeP(9, t4);
+        TreeNodeP t10 = new TreeNodeP(10, t8);
+        t1.left = t2;
+        t1.right = t3;
+        t2.left = t4;
+        t3.left = t6;
+        t3.right = t7;
+        t4.left = t8;
+        t4.right = t9;
+        t8.right = t10;
+        System.out.println(ins.nextNodeInOrderTraversal(t7).val);
     }
 }

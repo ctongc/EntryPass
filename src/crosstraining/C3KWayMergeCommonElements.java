@@ -221,13 +221,13 @@ public class C3KWayMergeCommonElements {
         int leftMax = 0;
         int rightMax = 0;
         while (i <= j) {
-            leftMax = Math.max(leftMax, array[i]);
-            rightMax = Math.max(rightMax, array[j]);
-            if (leftMax < rightMax) {
-                waterSum += leftMax - array[i];
+            if (leftMax <= rightMax) {
+                waterSum += Math.max(0, leftMax - array[i]);
+                leftMax = Math.max(leftMax, array[i]);
                 i++;
             } else {
-                waterSum += rightMax - array[j];
+                waterSum += Math.max(0, rightMax - array[j]);
+                rightMax = Math.max(rightMax, array[j]);
                 j--;
             }
         }

@@ -199,7 +199,6 @@ public class RecursionBasics {
      * Time = O(n * n) // n * n's element
      * Space = O(m) // if m > n
      */
-
     public int[][] spiralOrderGenerate(int m, int n) {
         int[][] matrix = new int[m][n];
         if (m == 0 || n == 0) {
@@ -218,14 +217,14 @@ public class RecursionBasics {
          * m == 1 && m == 1: one element left
          * m == 1 && n != 1: one column left
          * m != 1 && n == 1: one row left */
-        if(m <= 1 || n <= 1) {
+        if (m <= 1 || n <= 1) {
             if (m == 1 && n == 1) {
                 matrix[offset][offset] = counter;
-            } else if (n == 1 && m != 1) {
+            } else if (n == 1) {
                 for (int i = 0; i < m; i++) {
                     matrix[offset + i][offset] = counter++;
                 }
-            } else if (n != 1 && m == 1){
+            } else if (m == 1){
                 for (int i = 0; i < n; i++) {
                     matrix[offset][offset + i] = counter++;
                 }
@@ -237,19 +236,19 @@ public class RecursionBasics {
         /* offset is the [x] and [y] coordinates of the upper left corner */
 
         // top row
-        for(int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             matrix[offset][offset + i] = counter++;
         }
         // right column
-        for(int i = 0; i < m - 1; i++) {
+        for (int i = 0; i < m - 1; i++) {
              matrix[offset + i][offset + n - 1] = counter++;
         }
         // bottom row
-        for(int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             matrix[offset + m - 1][offset + n - 1 - i] = counter++;
         }
         // left column
-        for(int i = 0; i < m - 1; i++) {
+        for (int i = 0; i < m - 1; i++) {
             matrix[offset + m - 1 - i][offset] = counter++;
         }
         // recursive rule
@@ -691,8 +690,8 @@ public class RecursionBasics {
     public static void main(String[] args) {
         RecursionBasics solution = new RecursionBasics();
         System.out.println(solution.fibonacci(5));
-        int[][] array = solution.spiralOrderGenerate(4,2);
-        for (int i = 0; i < 4; i++) {
+        int[][] array = solution.spiralOrderGenerate(5,5);
+        for (int i = 0; i < array.length; i++) {
             System.out.println(Arrays.toString(array[i]));
         }
         System.out.println(solution.abbreviationMatching("apple","a2l1"));

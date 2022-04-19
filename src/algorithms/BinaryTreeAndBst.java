@@ -140,7 +140,17 @@ public class BinaryTreeAndBst {
                 inOrderList.add(cur.key); // print
                 cur = cur.right; // 向右走一步，再向左走到底
             }
+
+            // might bee easier to understand
+            // while (cur != null) {
+            //     stack.offerFirst(cur);
+            //     cur = cur.left;
+            // }
+            // cur = stack.pollFirst();
+            // inOrderList.add(cur.key);
+            // cur = cur.right;
         }
+
 
         return inOrderList;
     }

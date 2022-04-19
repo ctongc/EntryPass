@@ -134,6 +134,12 @@ public class Comparators {
                 return s1.getName().compareTo(s2.getName());
             }
         });
+
+        String[] strs = {"c", "bb", "aaa"};
+        Arrays.sort(strs, Comparator.comparing(String::length));
+        for (String s : strs) {
+            System.out.println(s);
+        }
     }
 
     private void otherNotedExpressions() {

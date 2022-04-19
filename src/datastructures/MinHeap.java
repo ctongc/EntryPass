@@ -107,10 +107,10 @@ public class MinHeap {
             int leftChildIndex = index * 2 + 1;
             int rightChildIndex = index * 2 + 2;
             // use swapCandidate to indicate the smaller element between left and right child
-            int swapCandidate = rightChildIndex <= size - 1 && array[leftChildIndex] > array[rightChildIndex] ?
+            int swapCandidate = rightChildIndex <= size - 1 && array[leftChildIndex] >= array[rightChildIndex] ?
                     rightChildIndex : leftChildIndex;
             if (array[index] > array[swapCandidate]) {
-                swap(index, leftChildIndex);
+                swap(index, swapCandidate);
             } else {
                 break; // needed!
             }

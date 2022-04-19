@@ -385,8 +385,9 @@ public class Leftover {
      * Space = O(n)
      */
     public TreeNode reconstructPostIn(int[] inOrder, int[] postOrder) {
-        // Assumptions: 1 The given sequences are not null and they have the same length
-        // 2 There are no duplicate keys in the binary tree
+        // Assumptions
+        // 1. The given sequences are not null, and they have the same length
+        // 2. There are no duplicate keys in the binary tree
         HashMap<Integer, Integer> indexMap = new HashMap<>();
         for (int i = 0; i < inOrder.length; i++) {
             indexMap.put(inOrder[i], i);
@@ -410,8 +411,8 @@ public class Leftover {
     }
 
     /**
-     * Reconstruct Binary Tree With Levelorder And Inorder
-     * Given the levelorder and inorder traversal sequence of a binary tree, reconstruct the original tree.
+     * Reconstruct Binary Tree With Level order And Inorder
+     * Given the level order and inorder traversal sequence of a binary tree, reconstruct the original tree.
      * Time = O(n^2) // worst case n levels, and for each level, time = n + (n-1) + (n-2) + … = O(n^2)
      * Space = O(n^2) // for each node, we stored the left and right tree
      */
@@ -440,8 +441,8 @@ public class Leftover {
         // store the node in the corresponding list
         List<Integer> left = new ArrayList<>();
         List<Integer> right = new ArrayList<>();
-        // Case 1: if indexMap[x] < indexMap[20]: x goes to the left sub tree.
-        // Case 2: if indexMap[x] > indexMap[20]: x goes to the right sub tree.
+        // Case 1: if indexMap[x] < indexMap[20]: x goes to the left sub-tree.
+        // Case 2: if indexMap[x] > indexMap[20]: x goes to the right sub-tree.
         for (int node : level) {
             if (indexMap.get(node) < indexMap.get(root.key)) {
                 left.add(node);
@@ -464,7 +465,7 @@ public class Leftover {
         // Assumptions: 1 the given sequence is not null
         // 2 there are no duplicate keys in the binary search tree
         // we traverse the post order sequence from right to left
-        int[] index = new int[]{post.length - 1}; // use to iterate the the postorder sequence from last to first
+        int[] index = new int[]{post.length - 1}; // use to iterate the postorder sequence from last to first
         return construct(post, index, Integer.MIN_VALUE);
     }
 

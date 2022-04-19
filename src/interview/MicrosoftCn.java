@@ -1,7 +1,5 @@
 package interview;
 
-import practice.Microsoft;
-
 import java.util.*;
 
 class ListNode {

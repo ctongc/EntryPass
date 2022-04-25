@@ -6,6 +6,7 @@ package algorithms;
  * 2. target不能被rule out
  */
 public class BinarySearch {
+
     /**
      * Classical Binary Search
      * Given a target integer T and an integer array A sorted in ascending order find
@@ -45,7 +46,7 @@ public class BinarySearch {
      * Given a target number, returning the position that the target locates within the
      * matrix. If the target number does not exist in the matrix, return {-1, -1}.
      *
-     * Time = O(log n*m)
+     * Time = O(log(n*m))
      * Space = O(1)
      */
     public int[] searchInSortedMatrix(int[][] matrix, int target) {
@@ -89,7 +90,7 @@ public class BinarySearch {
         int right = array.length - 1;
         /* This trick can avoid infinity loop
          * if left + 1 == right, mid will === left
-         * then it will stop when there are two elements left. */
+         * then it will stop when there are two elements left */
         while (left + 1 < right) { // if left neighbors right -> terminate
             int mid = left + (right - left) / 2;
             if (array[mid] == target) {
@@ -100,6 +101,7 @@ public class BinarySearch {
                 left = mid; // left = mid + 1? WRONG
             }
         }
+
         if (array[left] == target) {
             return left;
         } else if (array[right] == target) {
@@ -222,6 +224,7 @@ public class BinarySearch {
         } else if (array[right] == target) {
             return right;
         }
+
         return -1;
     }
 
@@ -288,6 +291,7 @@ public class BinarySearch {
         } else if (array[left] == target) {
             return left;
         }
+
         return -1;
     }
 
@@ -366,6 +370,7 @@ public class BinarySearch {
         if (array[left] <= target) {
             return left;
         }
+
         return -1;
     }
 
@@ -393,10 +398,10 @@ public class BinarySearch {
         // post-processing
         if (array[left] > target) {
             return left;
-        }
-        if (array[right] > target) {
+        } else if (array[right] > target) {
             return right;
         }
+
         return -1;
     }
 
@@ -473,13 +478,13 @@ public class BinarySearch {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
                 return mid;
-            } else if (nums[left] <= nums[mid]) {
+            } else if (nums[left] <= nums[mid]) { // left to mid is ascending
                 if (nums[left] <= target && target < nums[mid]) {
                     right = mid - 1;
                 } else {
                     left = mid + 1;
                 }
-            } else {
+            } else { // mid to right is ascending
                 if (nums[mid] < target && target <= nums[right]) {
                     left = mid + 1;
                 } else {
@@ -498,6 +503,7 @@ public class BinarySearch {
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left <= right) {
@@ -508,6 +514,7 @@ public class BinarySearch {
                 right = mid;
             }
         }
+
         return left;
     }
 }

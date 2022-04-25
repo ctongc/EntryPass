@@ -1,4 +1,4 @@
-package interview;
+package interviews;
 
 import java.util.ArrayList;
 import java.util.HashSet;

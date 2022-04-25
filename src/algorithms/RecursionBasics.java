@@ -687,6 +687,41 @@ public class RecursionBasics {
         return root;
     }
 
+    /**
+     * Construct a Binary Search Tree from Preorder Traversal
+     * Given an array of integers pre-order, which represents the preorder traversal of
+     * a BST (i.e., binary search tree), construct the tree and return its root.
+     *
+     * It is guaranteed that there is always possible to find a binary search tree with
+     * the given requirements for the given test cases.
+     *
+     * Time = O(n)
+     * Space = O(n)
+     */
+    public TreeNode bstFromPreorder(int[] preorder) {
+        if (preorder == null || preorder.length == 0) {
+            return null;
+        }
+        return bstFromPreorder(preorder, 0, preorder.length - 1);
+    }
+
+    private TreeNode bstFromPreorder(int[] preorder, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+
+        TreeNode node = new TreeNode(preorder[left]);
+        int index = left;
+        while (index <= right && preorder[index] <= node.key) {
+            index++;
+        }
+
+        node.left = bstFromPreorder(preorder, left + 1, index - 1);
+        node.right = bstFromPreorder(preorder, index, right);
+
+        return node;
+    }
+
     public static void main(String[] args) {
         RecursionBasics solution = new RecursionBasics();
         System.out.println(solution.fibonacci(5));

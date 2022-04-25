@@ -249,6 +249,90 @@ public class LeetCode {
     }
 
     /**
+     * Binary Tree Path Sum To Target III
+     * https://leetcode.com/problems/path-sum-iii/
+     * Given the root of a binary tree and an integer targetSum, return the number
+     * of paths where the sum of the values along the path equals targetSum.
+     *
+     * The path does not need to start or end at the root or a leaf, but it must
+     * go downwards (i.e., traveling only from parent nodes to child nodes).
+     *
+     * Time = O(n) // n is number of nodes
+     * Space = O(n) // hashmap
+     */
+    public int pathSumToTarget(TreeNode root, int targetSum) {
+        if (root == null) {
+            return 0;
+        }
+
+        int[] result = new int[1];
+        Map<Integer, Integer> pathSumCount = new HashMap<>(); // <pathSum, count>
+
+        pathSum(root, targetSum, 0, pathSumCount, result);
+
+        return result[0];
+    }
+
+    private void pathSum(TreeNode root, int target, int preSum, Map<Integer, Integer> pathSumCount, int[] result) {
+        preSum += root.val;
+        if (preSum == target) {
+            result[0]++;
+        }
+
+        int pathCount = pathSumCount.getOrDefault(preSum - target, 0);
+        if (pathCount > 0) {
+            result[0] += pathCount; // that's why need a map
+        }
+
+        pathSumCount.put(preSum, pathSumCount.getOrDefault(preSum, 0) + 1);
+
+        if (root.left != null) {
+            pathSum(root.left, target, preSum, pathSumCount, result);
+        }
+        if (root.right != null) {
+            pathSum(root.right, target, preSum, pathSumCount, result);
+        }
+
+        pathSumCount.put(preSum, pathSumCount.get(preSum) - 1);
+    }
+
+    /**
+     * 554. Brick Wall
+     * https://leetcode.com/problems/brick-wall/
+     * There is a rectangular brick wall in front of you with n rows of bricks.
+     * The ith row has some number of bricks each of the same height (i.e., one unit)
+     * but they can be of different widths. The total width of each row is the same.
+     *
+     * Draw a vertical line from the top to the bottom and cross the least bricks.
+     * If your line goes through the edge of a brick, then the brick is not considered
+     * as crossed. You cannot draw a line just along one of the two vertical edges of
+     * the wall, in which case the line will obviously cross no bricks.
+     *
+     * Given the 2D array wall that contains the information about the wall, return
+     * the minimum number of crossed bricks after drawing such a vertical line.
+     *
+     * Time = O(n ^ 2) // total number of bricks
+     * Space = O(m) // m is the width of the wall
+     */
+    public int leastBricks(List<List<Integer>> wall) {
+        Map<Integer, Integer> skipBrickCounter = new HashMap<>(); // <xCoordinate, skip count>
+        int maxSkip = 0;
+        for (List<Integer> row : wall) {
+            // we are recording on which xCoordinate the vertical line is not
+            // crossing a brick, which means the brick ends on that xCoordinate
+            int xCoordinate = 0;
+            // as required the line can't be edges of the wall
+            for (int i = 0; i < row.size() - 1; i++) {
+                xCoordinate += row.get(i);
+                int newSkip = skipBrickCounter.getOrDefault(xCoordinate, 0) + 1;
+                skipBrickCounter.put(xCoordinate, newSkip);
+                maxSkip = Math.max(maxSkip, newSkip);
+            }
+        }
+        return wall.size() - maxSkip;
+    }
+
+    /**
      * 621. Task Scheduler
      * https://leetcode.com/problems/task-scheduler/
      * Given a characters array tasks, representing the tasks a CPU needs to do,

@@ -1,4 +1,4 @@
-package interview.onlineassements;
+package interviews.onlineassements;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -792,6 +792,104 @@ public class MicrosoftCn {
         return null;
     }
 
+    /**
+     * iterator
+     * binary tree - in order
+     */
+    static class BinaryTreeIterator {
+        Deque<TreeNode> deque; // stack
+        TreeNode node;
+
+        public BinaryTreeIterator(TreeNode root) {
+            this.deque = new ArrayDeque<>();
+            this.node = root;
+        }
+
+        public boolean hasNext() {
+            return node != null || !deque.isEmpty();
+        }
+
+        public int next() {
+            while (node != null) {
+                deque.offerFirst(node);
+                node = node.left;
+            }
+            if (hasNext()) {
+                node = deque.pollFirst();
+                int curVal = node.key;
+                node = node.right;
+                return curVal;
+            } else {
+                throw new NoSuchElementException("no next value!");
+            }
+        }
+    }
+
+    /**
+     * [0, 0,  1,  2,  0,  1,  1]  candidate list
+     * [0, 3, 10, 15, 20, 25, 30]  timeStamp list
+     * input: 18, output: 0
+     * input: 30, output: 1
+     */
+    // int[] elected = new int[TimeStamp.length] 下标对应timeStamp
+    // binary search - log(n) 找timestamp里最接近input的两个数
+    // int candidateIndex
+    // int count - 1
+    // O(n)
+    // O(1)
+
+    /**
+     * Tag Validator + form a n-nary tree
+     * https://leetcode.com/problems/tag-validator/
+     */
+
+    /**
+     * Given two non-negative integers num1 and num2 represented as strings,
+     * return the product of num1 and num2, also represented as a string.
+     * In order to simply the problem, there is no string which contains
+     * leading “0” except for the num is 0.
+     */
+    public String productOfTwoStrings(String s1, String s2) {
+        // sanity check
+        if (s1 == null || s1.length() == 0 || s2 == null || s2.length() == 0) {
+            return null;
+        }
+
+        // base case
+        if ("0".equals(s1)) {
+            return "0";
+        }
+        if ("0".equals(s2)) {
+            return "0";
+        }
+        if ("1".equals(s1)) {
+            return s2;
+        }
+        if ("1".equals(s2)) {
+            return s1;
+        }
+
+        int[] num = new int[s1.length() + s2.length()];
+        for (int i = s1.length() - 1; i >= 0; i--) {
+            for (int j = s2.length() - 1; j >= 0; j--) {
+                int product = (s1.charAt(i) - '0') * (s2.charAt(j) - '0');
+                int digit = num[i + j + 1];
+                int cur = product + digit;
+
+                num[i + j] += cur / 10;
+                num[i + j + 1] = cur % 10;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i : num) {
+            if (!(sb.length() == 0 && i == 0)) {
+                sb.append(i);
+            }
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
         MicrosoftCn ins = new MicrosoftCn();
         System.out.println(ins.removeFive(15958));
@@ -841,6 +939,48 @@ public class MicrosoftCn {
         t4.left = t8;
         t4.right = t9;
         t8.right = t10;
-        System.out.println(ins.nextNodeInOrderTraversal(t7).val);
+        // System.out.println(ins.nextNodeInOrderTraversal(t7).val);
+
+        // case 1 null node
+        TreeNode nullNode = null;
+        BinaryTreeIterator it1 = new BinaryTreeIterator(nullNode);
+        // it1.next(); will throw exception
+
+        // case 2 has one node
+        TreeNode n1 = new TreeNode(0);
+        BinaryTreeIterator it2 = new BinaryTreeIterator(n1);
+        System.out.println(it2.hasNext());
+        it2.next();
+        System.out.println(it2.hasNext());
+
+        // case 3 tree height > 3
+        //        1
+        //     2     3
+        //   4  5  6
+        // 7
+        // inorder -> 7 4 2 5 1 6 3
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node2 = new TreeNode(2);
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(5);
+        TreeNode node6 = new TreeNode(6);
+        TreeNode node7 = new TreeNode(7);
+        BinaryTreeIterator it3 = new BinaryTreeIterator(node1);
+        node1.left = node2;
+        node1.right = node3;
+        node2.left = node4;
+        node2.right = node5;
+        node3.left = node6;
+        node4.left = node7;
+        for (int i = 0; i < 7; i++) {
+            System.out.print(it3.next() + " ");
+        }
+
+        System.out.println(ins.productOfTwoStrings("0", "1"));
+        System.out.println(ins.productOfTwoStrings("9", "9"));
+        System.out.println(ins.productOfTwoStrings("99", "99"));
+        System.out.println(ins.productOfTwoStrings("11322324234523532532453453453245345235235235253",
+                "11322324234523532532453453453245345235235235253"));
     }
 }

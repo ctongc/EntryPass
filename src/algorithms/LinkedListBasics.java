@@ -145,9 +145,38 @@ public class LinkedListBasics {
             return head;
         }
         ListNode newHead = reverseLinkedList2(head.next); // newHead is the last node of current linked list
-        head.next.next = head; // head.next is the next node
-        head.next = null; // reset, now pev -> head <- originalNext
+        head.next.next = head; // head.next is the next node, leave the newHead pointer but operate head.next.next
+        head.next = null; // reset, after this step, pev -> head <- originalNext
         return newHead;
+    }
+
+    public ListNode reverseInPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode newHead = head.next;
+        head.next = reverseInPairs(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+
+    public ListNode reverseInPairs2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode prev = dummyHead;
+        while (head != null && head.next != null) {
+            prev.next = head.next;
+            head.next = head.next.next;
+            prev.next.next = head;
+            prev = head;
+            head = head.next;
+        }
+        return dummyHead.next;
     }
 
     /**

@@ -64,8 +64,8 @@ public class ByteDance {
     /**
      * Q1 两个Thread交替打印
      */
-    static int counter = 0;
-    static int N = 100;
+    static int counter = 1;
+    static int N = 10;
 
     private synchronized void printEvenNumber() throws InterruptedException {
         while (counter < N) {

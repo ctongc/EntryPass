@@ -249,7 +249,7 @@ public class LeetCode {
     }
 
     /**
-     * Binary Tree Path Sum To Target III
+     * 437. Binary Tree Path Sum To Target III
      * https://leetcode.com/problems/path-sum-iii/
      * Given the root of a binary tree and an integer targetSum, return the number
      * of paths where the sum of the values along the path equals targetSum.
@@ -330,6 +330,48 @@ public class LeetCode {
             }
         }
         return wall.size() - maxSkip;
+    }
+
+    /**
+     * 581. Shortest Unsorted Continuous Subarray
+     * https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
+     * Given an integer array nums, you need to find one continuous subarray that if you
+     * only sort this subarray in ascending order, then the whole array will be sorted in
+     * ascending order.
+     *
+     * Return the shortest such subarray and output its length.
+     *
+     * Time = O(n)
+     * Space = O(1) // if using stack then space is O(n)
+     */
+    public int findUnsortedSubarray(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return 0;
+        }
+
+        int right = -1;
+        int max = Integer.MIN_VALUE;
+        // from left to right, find the right most element that smaller than the
+        // largest element on it's left to set the right border
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < max) {
+                right = i;
+            }
+            max = Math.max(max, nums[i]);
+        }
+
+        // from right to left, find the left most element that bigger than the
+        // smallest element on it's right to set the left border
+        int left = nums.length;
+        int min = Integer.MAX_VALUE;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] > min) {
+                left = i;
+            }
+            min = Math.min(min, nums[i]);
+        }
+
+        return Math.max(0, right - left + 1);
     }
 
     /**

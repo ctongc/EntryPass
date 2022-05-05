@@ -407,7 +407,11 @@ public class RecursionBasics {
 
     /**
      * Determine whether a binary tree is a balanced binary tree
-     * O(nlogn) solution
+     * A balanced binary tree is one in which the depths of every node’s
+     * left and right subtree differ by at most 1.
+     *
+     * Time = O(nlogn), not optimal
+     * Space = O(height)
      */
     public boolean isBalanced(TreeNode root) {
         if (root == null) {
@@ -429,7 +433,9 @@ public class RecursionBasics {
 
     /**
      * Determine whether a binary tree is a balanced binary tree
-     * O(n) solution
+     *
+     * Time = O(n)
+     * Space = O(height)
      */
     public boolean isBalanced2 (TreeNode root) {
         return checkHeight(root) != -1;
@@ -463,20 +469,20 @@ public class RecursionBasics {
      * Time = O(n)
      * Space = O(height)
      */
-    public int maxPathSumFromLeafToLeaf(TreeNode root) {
-        int[] result = new int[]{ Integer.MIN_VALUE };
-        getMaxPathSum(root, result);
+    public int maxPathSumLeafToLeaf(TreeNode root) {
+        int[] result = new int[]{ Integer.MIN_VALUE }; // max sum might be negative
+        getMaxPathSumLeafToLeaf(root, result);
         return result[0];
     }
 
-    private int getMaxPathSum(TreeNode root, int[] result) {
+    private int getMaxPathSumLeafToLeaf(TreeNode root, int[] result) {
         if (root == null) {
             return 0;
         }
 
         // step 1
-        int leftPathSum = getMaxPathSum(root.left, result);
-        int rightPathSum = getMaxPathSum(root.right, result);
+        int leftPathSum = getMaxPathSumLeafToLeaf(root.left, result);
+        int rightPathSum = getMaxPathSumLeafToLeaf(root.right, result);
 
         // step 2 - both child need to be non-null to update the globalMax
         if (root.left != null && root.right != null) {
@@ -494,27 +500,29 @@ public class RecursionBasics {
 
     /**
      * Max path sum from any node to any node
-     * Get maximum sum of the path cost from **any node to any node
+     * Given a binary tree in which each node contains an integer number
+     * Find the maximum possible sum from any node to any node (the start
+     * node and the end node can be the same)
      *
      * Time = O(n)
      * Space = O(height)
      */
-    public int maxPathSumFromAnyToAny(TreeNode root) {
-        int[] result = new int[]{ Integer.MIN_VALUE };
-        getMaxPathSum2(root, result);
+    public int maxPathSumAnyNodeToAnyNode(TreeNode root) {
+        int[] result = new int[]{ Integer.MIN_VALUE }; // max sum might be negative
+        getMaxPathSumNodeToNode(root, result);
         return result[0];
     }
 
-    private int getMaxPathSum2(TreeNode root, int[] result) {
+    private int getMaxPathSumNodeToNode(TreeNode root, int[] result) {
         if (root == null) {
             return 0;
         }
 
         // step 1
-        int leftPathSum = getMaxPathSum2(root.left, result);
-        int rightPathSum = getMaxPathSum2(root.right, result);
+        int leftPathSum = getMaxPathSumNodeToNode(root.left, result);
+        int rightPathSum = getMaxPathSumNodeToNode(root.right, result);
 
-        // step 2
+        // step 2 左右path小于0就discard
         result[0] = Math.max(result[0], Math.max(leftPathSum, 0) + Math.max(rightPathSum, 0) + root.key);
 
         // step 3, care if one child is null the other is negative
@@ -522,63 +530,153 @@ public class RecursionBasics {
     }
 
     /**
-     * Find maximum path cost for all paths from leaf to root in a Binary Tree
-     *
-     * Time = O(n^2)
-     * Space = O(height)
-     */
-    public int maxPathCost(TreeNode root) {
-        int[] result = new int[]{ Integer.MIN_VALUE };
-        getMaxPathCostWithPrefix(root, new ArrayList<>(), result);
-        return result[0];
-    }
-
-    private void getMaxPathCostWithPrefix(TreeNode root, List<Integer> pathPrefix, int[] globalMax) {
-        if (root == null) {
-            return;
-        }
-
-        if (root.left == null && root.right == null) {
-            int pathSum = 0;
-            for (int i : pathPrefix) {
-                pathSum += i;
-            }
-            globalMax[0] = Math.max(globalMax[0], pathSum + root.key);
-            return;
-        }
-
-        // recursive rule
-        pathPrefix.add(root.key);
-        getMaxPathCostWithPrefix(root.left, pathPrefix, globalMax);
-        getMaxPathCostWithPrefix(root.right, pathPrefix, globalMax);
-        pathPrefix.remove(pathPrefix.size() - 1);
-    }
-
-    /**
-     * Find maximum path cost for all paths from leaf to root in a Binary Tree
+     * Max path sum from leaf to root
+     * Find maximum path sum for all paths from leaf to root in a Binary Tree
      *
      * Time = O(n)
      * Space = O(height)
      */
-    public int maxPathCost2(TreeNode root) {
-        int[] result = new int[]{ Integer.MIN_VALUE };
-        getMaxPathCostWithPrefix2(root, 0, result);
+    public int maxPathSumLeafToRoot(TreeNode root) {
+        int[] result = new int[]{ Integer.MIN_VALUE }; // max sum might be negative
+        getMaxPathSumLeafToRoot(root, 0, result);
         return result[0];
     }
 
-    private void getMaxPathCostWithPrefix2(TreeNode root, int prefixSum, int[] globalMax) {
+    private void getMaxPathSumLeafToRoot(TreeNode root, int prefixSum, int[] globalMax) {
         if (root == null) {
             return;
         }
 
+        prefixSum += root.key;
+
+        // root/one child == null doesn't mean it is on the leaf!!
         if (root.left == null && root.right == null) {
-            globalMax[0] = Math.max(globalMax[0], prefixSum + root.key);
+            globalMax[0] = Math.max(globalMax[0], prefixSum);
             return;
         }
 
         // recursive rule
-        getMaxPathCostWithPrefix2(root.left, prefixSum + root.key, globalMax); // go left
-        getMaxPathCostWithPrefix2(root.right, prefixSum + root.key, globalMax); // go right
+        getMaxPathSumLeafToRoot(root.left, prefixSum, globalMax); // go left
+        getMaxPathSumLeafToRoot(root.right, prefixSum, globalMax); // go right
+    }
+
+    /**
+     * Maximum Path Sum Binary Tree III
+     * Given a binary tree in which each node contains an integer number. Find the maximum possible subpath sum
+     * (both the starting and ending node of the subpath should be on the same path from root to one of the leaf nodes,
+     * and the subpath is allowed to contain only one node)
+     *
+     * Time = O(n)
+     * Space = O(height)
+     */
+    public int maxPathSumSamePathFromRoot(TreeNode root) {
+        // assumption: root is not null
+        int[] maxSum = new int[]{Integer.MIN_VALUE};
+        getMaxSumPath(root, maxSum);
+        return maxSum[0];
+    }
+
+    private int getMaxSumPath(TreeNode root, int[] maxSum) {
+        if (root == null) { // base case
+            return 0;
+        }
+
+        int leftPathSum = getMaxSumPath(root.left, maxSum);
+        int rightPathSum = getMaxSumPath(root.right, maxSum);
+
+        int cur = Math.max(Math.max(rightPathSum, leftPathSum), 0) + root.key;
+        maxSum[0] = Math.max(cur, maxSum[0]);
+
+        return cur;
+    }
+
+    /**
+     * Binary Tree Path Sum To Target III
+     * Given a binary tree in which each node contains an integer number. Determine if there exists a path
+     * (the path can only be from one node to itself or to any of its descendants), the sum of the numbers
+     * on the path is the given target number
+     *
+     * Time = O(n)
+     * Space = O(n) // O(n) for call stack + O(n) for the set
+     */
+    public boolean existPathSumToTarget(TreeNode root, int target) {
+        if (root == null) {
+            return false;
+        }
+        // contains all path prefix sum from root node to the current node
+        HashSet<Integer> prefixSumSet = new HashSet<>(); // use a HashMap with count to deal with duplicate sums
+        prefixSumSet.add(0);
+        return findTargetSum(root, target, 0, prefixSumSet);
+    }
+
+    private boolean findTargetSum(TreeNode root, int target, int prefixSum, HashSet<Integer> prefixSumSet) {
+        if (root == null) {
+            return false;
+        }
+        prefixSum += root.key;
+        if (prefixSumSet.contains(prefixSum - target)) {
+            return true;
+        }
+        boolean needRemove = prefixSumSet.add(prefixSum);
+        if (findTargetSum(root.left, target, prefixSum, prefixSumSet)) {
+            return true;
+        }
+        if (findTargetSum(root.right, target, prefixSum, prefixSumSet)) {
+            return true;
+        }
+
+        // don't forget to recovery!
+        if (needRemove) {
+            prefixSumSet.remove(prefixSum);
+        }
+        return false;
+    }
+
+    /**
+     * Binary Tree Path Sum To Target IV
+     * Given the root of a binary tree and an integer targetSum, return the number
+     * of paths where the sum of the values along the path equals targetSum.
+     *
+     * The path does not need to start or end at the root or a leaf, but it must
+     * go downwards (i.e., traveling only from parent nodes to child nodes).
+     *
+     * Time = O(n) // n is number of nodes
+     * Space = O(n) // hashmap
+     */
+    public int pathSumToTarget(TreeNode root, int targetSum) {
+        if (root == null) {
+            return 0;
+        }
+
+        int[] result = new int[1];
+        Map<Integer, Integer> pathSumCount = new HashMap<>(); // <pathSum, count>
+
+        pathSum(root, targetSum, 0, pathSumCount, result);
+
+        return result[0];
+    }
+
+    private void pathSum(TreeNode root, int target, int preSum, Map<Integer, Integer> pathSumCount, int[] result) {
+        preSum += root.key;
+        if (preSum == target) {
+            result[0]++;
+        }
+
+        int pathCount = pathSumCount.getOrDefault(preSum - target, 0);
+        if (pathCount > 0) {
+            result[0] += pathCount; // that's why need a map
+        }
+
+        pathSumCount.put(preSum, pathSumCount.getOrDefault(preSum, 0) + 1);
+
+        if (root.left != null) {
+            pathSum(root.left, target, preSum, pathSumCount, result);
+        }
+        if (root.right != null) {
+            pathSum(root.right, target, preSum, pathSumCount, result);
+        }
+
+        pathSumCount.put(preSum, pathSumCount.get(preSum) - 1);
     }
 
     /**

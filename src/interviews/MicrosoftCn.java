@@ -827,57 +827,38 @@ public class MicrosoftCn {
 
     /**
      * [0, 0,  1,  2,  0,  1,  1]  candidate list
-     * [0, 3, 10, 15, 20, 25, 30]  timeStamp list
+     * [0, 3, 10, 15, 20, 25, 30]  timestamp list
      * input: 18, output: 0
      * input: 30, output: 1
      */
-    // int[] elected = new int[TimeStamp.length] 下标对应timeStamp
+    // int[] elected = new int[TimeStamp.length] 下标对应timestamp
     // binary search - log(n) 找timestamp里最接近input的两个数
-    // int candidateIndex
-    // int count - 1
     // O(n)
     // O(1)
 
     /**
-     * Tag Validator + form a n-nary tree
+     * Tag Validator + form an n-nary tree
      * https://leetcode.com/problems/tag-validator/
      */
 
     /**
+     * Multiply Strings
+     * https://leetcode.com/problems/multiply-strings/
      * Given two non-negative integers num1 and num2 represented as strings,
      * return the product of num1 and num2, also represented as a string.
      * In order to simply the problem, there is no string which contains
      * leading “0” except for the num is 0.
      */
-    public String productOfTwoStrings(String s1, String s2) {
-        // sanity check
-        if (s1 == null || s1.length() == 0 || s2 == null || s2.length() == 0) {
-            return null;
-        }
-
-        // base case
-        if ("0".equals(s1)) {
-            return "0";
-        }
-        if ("0".equals(s2)) {
-            return "0";
-        }
-        if ("1".equals(s1)) {
-            return s2;
-        }
-        if ("1".equals(s2)) {
-            return s1;
-        }
-
-        int[] num = new int[s1.length() + s2.length()];
-        for (int i = s1.length() - 1; i >= 0; i--) {
-            for (int j = s2.length() - 1; j >= 0; j--) {
-                int product = (s1.charAt(i) - '0') * (s2.charAt(j) - '0');
+    public String multiplyStrings(String num1, String num2) {
+        int[] num = new int[num1.length() + num2.length()];
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            for (int j = num2.length() - 1; j >= 0; j--) {
+                int product = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
                 int digit = num[i + j + 1];
-                int cur = product + digit;
+                int sum = product + digit;
 
-                num[i + j] += cur / 10;
-                num[i + j + 1] = cur % 10;
+                num[i + j] += sum / 10;
+                num[i + j + 1] = sum % 10;
             }
         }
 
@@ -887,7 +868,8 @@ public class MicrosoftCn {
                 sb.append(i);
             }
         }
-        return sb.toString();
+
+        return sb.length() == 0 ? "0" : sb.toString();
     }
 
     public static void main(String[] args) {
@@ -977,10 +959,10 @@ public class MicrosoftCn {
             System.out.print(it3.next() + " ");
         }
 
-        System.out.println(ins.productOfTwoStrings("0", "1"));
-        System.out.println(ins.productOfTwoStrings("9", "9"));
-        System.out.println(ins.productOfTwoStrings("99", "99"));
-        System.out.println(ins.productOfTwoStrings("11322324234523532532453453453245345235235235253",
+        System.out.println(ins.multiplyStrings("0", "1"));
+        System.out.println(ins.multiplyStrings("9", "9"));
+        System.out.println(ins.multiplyStrings("99", "99"));
+        System.out.println(ins.multiplyStrings("11322324234523532532453453453245345235235235253",
                 "11322324234523532532453453453245345235235235253"));
     }
 }

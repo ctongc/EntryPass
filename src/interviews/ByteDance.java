@@ -60,7 +60,6 @@ public class ByteDance {
         }
     }
 
-
     /**
      * Q1 两个Thread交替打印
      */
@@ -152,6 +151,65 @@ public class ByteDance {
         return newNode;
     }
 
+    /**
+     * Q1 Factorial of Big String
+     */
+    public String factorialOfString(String num) {
+        if (num == null) {
+            return "";
+        }
+        if ("0".equals(num)) {
+            return "1";
+        }
+        String result = "1";
+        String factor = "1";
+        while (!factor.equals(num)) {
+            factor = addOne(factor);
+            result = multiplyStrings(result, factor);
+        }
+        return result;
+    }
+
+    private String multiplyStrings(String num1, String num2) {
+        int[] num = new int[num1.length() + num2.length()];
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            for (int j = num2.length() - 1; j >= 0; j--) {
+                int product = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                int digit = num[i + j + 1];
+                int sum = product + digit;
+
+                num[i + j] += sum / 10;
+                num[i + j + 1] = sum % 10;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i : num) {
+            if (!(sb.length() == 0 && i == 0)) {
+                sb.append(i);
+            }
+        }
+
+        return sb.length() == 0 ? "0" : sb.toString();
+    }
+
+    private String addOne(String num) {
+        int carry = 1;
+        StringBuilder sb = new StringBuilder();
+        for (int i = num.length() - 1; i >= 0; i--) {
+            int sum = (num.charAt(i) - '0') + carry;
+            carry = sum / 10;
+            int digit = sum % 10;
+            sb.append(digit);
+        }
+
+        if (carry > 0) {
+            sb.append(carry);
+        }
+
+        return sb.reverse().toString();
+    }
+
     public static void main(String[] args) {
         ByteDance ins = new ByteDance();
         int[] nums = {1,4,2,8,5,7,9,10,15,3,1};
@@ -160,6 +218,9 @@ public class ByteDance {
             System.out.print(n + " ");
         }
         System.out.println();
-        ins.printOneByOne();
+        // ins.printOneByOne();
+
+        String num = ins.factorialOfString("100");
+        System.out.println(num);
     }
 }

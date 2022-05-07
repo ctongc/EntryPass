@@ -437,7 +437,7 @@ public class RecursionBasics {
      * Time = O(n)
      * Space = O(height)
      */
-    public boolean isBalanced2 (TreeNode root) {
+    public boolean isBalanced2(TreeNode root) {
         return checkHeight(root) != -1;
     }
 
@@ -499,37 +499,6 @@ public class RecursionBasics {
     }
 
     /**
-     * Max path sum from any node to any node
-     * Given a binary tree in which each node contains an integer number
-     * Find the maximum possible sum from any node to any node (the start
-     * node and the end node can be the same)
-     *
-     * Time = O(n)
-     * Space = O(height)
-     */
-    public int maxPathSumAnyNodeToAnyNode(TreeNode root) {
-        int[] result = new int[]{ Integer.MIN_VALUE }; // max sum might be negative
-        getMaxPathSumNodeToNode(root, result);
-        return result[0];
-    }
-
-    private int getMaxPathSumNodeToNode(TreeNode root, int[] result) {
-        if (root == null) {
-            return 0;
-        }
-
-        // step 1
-        int leftPathSum = getMaxPathSumNodeToNode(root.left, result);
-        int rightPathSum = getMaxPathSumNodeToNode(root.right, result);
-
-        // step 2 左右path小于0就discard
-        result[0] = Math.max(result[0], Math.max(leftPathSum, 0) + Math.max(rightPathSum, 0) + root.key);
-
-        // step 3, care if one child is null the other is negative
-        return Math.max(leftPathSum, rightPathSum) + root.key;
-    }
-
-    /**
      * Max path sum from leaf to root
      * Find maximum path sum for all paths from leaf to root in a Binary Tree
      *
@@ -558,6 +527,39 @@ public class RecursionBasics {
         // recursive rule
         getMaxPathSumLeafToRoot(root.left, prefixSum, globalMax); // go left
         getMaxPathSumLeafToRoot(root.right, prefixSum, globalMax); // go right
+    }
+
+    /**
+     * Max path sum from any node to any node
+     * Given a binary tree in which each node contains an integer number
+     * Find the maximum possible sum from any node to any node (the start
+     * node and the end node can be the same)
+     *
+     * Time = O(n)
+     * Space = O(height)
+     */
+    public int maxPathSumAnyNodeToAnyNode(TreeNode root) {
+        int[] result = new int[]{ Integer.MIN_VALUE }; // max sum might be negative
+        getMaxPathSumNodeToNode(root, result);
+        return result[0];
+    }
+
+    private int getMaxPathSumNodeToNode(TreeNode root, int[] result) {
+        if (root == null) {
+            return 0;
+        }
+
+        // step 1
+        int leftPathSum = getMaxPathSumNodeToNode(root.left, result);
+        int rightPathSum = getMaxPathSumNodeToNode(root.right, result);
+
+        // step 2 左右path小于0就discard
+        int leftMaxSum = Math.max(leftPathSum, 0);
+        int rightMaxSum = Math.max(rightPathSum, 0);
+        result[0] = Math.max(result[0], leftMaxSum + rightMaxSum + root.key);
+
+        // step 3, care if one child is null the other is negative
+        return Math.max(leftPathSum, rightPathSum) + root.key;
     }
 
     /**

@@ -627,34 +627,33 @@ public class MicrosoftCn {
     }
 
     /**
-     * 第一轮: 2.
-     * 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置。如果没找到返回[-1, -1]
+     * 第一轮: 2. 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置。如果没找到返回[-1, -1]
      *
      * e.g. Nums = [1,3,5,5,5,6,9], A = 5
      * 输出结果为[2,4]
      */
-    public int[] binarySearch(int a[], int target) {
-        if (a == null || a.length == 0) {
+    public int[] binarySearch(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
             return new int[]{-1, -1};
         }
 
         int left = 0;
-        int right = a.length - 1;
+        int right = nums.length - 1;
 
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (a[mid] == target) {
+            if (nums[mid] == target) {
                 int i = mid; // go left
                 int j = mid; // go right
-                while (i >= 0 && a[i] == target) {
+                while (i >= 0 && nums[i] == target) {
                     i--;
                 }
-                while (j <= a.length - 1 && a[j] == target) {
+                while (j <= nums.length - 1 && nums[j] == target) {
                     j++;
                 }
 
                 return new int[]{i + 1, j - 1};
-            } else if (a[mid] < target) {
+            } else if (nums[mid] < target) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
@@ -797,25 +796,25 @@ public class MicrosoftCn {
      * binary tree - in order
      */
     static class BinaryTreeIterator {
-        Deque<TreeNode> deque; // stack
+        Deque<TreeNode> stack;
         TreeNode node;
 
         public BinaryTreeIterator(TreeNode root) {
-            this.deque = new ArrayDeque<>();
+            this.stack = new ArrayDeque<>();
             this.node = root;
         }
 
         public boolean hasNext() {
-            return node != null || !deque.isEmpty();
+            return node != null || !stack.isEmpty();
         }
 
         public int next() {
             while (node != null) {
-                deque.offerFirst(node);
+                stack.offerFirst(node);
                 node = node.left;
             }
             if (hasNext()) {
-                node = deque.pollFirst();
+                node = stack.pollFirst();
                 int curVal = node.key;
                 node = node.right;
                 return curVal;

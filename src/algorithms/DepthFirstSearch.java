@@ -468,6 +468,23 @@ public class DepthFirstSearch {
         cur.subList(size, cur.size()).clear();
     }
 
+    private void getValidFactorCombinations2(int n,
+                                             List<Integer> factors, List<Integer> prefix, List<List<Integer>> result) {
+        if (n == 1) {
+            result.add(new ArrayList<>(prefix));
+            return;
+        }
+
+        for (int factor : factors) {
+            if (n % factor == 0
+                    && (prefix.isEmpty() || factor <= prefix.get(prefix.size() - 1))) {
+                prefix.add(factor);
+                getValidFactorCombinations2(n / factor, factors, prefix, result);
+                prefix.remove(prefix.size() - 1);
+            }
+        }
+    }
+
     private List<Integer> getFactors(int target) {
         List<Integer> factors = new ArrayList<>();
         for (int i = target / 2; i > 1; i--) {
@@ -481,18 +498,18 @@ public class DepthFirstSearch {
     /**
      * 4^99 version, not recommended
      */
-    private void getValidFactorCombinations2(int cur, int index, List<Integer> factors,
-                               int target,  List<Integer> prefix, List<List<Integer>> result){
-        if(cur == target){
+    private void getValidFactorCombinations2(int cur, int index, List<Integer> factors, int target,
+                                             List<Integer> prefix, List<List<Integer>> result) {
+        if (cur == target) {
             result.add(new ArrayList<>(prefix));
             return;
         }
 
-        if(cur > target){
+        if (cur > target) {
             return;
         }
 
-        for(int i = index; i < factors.size(); i++) {
+        for (int i = index; i < factors.size(); i++) {
             prefix.add(factors.get(i));
             getValidFactorCombinations2(cur * factors.get(i), i, factors, target, prefix, result);
             prefix.remove(prefix.size()-1);

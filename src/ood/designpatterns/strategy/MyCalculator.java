@@ -1,5 +1,7 @@
 package ood.designpatterns.strategy;
 
+import ood.designpatterns.strategy.strategies.CalculatorOperation;
+
 public class MyCalculator {
 
     private CalculatorOperation operation;

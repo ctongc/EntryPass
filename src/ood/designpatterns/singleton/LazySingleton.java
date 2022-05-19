@@ -1,31 +1,33 @@
 package ood.designpatterns.singleton;
 
 /**
- * Lazy version, 需要加锁, 不然有并发问题
+ * Lazy version, double-checked locking (volatile + synchronized)
  */
 public final class LazySingleton {
-    // 若没有static则这个instance需要依赖于一个object而存在
-    private static volatile LazySingleton instance = null; // no final here
 
+    // volatile可以保证instance变量在被其中一个线程new出来时，其他线程可以立即看到结果并正确的处理它
+    private static volatile LazySingleton INSTANCE = null; // no final here
+
+    // suppresses default public constructor to private
     private LazySingleton() {
-        // default constructor is public
     }
 
     // 必须是static
     public static LazySingleton getInstance() {
-        if (instance == null) {
+        if (INSTANCE == null) {
             synchronized (LazySingleton.class) {
                 // when more than two threads run into the first null check at the same time
                 // to avoid instanced more than one time, it needs to be checked again.
-                if (instance == null) {
-                    instance = new LazySingleton();
+                if (INSTANCE == null) {
+                    INSTANCE = new LazySingleton();
                 }
             }
         }
-        return instance;
+
+        return INSTANCE;
     }
 
     public void print() {
-        System.out.println("This is the only Lazy Singleton");
+        System.out.println("This is the only Lazy Singleton.");
     }
 }

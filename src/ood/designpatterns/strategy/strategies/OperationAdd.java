@@ -1,4 +1,4 @@
-package ood.designpatterns.strategy;
+package ood.designpatterns.strategy.strategies;
 
 public class OperationAdd implements CalculatorOperation {
 

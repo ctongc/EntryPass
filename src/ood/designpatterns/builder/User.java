@@ -1,17 +1,20 @@
 package ood.designpatterns.builder;
 
 /**
- * This class is using builder pattern
+ * This class is demonstrating builder pattern
  */
 public class User {
+
+    // names are required and immutable
     private final String firstName;
     private final String lastName;
+
     private int age;
     private String phone;
     private String address;
 
     public User(UserBuilder builder) {
-        this.firstName = builder.firstName; // these two are required and immutable
+        this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.age = builder.age;
         this.phone = builder.phone;
@@ -39,8 +42,10 @@ public class User {
     }
 
     public static class UserBuilder {
-        private final String firstName; // these two are required
+
+        private final String firstName;
         private final String lastName;
+
         private int age = 0; // default value is 0
         private String phone = ""; // default value is an empty string
         private String address; // default value is null
@@ -65,13 +70,9 @@ public class User {
             this.address = address;
             return this;
         }
+
         public User build() {
             return new User(this);
         }
-    }
-
-    public static void main(String[] args) {
-        User user = new UserBuilder("Miranda", "Kerr")
-                .age(35).phone("1234567890").address("some where cali").build();
     }
 }

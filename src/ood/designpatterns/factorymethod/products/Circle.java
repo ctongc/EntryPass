@@ -1,11 +1,12 @@
-package ood.designpatterns.factory;
+package ood.designpatterns.factorymethod.products;
 
 public class Circle implements Shape {
+
     public Circle() {
     }
 
     @Override
     public void draw() {
-        System.out.println("Inside Circle :: draw() method");
+        System.out.println("Circle::draw created a circle.");
     }
 }

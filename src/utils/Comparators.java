@@ -3,6 +3,7 @@ package utils;
 import java.util.*;
 
 class Cell {
+
     int row;
     int column;
     int value;
@@ -15,16 +16,19 @@ class Cell {
 }
 
 class CellComparator implements Comparator<Cell> {
+
     @Override
     public int compare(Cell c1, Cell c2) {
         if (c1.value == c2.value) {
             return 0;
         }
+
         return c1.value < c2.value ? -1 : 1;
     }
 }
 
 class ComparableCell implements Comparable<ComparableCell> {
+
     int row;
     int column;
     int value;
@@ -40,11 +44,13 @@ class ComparableCell implements Comparable<ComparableCell> {
         if (this.value == c2.value) {
             return 0;
         }
+
         return this.value > c2.value ? -1 : 1;
     }
 }
 
 class Student {
+
     private final String name;
     private final int age;
     public final String gender;
@@ -64,17 +70,11 @@ class Student {
     }
 }
 
-/**
- * Possible ways to provide a comparator class**
- * 1. Top-level class
- * 2. Static nested class
- * 3. Anonymous class (not recommended)
- * 4. Lambda expressions (recommended)
- * 5. Comparator Interface
- */
+@SuppressWarnings("all")
 public class Comparators {
 
     static class StudentComparator implements Comparator<Student> {
+
         @Override
         public int compare(Student s1, Student s2) {
             if (s1.getAge() == s2.getAge()) {
@@ -84,7 +84,15 @@ public class Comparators {
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     * Possible ways to provide a comparator class
+     * 1. Top-level class
+     * 2. Static nested class
+     * 3. Anonymous class (not recommended)
+     * 4. Lambda expressions (recommended)
+     * 5. Comparator Interface
+     */
+    public static void fiveRegularWays() {
         // 1. Top-level class
         PriorityQueue<Cell> minHeapCells = new PriorityQueue<>(new CellComparator());
         List<Cell> cells = new ArrayList<>();
@@ -122,7 +130,7 @@ public class Comparators {
         PriorityQueue<ComparableCell> minHeap2new2 = new PriorityQueue<>(Comparator.comparingInt((ComparableCell c) -> c.value));
         List<Student> students4 = new ArrayList<>();
         students4.sort(Comparator.comparing(Student::getName).thenComparing(Student::getAge).thenComparing(Student -> Student.gender));
-        // this equivalents to
+        // this is equivalent to
         students4.sort((s1, s2) -> {
             if(s1.getName().equals(s2.getName())) {
                 if (s1.getAge() == s2.getAge()) {
@@ -134,18 +142,12 @@ public class Comparators {
                 return s1.getName().compareTo(s2.getName());
             }
         });
-
-        String[] strs = {"c", "bb", "aaa"};
-        Arrays.sort(strs, Comparator.comparing(String::length));
-        for (String s : strs) {
-            System.out.println(s);
-        }
     }
 
-    private void otherNotedExpressions() {
+    public static void main(String[] args) {
         // cast (Student s) is important for chained comparators on field members (appearing first) without getter
         PriorityQueue<Student> minHeapStudents = new PriorityQueue<>(Comparator.comparing((Student s) -> s.gender).thenComparingInt(Student::getAge));
-        PriorityQueue<Student> minHeapStudents2 = new PriorityQueue<>(Comparator.comparingInt(Student::getAge).thenComparing(Student-> Student.gender));
+        PriorityQueue<Student> minHeapStudents2 = new PriorityQueue<>(Comparator.comparingInt(Student::getAge).thenComparing(Student -> Student.gender));
         List<Student> students = new ArrayList<>();
         students.sort(Comparator.comparing(Student::getName).thenComparing(Student -> Student.gender));
         students.sort(Comparator.comparing((Student s) -> s.gender).thenComparing(Student::getName));
@@ -157,7 +159,7 @@ public class Comparators {
         List<Cell> cells = new ArrayList<>();
         Collections.sort(cells, new CellComparator());
 
-        // reverse()
+        // reverse: Collections.reverseOrder() vs Comparator.comparing().reverse()
         PriorityQueue<ComparableCell> minHeap = new PriorityQueue<>();
         PriorityQueue<ComparableCell> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
         PriorityQueue<Cell> maxHeap2 = new PriorityQueue<>(Collections.reverseOrder(new CellComparator()));
@@ -201,6 +203,13 @@ public class Comparators {
                                 Math.sqrt(list.get(0)*list.get(0)
                                         + list.get(0)*list.get(0)
                                         + list.get(0)*list.get(0))));
+
+        int[][] intervals = new int[0][0];
+        Arrays.sort(intervals, Comparator.comparingInt((int[] a) -> a[0]));
+        List<int[]> a = Arrays.asList(intervals);
+
+        String[] strs = {"c", "bb", "aaa"};
+        Arrays.sort(strs, Comparator.comparingInt(String::length));
 
         // Heapify
         List<ComparableCell> cellList = new ArrayList<>();

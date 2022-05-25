@@ -1,6 +1,7 @@
 package playground;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Practice {
     public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class Practice {
         System.out.println(chars);
 
         List<String> strings = new ArrayList<>(List.of("aa", "bb", "cc"));
-        String[] stringsArray = strings.toArray(new String[strings.size()]);
+        String[] stringsArray = strings.toArray(new String[0]);
         System.out.println(strings);
         for (String s : stringsArray) {
             System.out.print(s + " ");
@@ -43,5 +44,10 @@ public class Practice {
         char cc = 'a' - 32;
         System.out.println(cc);
         System.out.println('9'-'3' == 6);
+
+        Integer[] numArray = {1, 2, 3, 4, 5, 6, 7};
+        List<Integer> integers = Arrays.stream(numArray).collect(Collectors.toList());
+        integers.removeIf(filter -> filter % 2 == 0);
+        System.out.println(integers);
     }
 }

@@ -1,4 +1,4 @@
-package ood.parkinglot;
+package ood.parkinglot.vehicles;
 
 public class Car extends Vehicle {
 

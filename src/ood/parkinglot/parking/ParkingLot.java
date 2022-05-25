@@ -1,6 +1,9 @@
-package ood.parkinglot;
+package ood.parkinglot.parking;
+
+import ood.parkinglot.vehicles.Vehicle;
 
 public class ParkingLot {
+
     private final Level[] levels;
 
     public ParkingLot(int numLevels, int numSpotPerLevel) {
@@ -16,6 +19,7 @@ public class ParkingLot {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -25,6 +29,7 @@ public class ParkingLot {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -34,6 +39,7 @@ public class ParkingLot {
                 return true;
             }
         }
+
         return false;
     }
 }

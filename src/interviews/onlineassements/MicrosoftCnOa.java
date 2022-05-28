@@ -4,6 +4,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MicrosoftCnOa {
+
+    /**
+     * You are given an integer array nums, you need to divide it into n pairs such that:
+     * 1. Each element belongs to exactly one pair.
+     * 2. The elements present in a pair are equal.
+     * Return true if nums can be divided into n pairs, otherwise return false.
+     */
+    public boolean canDivideArray(int[] nums) {
+        if (nums == null || nums.length % 2 != 0) {
+            return false;
+        }
+
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num)) {
+                set.remove(num);
+            }
+        }
+
+        return set.isEmpty();
+    }
+
     /**
      * Max Concatenated String Length with unique Characters
      */
@@ -11,8 +33,10 @@ public class MicrosoftCnOa {
         if (A == null || A.length == 0) {
             return 0;
         }
+
         int[] result = new int[]{0};
         allPerm(A, 0, "", result);
+
         return result[0];
     }
 
@@ -37,11 +61,12 @@ public class MicrosoftCnOa {
                 return true;
             }
         }
+
         return false;
     }
 
     public static void main(String[] args) {
         MicrosoftCnOa ins = new MicrosoftCnOa();
-        ins.maxConcatenatedLength(new String[]{"abc", "yyy", "def", "csv"});
+        System.out.println(ins.maxConcatenatedLength(new String[]{"abc", "yyy", "def", "csv"}));
     }
 }

@@ -39,7 +39,6 @@ public class MicrosoftCn {
      * Space = O(n)
      */
     public int removeFive(int num) {
-
         String numString = String.valueOf(num); // this still keeps the sign
         int deletePos = -1;
         if (numString.charAt(0) != '-') { // positive number
@@ -108,15 +107,16 @@ public class MicrosoftCn {
     }
 
     /**
-     * Given an array A of N integers, returns the smallest positive integer (greater than 0) that does not occur in A.
+     * Given an array A of N integers, returns the smallest positive integer (greater
+     * than 0) that does not occur in A.
      *
      * e.g. A = [1, 3, 6, 4, 1, 2], return 5
      * e.g. A = [1, 2, 3], return 4
      * e.g. A = [−1, −3], return 1.
      *
-     * assumptions:
-     * 1. N is an integer within the range [1..100,000];
-     * 2. each element of array A is an integer within the range [−1,000,000..1,000,000].
+     * Assumptions:
+     * 1. N is an integer within the range [1..100,000]
+     * 2. each element of array A is an integer within the range [−1,000,000..1,000,000]
      */
     public int solution(int[] A) {
         if (A == null || A.length == 0) {
@@ -154,6 +154,7 @@ public class MicrosoftCn {
         if (array == null || array.length == 0) {
             return -1;
         }
+
         int left = 0;
         int right = array.length - 1;
         while (left <= right) {
@@ -164,6 +165,7 @@ public class MicrosoftCn {
                 right = mid;
             }
         }
+
         return left;
     }
 
@@ -174,6 +176,7 @@ public class MicrosoftCn {
         if (array == null || array.length == 0) {
             return -1;
         }
+
         // {1, 2, 2, 2, 3}, T = 2
         //  l     M     r
         //  case 1: a[mid] = T -> left = mid
@@ -189,6 +192,7 @@ public class MicrosoftCn {
                 right = mid;
             }
         }
+
         // post-processing
         if (array[left] > target) {
             return left;
@@ -196,6 +200,7 @@ public class MicrosoftCn {
         if (array[right] > target) {
             return right;
         }
+
         return - 1;
     }
 
@@ -205,29 +210,26 @@ public class MicrosoftCn {
     public boolean judgeCircle(String moves) {
         int ver = 0;
         int hor = 0;
+
         for (char move : moves.toCharArray()) {
-            if (move == 'U') {
-                ver++;
-            }
-            if (move == 'D') {
-                ver--;
-            }
-            if (move == 'R') {
-                hor++;
-            }
-            if (move == 'L') {
-                hor--;
+            switch (move) {
+                case 'U' -> ver++;
+                case 'D' -> ver--;
+                case 'R' -> hor++;
+                case 'L' -> hor--;
             }
         }
+
         return ver == 0 && hor == 0;
     }
+
     /**
      * Ads: meeting schedule
      */
     public int maxMeetings(int[][] intervals) {
-        // perform greedy
-        // 1. sort by ending time
-        // 2. pick by ending time without conflicts
+        /* perform greedy
+         * 1. sort by ending time
+         * 2. pick by ending time without conflicts */
         Arrays.sort(intervals, Comparator.comparingInt(m -> m[1]));
 
         int count = 1;
@@ -238,9 +240,13 @@ public class MicrosoftCn {
                 lastMeetingEndTime = meetings[1];
             }
         }
+
         return count;
     }
 
+    /**
+     * Meeting rooms
+     */
     public int minMeetingRooms(int[][] intervals) {
         Arrays.sort(intervals, Comparator.comparingInt(m -> m[0]));
 
@@ -256,8 +262,10 @@ public class MicrosoftCn {
                 minHeap.offer(intervals[i][1]);
             }
         }
+
         return meetingRoom;
     }
+
     /**
      * LeetCode 739 每日温度
      */
@@ -268,6 +276,7 @@ public class MicrosoftCn {
         // 2. if no date to update or curTemp < stack.peek(), no day can be updated, stack.push(curTemp)
         int[] warmerDay = new int[temperatures.length];
         Deque<Integer> stack = new ArrayDeque<>(); // warmerDays that hasn't been updated
+
         for (int i = 0; i < temperatures.length; i++) {
             while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
                 int date = stack.pollFirst();
@@ -275,6 +284,7 @@ public class MicrosoftCn {
             }
             stack.offerFirst(i);
         }
+
         return warmerDay;
     }
 
@@ -304,6 +314,7 @@ public class MicrosoftCn {
         if (!visited.add(node)) {
             return false;
         }
+
         for (int neighbor : graph.get(node)) {
             if (neighbor != pre) { // 查重时排除父节点
                 if(!dfs(graph, neighbor, node, visited)) {
@@ -311,16 +322,18 @@ public class MicrosoftCn {
                 }
             }
         }
+
         return true;
     }
 
     /**
-     * 技术面1：反转链表、每隔k个反转链表
+     * 反转链表、每隔k个反转链表
      */
     public ListNode reverseLinkedList(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
+
         ListNode prev = null;
         while (head != null) { // if using while (head.next != null) then it won't reverse the last element
             ListNode nextNode = head.next; // always store the new head first
@@ -329,6 +342,7 @@ public class MicrosoftCn {
             head = nextNode; // move current by one
         }
         // now head == null
+
         return prev;
     }
 
@@ -336,6 +350,7 @@ public class MicrosoftCn {
         if (head == null || head.next == null) {
             return head;
         }
+
         ListNode newHead = reverseLinkedListRecursive(head.next); // newHead is the last node of current linked list
 
         head.next.next = head; // head.next is the next node
@@ -370,6 +385,7 @@ public class MicrosoftCn {
             head = prev; // head == newLinkTail, prev points to the newLinkHead
         }
         newLinkTail.next = cur;
+
         return head;
     }
 
@@ -377,6 +393,7 @@ public class MicrosoftCn {
         if (head == null || head.next == null) {
             return head;
         }
+
         ListNode dummyHead = new ListNode(0);
         ListNode prev = dummyHead;
         while (head != null && head.next != null) {
@@ -386,6 +403,7 @@ public class MicrosoftCn {
             prev = head;
             head = head.next;
         }
+
         return dummyHead.next;
     }
 
@@ -408,6 +426,7 @@ public class MicrosoftCn {
                 cur = lastKTail.next;
             }
         }
+
         return dummyHead.next;
     }
 
@@ -438,7 +457,7 @@ public class MicrosoftCn {
     }
 
      /**
-      * 技术面4：组内leader，n个球内选k个，所有的排列组合
+      * 组内leader，n个球内选k个，所有的排列组合
       */
      public int nChooseK(int n, int k) {
          if (n < k) {
@@ -457,8 +476,10 @@ public class MicrosoftCn {
          if (n == null || n.length == 0 || n.length < k) {
              return Collections.emptyList();
          }
+
          List<List<String>> result = new ArrayList<>();
          nChooseKAllPerm(n, k, 0, new ArrayList<>(), result);
+
          return result;
     }
 
@@ -480,18 +501,20 @@ public class MicrosoftCn {
     }
 
     /**
-     * 大老板面：树的反序列化、二叉树查找父节点
+     * 树的反序列化、二叉树查找父节点
      */
     public String serialize(TreeNode root) {
         if (root == null) {
             return "null,";
         }
+
         return root.key + "," + serialize(root.left) + serialize(root.right);
     }
 
     public TreeNode deserialize(String data) {
         String[] dataArray = data.split(",");
         List<String> dataList = new ArrayList<>(Arrays.asList(dataArray));
+
         return deserializer(dataList);
     }
 
@@ -505,6 +528,7 @@ public class MicrosoftCn {
         dataList.remove(0);
         root.left = deserializer(dataList);
         root.right = deserializer(dataList);
+
         return root;
     }
 
@@ -543,6 +567,7 @@ public class MicrosoftCn {
                 return result;
             }
         }
+
         return null;
     }
 
@@ -585,11 +610,11 @@ public class MicrosoftCn {
     }
 
     /**
-     * 技术面2：String to Double实现
-     * 技术面3：系统设计题：京东优惠券，大致思路，关键数据结构设计，数据存储等等
-     * 2轮 做一个Throttling downloader. 类似于实现一个可以限制速度的下载器。用的token bucket算法完成的。
-     * 3轮 做一个支持20000000user的排名系统，User登录评论可以加分，要返回user的排名
-     * 4轮 问了一些java的内容，GC, 多线程, 然后系统设计tiny url
+     * String to Double实现
+     * 系统设计题：京东优惠券，大致思路，关键数据结构设计，数据存储等等
+     * 做一个Throttling downloader. 类似于实现一个可以限制速度的下载器。用的token bucket算法完成的。
+     * 做一个支持20000000user的排名系统，User登录评论可以加分，要返回user的排名
+     * 问了一些java的内容，GC, 多线程, 然后系统设计tiny url
      */
 
     /**
@@ -635,11 +660,13 @@ public class MicrosoftCn {
 
         // left on the first element that greater than pivot
         swap(a, left, last);
+
         return left;
     }
 
     /**
-     * 第一轮: 2. 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置。如果没找到返回[-1, -1]
+     * 第一轮: 2. 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置。
+     * 如果没找到返回[-1, -1]
      *
      * e.g. Nums = [1,3,5,5,5,6,9], A = 5
      * 输出结果为[2,4]
@@ -740,6 +767,7 @@ public class MicrosoftCn {
     }
 
     static class TreeNodeP {
+
         int val;
         TreeNodeP left;
         TreeNodeP right;
@@ -800,6 +828,7 @@ public class MicrosoftCn {
                 }
             }
         }
+        
         return null;
     }
 

@@ -3,6 +3,7 @@ package interviews;
 import java.util.*;
 
 class ListNode {
+
     int value;
     ListNode next;
 
@@ -17,6 +18,7 @@ class ListNode {
 }
 
 class TreeNode {
+
     public int key;
     public TreeNode left;
     public TreeNode right;
@@ -30,34 +32,44 @@ class TreeNode {
 public class MicrosoftCn {
 
     /**
-     * Return the maximum possible value obtained by deleting one '5' digit from the decimal representation
-     * It's guaranteed that num has at least one '5'
+     * Return the maximum possible value obtained by deleting one '5' digit from
+     * the decimal representation. It's guaranteed that num has at least one '5'.
      *
      * Time = O(n)
      * Space = O(n)
      */
     public int removeFive(int num) {
-        int sign = num >= 0 ? 1 : -1;
-        String numString = Integer.toString(num); // this will keep the sign
-        boolean foundFivePos = false;
-        StringBuilder sb = new StringBuilder();
-        if (sign == -1) {
+
+        String numString = String.valueOf(num); // this still keeps the sign
+        int deletePos = -1;
+        if (numString.charAt(0) != '-') { // positive number
             for (int i = 0; i < numString.length(); i++) {
-                if (numString.charAt(i) == '5' && !foundFivePos) {
-                    foundFivePos = true;
-                    continue;
+                if (numString.charAt(i) == '5') {
+                    deletePos = i;
+                    if (i + 1 < numString.length() && numString.charAt(i + 1) > '5') { // charAt() returns char!!!
+                        break;
+                    }
                 }
-                sb.append(numString.charAt(i));
             }
         } else {
             for (int i = 0; i < numString.length(); i++) {
-                if (numString.charAt(i) == '5' && !foundFivePos) {
-                    foundFivePos = true;
-                    continue;
+                if (numString.charAt(i) == '5') {
+                    deletePos = i;
+                    if (i + 1 < numString.length() && numString.charAt(i + 1) < '5') {
+                        break;
+                    }
                 }
-                sb.append(numString.charAt(i));
             }
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numString.length(); i++) {
+            if (i == deletePos) {
+                continue;
+            }
+            sb.append(numString.charAt(i));
+        }
+
         return Integer.parseInt(sb.toString());
     }
 
@@ -873,9 +885,16 @@ public class MicrosoftCn {
 
     public static void main(String[] args) {
         MicrosoftCn ins = new MicrosoftCn();
-        System.out.println(ins.removeFive(15958));
-        System.out.println(ins.removeFive(-9995));
-        System.out.println(ins.removeFive(-5859));
+        System.out.println(ins.removeFive(15759));
+        System.out.println(ins.removeFive(-15759));
+        System.out.println(ins.removeFive(5759));
+        System.out.println(ins.removeFive(-5759));
+        System.out.println(ins.removeFive(153515));
+        System.out.println(ins.removeFive(-153515));
+        System.out.println(ins.removeFive(6535153));
+        System.out.println(ins.removeFive(-6535153));
+        System.out.println(ins.removeFive(6535156));
+        System.out.println(ins.removeFive(-6535156));
         System.out.println(ins.removeFive(-5000));
 
         System.out.println(ins.minStep("AAABBB"));

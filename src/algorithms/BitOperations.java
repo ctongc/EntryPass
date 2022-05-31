@@ -1,6 +1,5 @@
 package algorithms;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -242,12 +241,6 @@ public class BitOperations {
         }
 
         return sb.toString();
-    }
-
-    public void swap(int[] nums, int i, int j) {
-        nums[i] ^= nums[j];
-        nums[j] ^= nums[i];
-        nums[i] ^= nums[j];
     }
 
     public static void main(String[] args) {

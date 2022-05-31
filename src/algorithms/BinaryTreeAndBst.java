@@ -318,6 +318,35 @@ public class BinaryTreeAndBst {
     }
 
     /**
+     * Subtree of Another Tree
+     * Given the roots of two binary trees root and subRoot, return true if there is a
+     * subtree of root with the same structure and node values of subRoot and false otherwise.
+     *
+     * Time = O(m * n)
+     * Space = O(n)
+     */
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) {
+            return subRoot == null;
+        }
+
+        return isIdentical(root, subRoot) || isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+
+    private boolean isIdentical(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+
+        return root1.key == root2.key
+                && isIdentical(root1.left, root2.left)
+                && isIdentical(root1.right, root2.right);
+    }
+
+    /**
      * Tweaked Identical Binary Trees
      * Determine whether two given binary trees are identical assuming any number of
      * "tweak"s are allowed. A tweak is defined as a swap of the children of one node

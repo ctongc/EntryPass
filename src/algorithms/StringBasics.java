@@ -674,7 +674,7 @@ public class StringBasics {
 
     public static void main(String[] args) {
         StringBasics ins = new StringBasics();
-        
+
         String s = "bbbaabbbbcccctc";
         System.out.println(ins.deDuplication(s));
         System.out.println(ins.repeatDeDuplication(s));
@@ -700,7 +700,6 @@ public class StringBasics {
         System.out.println("ss1 == ss4: " + (ss1 == ss4));
         System.out.println("ss1 == ss5: " + (ss1 == ss5));
         System.out.println("ss1 == ss7: " + (ss1 == ss7));
-
 
         String sss = "This String s is used for testing the .indexOf() method.";
         System.out.println(sss.indexOf("t"));

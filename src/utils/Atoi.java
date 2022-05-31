@@ -75,52 +75,50 @@ public class Atoi {
      * INTEGER :: = (SPC*) [+ | -] (NUM+) (SPC*)
      */
     public int myAtoi(String str) {
-        // conner case 1
+        // conner case 1: null or empty string
         if (str == null || str.length() == 0) {
             return 0;
         }
 
         int n = str.length();
         int i = 0;
-        // conner case 2
+        // conner case 2: leading spaces
         while (i < n && str.charAt(i) == ' ') {
             i++;
         }
 
         boolean positive = true;
-        // conner case 3
+        // conner case 3: sign, + or -
         if (i < n && (str.charAt(i) == '+' || str.charAt(i) == '-')) {
             positive = (str.charAt(i) == '+');
             i++;
         }
 
-        // conner case 5
+        // conner case 5: overflow an integer
         long sum = 0;
 
-        // conner case 4
+        // conner case 4: trailing spaces or other characters
         while (i < n && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
             sum = sum * 10 + (str.charAt(i) - '0');
-            // conner case 6
+            // conner case 6: overflow a long
             if (sum > (long)Integer.MAX_VALUE + 1) {
                 /* Why + 1 ?
                  * positive:
-                 * sum > (long)Integer.MAX_VALUE
+                 *     sum > (long)Integer.MAX_VALUE
                  * negative:
-                 * -sum < -((long)Integer.MAX_VALUE + 1)
-                 * => sum > (long)Integer.MAX_VALUE + 1
-                 */
+                 *     -sum < -((long)Integer.MAX_VALUE + 1)
+                 * => sum > (long)Integer.MAX_VALUE + 1 */
                 break;
             }
             i++;
         }
-        // conner case 3
+        // conner case 3: sign
         sum = positive ? sum : -sum;
 
-        // conner case 5
+        // conner case 5: overflow
         if (sum > (long)Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
-        }
-        if (sum < (long)Integer.MIN_VALUE) { // why not before adding sign?
+        } else if (sum < (long)Integer.MIN_VALUE) { // why not before adding sign?
             return Integer.MIN_VALUE;
         }
 

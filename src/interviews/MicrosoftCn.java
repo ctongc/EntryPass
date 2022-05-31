@@ -457,7 +457,7 @@ public class MicrosoftCn {
     }
 
      /**
-      * 组内leader，n个球内选k个，所有的排列组合
+      * n个球内选k个，所有的排列组合
       */
      public int nChooseK(int n, int k) {
          if (n < k) {
@@ -618,7 +618,7 @@ public class MicrosoftCn {
      */
 
     /**
-     * 第一轮: 1. 快排
+     * 快排
      */
     public void quickSort(int[] a) {
         if (a == null || a.length <= 1) {
@@ -665,13 +665,13 @@ public class MicrosoftCn {
     }
 
     /**
-     * 第一轮: 2. 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置。
+     * 给定一个含有重复元素的有序数组nums，和一个数A，在有序数组中寻找数A的起止位置
      * 如果没找到返回[-1, -1]
      *
      * e.g. Nums = [1,3,5,5,5,6,9], A = 5
      * 输出结果为[2,4]
      */
-    public int[] binarySearch(int[] nums, int target) {
+    public int[] getRangeOfSameTargetValue(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
             return new int[]{-1, -1};
         }
@@ -682,6 +682,9 @@ public class MicrosoftCn {
         while (left <= right) {
             int mid = left + (right - left) / 2;
             if (nums[mid] == target) {
+                // should be optimized O(n) => O(logn)
+                // int left = firstOccurrence();
+                // int right = lastOccurrence();
                 int i = mid; // go left
                 int j = mid; // go right
                 while (i >= 0 && nums[i] == target) {
@@ -703,8 +706,7 @@ public class MicrosoftCn {
     }
 
     /**
-     * 第二轮:
-     * ### 英文句子换行
+     * 英文句子换行
      * 把英文句子打印在纸上，每行有最大字符数限制，不足时换行。
      * 输入句子和每行字符数，输出一个数组，其中每个元素为本行内容。
      *
@@ -712,7 +714,6 @@ public class MicrosoftCn {
      * 一个单词只能出现在单行上，不能断开。此时需要从上一个空格提前换行。
      * 如果一行的最后是“.,”，那么这行可以超出字符数限制1个字符。
      *
-     * ```
      * "The quick brown fox jumps over the lazy dog", 9
      * ["The quick", "brown fox", "jumps", "over the", "lazy dog"]
      *
@@ -788,28 +789,21 @@ public class MicrosoftCn {
         }
     }
 
-    // binary tree
-    // left, right, parent
-    // in order  left, self, right
-    //         1
-    //      2      3
-    //   4       6   7
-    // 8   9
-    //  10
-    // 8 10 4 9 2 1 6 3 7
-
-    // case 1 如果右边有, 往右走一步, 再往左走到底 打印
-    // case 2 右边没有
-    //      case 2.1 cur == cur.parent.left, 左边和自己已经全遍历完了
-    //      打印parent
-    //      case 2.2: cur == cur.parent.right, parent的左边和parent已经全遍历完了, 自己也遍历完了
-    //      往上找到parent是别的node的left的情况，打印该parent
+    /**
+     * Next TreeNode in in-Order traversal, with Parent pointer
+     */
     public TreeNodeP nextNodeInOrderTraversal(TreeNodeP node) {
         if (node == null) {
             return null;
         }
 
         TreeNodeP cur = node;
+        /* case 1 如果右边有, 往右走一步, 再往左走到底 打印
+         * case 2 右边没有
+         *   - case 2.1: cur == cur.parent.left, 左边和自己已经全遍历完了
+         *               打印parent
+         *   - case 2.2: cur == cur.parent.right, parent的左边和parent已经全遍历完了, 自己也遍历完了
+         *               往上找到parent是别的node的left的情况，打印该parent */
         if (cur.right != null) {
             cur = cur.right;
             while (cur.left != null) {
@@ -833,8 +827,7 @@ public class MicrosoftCn {
     }
 
     /**
-     * iterator
-     * binary tree - in order
+     * in order iterator of binary tree
      */
     static class BinaryTreeIterator {
         Deque<TreeNode> stack;
@@ -912,6 +905,80 @@ public class MicrosoftCn {
         return sb.length() == 0 ? "0" : sb.toString();
     }
 
+    /**
+     * 870. Advantage Shuffle
+     * You are given two integer arrays nums1 and nums2 both of the same length.
+     * The advantage of nums1 with respect to nums2 is the number of indices i for
+     * which nums1[i] > nums2[i].
+     *
+     * Return any permutation of nums1 that maximizes its advantage with respect to nums2.
+     *
+     * e.g. num1 = {3, 9, 11, 5, 1}, num2 = {6, 4, 10, 8, 2}
+     * output = {9, 5, 1, 11, 3} or {9, 5, 11, 1, 3}
+     */
+    public int[] advantageCount(int[] nums1, int[] nums2) {
+        // sanity check
+        if (nums1 == null || nums2 == null
+                || nums1.length == 0 || nums2.length == 0) {
+            throw new IllegalArgumentException("nums1 or nums2 can't be empty!");
+        }
+
+        // pre-processing
+        TreeMap<Integer, Integer> counts = new TreeMap<>();
+        for (int num : nums1) {
+            counts.put(num, counts.getOrDefault(num, 0) + 1);
+        }
+
+        int[] result = new int[nums1.length];
+        for (int i = 0; i < nums2.length; i++) {
+            Integer cur = counts.higherKey(nums2[i]);
+            if (cur == null) {
+                cur = counts.firstKey();
+            }
+
+            result[i] = cur;
+
+            if (counts.get(cur) == 1) {
+                counts.remove(cur);
+            } else {
+                counts.put(cur, counts.get(cur) - 1);
+            }
+        }
+
+        return result;
+    }
+
+    public int[] advantageCount2(int[] nums1, int[] nums2) {
+        // sanity check
+        if (nums1 == null || nums2 == null
+                || nums1.length == 0 || nums2.length == 0) {
+            throw new IllegalArgumentException("nums1 or nums2 can't be empty!");
+        }
+
+        int[] result = new int[nums1.length];
+        Integer[] order = new Integer[nums2.length]; // ascending nums2 order
+        for (int i = 0; i < nums2.length; i++) {
+            order[i] = i;
+        }
+
+        Arrays.sort(nums1);
+        Arrays.sort(order, Comparator.comparingInt(a -> nums2[a]));
+
+        int left = 0;
+        int right = nums2.length - 1;
+        for (int i = order.length - 1; i >= 0; i--) {
+            // if largest of nums1 < largest nums2
+            // assign smallest nums1 to largest nums2
+            if (nums1[right] > nums2[order[i]]) {
+                result[order[i]] = nums1[right--];
+            } else {
+                result[order[i]] = nums1[left++];
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         MicrosoftCn ins = new MicrosoftCn();
         System.out.println(ins.removeFive(15759));
@@ -938,7 +1005,7 @@ public class MicrosoftCn {
         System.out.println(ins.nChooseK(7, 3));
 
         // [1,3,5,5,5,6,9] A = 5,
-        int[] a = ins.binarySearch(new int[]{1,3,5,5,5,6,9}, 5);
+        int[] a = ins.getRangeOfSameTargetValue(new int[]{1,3,5,5,5,6,9}, 5);
         System.out.println(a[0] + " " + a[1]);
 
         String s = "The quick brown fox jumps over the lazy dog";

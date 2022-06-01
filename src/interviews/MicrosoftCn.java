@@ -723,45 +723,43 @@ public class MicrosoftCn {
      * "Hello, world. Hello Microsoft.", 11
      * ["Hello,", "world.", "Hello", "Microsoft."]
      */
-    public List<String> printWords(String s, int limit) {
+    public List<String> printWordsWithLimit(String s, int maxWidth) {
         List<String> result = new ArrayList<>();
         String[] words = s.split(" ");
-        int count = 0;
-        int index = 0;
 
+        int index = 0;
         StringBuilder sb = new StringBuilder();
 
         while (index < words.length) {
-            while (index < words.length && (words[index].length() + count < limit)) {
+            int lineLength = 0;
+            while (index < words.length && (words[index].length() + lineLength <= maxWidth)) {
                 sb.append(words[index]);
-                count += words[index++].length();
-                if (count < limit) {
+                lineLength += words[index++].length();
+                if (lineLength < maxWidth) {
                     sb.append(" ");
+                    lineLength++;
                 }
             }
 
+            // if not the last word, lineLength > maxWidth
+            if (index < words.length) {
+                String curWord = words[index];
+                int curWordLength = curWord.length();
+                if ((lineLength + curWordLength == maxWidth + 1)
+                        && ((curWord.charAt(curWordLength - 1) == '.'
+                        || curWord.charAt(curWordLength - 1) == ','))) {
+                    sb.append(curWord);
+                    index++;
+                }
+            }
+
+            // remove trailing space
             if (sb.charAt(sb.length() - 1) == ' ') {
-                sb.deleteCharAt(sb.length() - 1); // remove tailing space
+                sb.deleteCharAt(sb.length() - 1);
             }
 
-            // case 1: index > words
-            if (index == words.length && !sb.isEmpty()) {
-                result.add(sb.toString());
-                break;
-            }
-
-            // case 2: index < words && sb + word > limit
-            String curWord = words[index];
-            int curWordLength = curWord.length();
-            if ((count + curWordLength == limit + 1)
-                    && ((curWord.charAt(curWordLength - 1) == '.'
-                    || curWord.charAt(curWordLength - 1) == ','))) {
-                sb.append(curWord);
-            }
-
-            count = 0;
             result.add(sb.toString());
-            sb.setLength(0);
+            sb.setLength(0); // O(1) if the new length is less than the old one
         }
 
         return result;
@@ -1008,8 +1006,9 @@ public class MicrosoftCn {
         int[] a = ins.getRangeOfSameTargetValue(new int[]{1,3,5,5,5,6,9}, 5);
         System.out.println(a[0] + " " + a[1]);
 
-        String s = "The quick brown fox jumps over the lazy dog";
-        List<String> list = ins.printWords(s, 9);
+        List<String> list = ins.printWordsWithLimit("Hello, world. Hello Microsoft.", 11);
+        System.out.println(list);
+        list = ins.printWordsWithLimit("Hello, world. Hello Microsoft.", 12);
         System.out.println(list);
 
         //         1

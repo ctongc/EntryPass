@@ -707,6 +707,8 @@ public class MicrosoftCn {
 
     /**
      * 英文句子换行
+     * Similar: 68. Text Justification
+     * https://leetcode.com/problems/text-justification/
      * 把英文句子打印在纸上，每行有最大字符数限制，不足时换行。
      * 输入句子和每行字符数，输出一个数组，其中每个元素为本行内容。
      *
@@ -869,6 +871,7 @@ public class MicrosoftCn {
 
     /**
      * Tag Validator + form an n-nary tree
+     * Similar question: 591. Tag Validator
      * https://leetcode.com/problems/tag-validator/
      */
 

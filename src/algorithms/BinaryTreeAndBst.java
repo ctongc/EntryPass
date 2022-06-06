@@ -141,7 +141,7 @@ public class BinaryTreeAndBst {
                 cur = cur.right; // 向右走一步，再向左走到底
             }
 
-            // might bee easier to understand
+            // writing as below might be easier to understand
             // while (cur != null) {
             //     stack.offerFirst(cur);
             //     cur = cur.left;
@@ -150,7 +150,6 @@ public class BinaryTreeAndBst {
             // inOrderList.add(cur.key);
             // cur = cur.right;
         }
-
 
         return inOrderList;
     }

@@ -236,7 +236,7 @@ public class SortingAlgorithms {
         // nodes with no incoming edges
         Queue<Integer> queue = new ArrayDeque<>();
         for (int x = 0; x < numCourses; x++) {
-            if(incomingEdges[x] == 0) {
+            if (incomingEdges[x] == 0) {
                 queue.offer(x);
             }
         }

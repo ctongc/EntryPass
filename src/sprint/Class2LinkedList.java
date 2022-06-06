@@ -32,7 +32,7 @@ public class Class2LinkedList {
         }
 
         ListNode newHead = reverseLinkedList(head.next);
-        // 注意recursion完以后 newHead已经指向head了，所以只用处理head就可以了
+        // 注意recursion结束之后, newHead已经指向head了, 所以只用处理head就可以了
         head.next.next = head; // not newHead.next = head;
         head.next = null;
 

@@ -1,9 +1,6 @@
 package interviews;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class ByteDance {
     public void heapSort(int[] nums) {
@@ -61,7 +58,7 @@ public class ByteDance {
     }
 
     /**
-     * Q1 两个Thread交替打印
+     * 两个Thread交替打印
      */
     static int counter = 1;
     static int N = 10;
@@ -108,7 +105,7 @@ public class ByteDance {
     }
 
     /**
-     * Q2 Deep clone n-nary tree
+     * Deep clone n-nary tree
      */
     static class Node {
         public int val;
@@ -130,29 +127,133 @@ public class ByteDance {
         }
     }
 
-    public Node deepCopy(Node n) {
-        if (n == null) {
+    /**
+     * Time = O(n)
+     * Space = O(n)
+     */
+    public Node cloneTreeBfs(Node root) {
+        if (root == null) {
             return null;
         }
-        Queue<Node> queue = new ArrayDeque<>();
-        Node newNode = new Node(n.val, new ArrayList(n.children)); // <new Val, old.children>
-        queue.offer(newNode);
+
+        Queue<Node[]> queue = new ArrayDeque<>();
+        Node copyHead = new Node(root.val);
+        Node[] nodePair = new Node[]{root, copyHead}; // <originalNode, copyNode>
+        queue.offer(nodePair);
         while (!queue.isEmpty()) {
-            Node curNode = queue.poll();
-            List<Node> children = curNode.children;
-            int size = children.size();
-            for (int i = 0; i < size; i++) {
-                Node beenCopied = children.remove(0);
-                Node childCopy = new Node(beenCopied.val, new ArrayList(beenCopied.children));
-                children.add(childCopy);
-                queue.offer(childCopy);
+            Node[] cur = queue.poll();
+            Node original = cur[0];
+            Node copy = cur[1];
+
+            List<Node> children = original.children;
+            for (Node child : children) {
+                Node copyChild = new Node(child.val);
+                copy.children.add(copyChild);
+                queue.offer(new Node[]{child, copyChild});
             }
         }
-        return newNode;
+
+        return copyHead;
     }
 
     /**
-     * Q1 Factorial of Big String
+     * Time = O(n)
+     * Space = O(n)
+     */
+    public Node cloneTreeDfs(Node root) {
+        // Base case: empty node.
+        if (root == null) {
+            return root;
+        }
+
+        // First, copy the node itself.
+        Node nodeCopy = new Node(root.val);
+
+        // Then, recursively clone the sub-trees.
+        for (Node child : root.children) {
+            nodeCopy.children.add(cloneTreeDfs(child));
+        }
+
+        return nodeCopy;
+    }
+
+    /**
+     * Deep clone undirectedGraph
+     */
+    static class GraphNode {
+        public int val;
+        public List<GraphNode> neighbors;
+        public GraphNode() {
+            val = 0;
+            neighbors = new ArrayList<GraphNode>();
+        }
+        public GraphNode(int _val) {
+            val = _val;
+            neighbors = new ArrayList<GraphNode>();
+        }
+        public GraphNode(int _val, ArrayList<GraphNode> _neighbors) {
+            val = _val;
+            neighbors = _neighbors;
+        }
+    }
+
+    public GraphNode cloneGraphBfs(GraphNode node) {
+        if (node == null) {
+            return node;
+        }
+
+        Map<GraphNode, GraphNode> lookup = new HashMap<>(); // <originalNode, copyNode>
+        Queue<GraphNode> queue = new ArrayDeque<>(); // stores original nodes
+        GraphNode copyHead = new GraphNode(node.val);
+        lookup.put(node, copyHead);
+        queue.offer(node);
+        while (!queue.isEmpty()) {
+            GraphNode cur = queue.poll();
+            GraphNode copy = lookup.get(cur);
+            for (GraphNode nei : cur.neighbors) {
+                GraphNode neiCopy = lookup.get(nei);
+                if (neiCopy == null) {
+                    neiCopy = new GraphNode(nei.val);
+                    lookup.put(nei, neiCopy);
+                    queue.offer(nei);
+                }
+                copy.neighbors.add(neiCopy);
+            }
+        }
+
+        return copyHead;
+    }
+
+    public GraphNode cloneGraphDfs(GraphNode node) {
+        if (node == null) {
+            return null;
+        }
+
+        Map<GraphNode, GraphNode> lookup = new HashMap<>();
+
+        return dfs(node, lookup);
+    }
+
+    private GraphNode dfs(GraphNode node, Map<GraphNode, GraphNode> lookup) {
+        if (node == null) {
+            return null;
+        }
+        GraphNode nodeCopy = lookup.get(node);
+        if (nodeCopy != null) {
+            return nodeCopy;
+        }
+
+        nodeCopy = new GraphNode(node.val);
+        lookup.put(node, nodeCopy);
+        for (GraphNode nei : node.neighbors) {
+            nodeCopy.neighbors.add(dfs(nei, lookup));
+        }
+
+        return nodeCopy;
+    }
+
+    /**
+     * Factorial of Big String
      */
     public String factorialOfString(String num) {
         if (num == null) {
@@ -161,12 +262,14 @@ public class ByteDance {
         if ("0".equals(num)) {
             return "1";
         }
+
         String result = "1";
         String factor = "1";
         while (!factor.equals(num)) {
             factor = addOne(factor);
             result = multiplyStrings(result, factor);
         }
+
         return result;
     }
 

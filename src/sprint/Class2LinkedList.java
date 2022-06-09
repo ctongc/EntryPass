@@ -2,7 +2,6 @@ package sprint;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 class ListNode {
     public final int value;
@@ -364,9 +363,10 @@ public class Class2LinkedList {
     }
 
     public RandomListNode deepCopyLinkedList(RandomListNode head) {
-        if (head == null || (head.next == null && head.random == null)) {
-            return new RandomListNode(head.value);
+        if (head == null) {
+            return head;
         }
+
         Map<RandomListNode, RandomListNode> lookup = new HashMap<>();
         RandomListNode cur = head;
         while (cur != null) {
@@ -393,6 +393,33 @@ public class Class2LinkedList {
             cur = cur.next;
         }
         return lookup.get(head);
+    }
+
+    public RandomListNode cloneLinkedListWithRandom(RandomListNode head) {
+        if (head == null) {
+            return head;
+        }
+        Map<RandomListNode, RandomListNode> lookup = new HashMap<>();
+        return cloneLinkedListWithRandom(head, lookup);
+    }
+
+    private RandomListNode cloneLinkedListWithRandom(RandomListNode node, Map<RandomListNode, RandomListNode> lookup) {
+        if (node == null) {
+            return null;
+        }
+
+        RandomListNode nodeCopy = lookup.get(node);
+        if (nodeCopy != null) {
+            return nodeCopy;
+        }
+
+        nodeCopy = new RandomListNode(node.value);
+        lookup.put(node, nodeCopy);
+
+        nodeCopy.next = cloneLinkedListWithRandom(node.next, lookup);
+        nodeCopy.random = cloneLinkedListWithRandom(node.random, lookup);
+
+        return nodeCopy;
     }
 
     public static void main(String[] args) {
@@ -432,8 +459,11 @@ public class Class2LinkedList {
         n5.random = n6;
         n6.random = n3;
 
-        RandomListNode rn = ins.deepCopyLinkedList(n1);
-        //ins.printLinkedList(n);
+        ins.printLinkedListWithRandom(n1);
+        RandomListNode rn1 = ins.deepCopyLinkedList(n1);
+        ins.printLinkedListWithRandom(rn1);
+        RandomListNode rn2 = ins.cloneLinkedListWithRandom(n1);
+        ins.printLinkedListWithRandom(rn2);
     }
 
     public ListNode createLinkedList(int[] values) {
@@ -449,6 +479,20 @@ public class Class2LinkedList {
     public void printLinkedList(ListNode head) {
         while (head != null) {
             System.out.print(head.value + " ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public void printLinkedListWithRandom(RandomListNode head) {
+        while (head != null) {
+            System.out.print("[" + head.value + ", ");
+            if (head.random != null) {
+                System.out.print(head.random.value);
+            } else {
+                System.out.print("null");
+            }
+            System.out.print("]");
             head = head.next;
         }
         System.out.println();

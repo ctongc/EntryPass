@@ -45,8 +45,8 @@ public class Practice {
         System.out.println(cc);
         System.out.println('9'-'3' == 6);
 
-        Integer[] numArray = {1, 2, 3, 4, 5, 6, 7};
-        List<Integer> integers = Arrays.stream(numArray).collect(Collectors.toList());
+        int[] numArray = {1, 2, 3, 4, 5, 6, 7};
+        List<Integer> integers = Arrays.stream(numArray).boxed().collect(Collectors.toList());
         integers.removeIf(filter -> filter % 2 == 0);
         System.out.println(integers);
     }

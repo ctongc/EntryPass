@@ -1,53 +1,110 @@
 package concurrent;
 
+import java.util.concurrent.Semaphore;
+
 public class PrintInOrder {
 
-    private static int counter = 1;
-    private final static int N = 10;
+    static class PrintOneByOneSynchronizedMethod {
+        private static int counter = 1;
+        private final static int N = 10;
 
-    private synchronized void printEvenNumber() throws InterruptedException {
-        while (counter < N) {
-            while (counter % 2 == 1) {
-                wait();
+        private synchronized void printOddNumber() throws InterruptedException {
+            while (counter < N) {
+                while (counter % 2 == 0) {
+                    wait();
+                }
+                System.out.print(counter++ + " ");
+                notifyAll();
             }
-            System.out.print(counter++ + " ");
-            notifyAll();
+        }
+
+        private synchronized void printEvenNumber() throws InterruptedException {
+            while (counter < N) {
+                while (counter % 2 == 1) {
+                    wait();
+                }
+                System.out.print(counter++ + " ");
+                notifyAll();
+            }
+        }
+
+        public void printOneByOne() {
+            Thread t1 = new Thread(() -> {
+                try {
+                    printOddNumber();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            Thread t2 = new Thread(() -> {
+                try {
+                    printEvenNumber();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            t1.start();
+            t2.start();
+        }
+
+        public static void main(String[] args) {
+            PrintOneByOneSynchronizedMethod ins = new PrintOneByOneSynchronizedMethod();
+            ins.printOneByOne();
         }
     }
 
-    private synchronized void printOddNumber() throws InterruptedException {
-        while (counter < N) {
-            while (counter % 2 == 0) {
-                wait();
+    static class PrintOneByOneSemaphore {
+
+        private static int counter = 1;
+        private final static int N = 10;
+        final Semaphore sem = new Semaphore(1);
+
+        private void printOddNumber() throws InterruptedException {
+            while (counter <= N) {
+                if (counter % 2 == 1) {
+                    sem.acquire();
+                    System.out.print(counter++ + " ");
+                    sem.release();
+                }
             }
-            System.out.print(counter++ + " ");
-            notifyAll();
         }
-    }
 
-    public void printOneByOne() {
-        Thread t1 = new Thread(() -> {
-            try {
-                printOddNumber();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        private void printEvenNumber() throws InterruptedException {
+            while (counter <= N) {
+                if (counter % 2 == 0) {
+                    sem.acquire();
+                    System.out.print(counter++ + " ");
+                    sem.release();
+                }
             }
-        });
+        }
 
-        Thread t2 = new Thread(() -> {
-            try {
-                printEvenNumber();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        public void printOneByOne() {
+            Thread t1 = new Thread(() -> {
+                try {
+                    printOddNumber();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
 
-        t1.start();
-        t2.start();
-    }
+            Thread t2 = new Thread(() -> {
+                try {
+                    printEvenNumber();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
 
-    public static void main(String[] args) {
-        PrintInOrder ins = new PrintInOrder();
-        ins.printOneByOne();
+            t1.start();
+            t2.start();
+        }
+
+        public static void main(String[] args) {
+            PrintOneByOneSemaphore ins = new PrintOneByOneSemaphore();
+            ins.printOneByOne();
+        }
     }
 }

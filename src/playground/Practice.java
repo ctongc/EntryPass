@@ -49,5 +49,7 @@ public class Practice {
         List<Integer> integers = Arrays.stream(numArray).boxed().collect(Collectors.toList());
         integers.removeIf(filter -> filter % 2 == 0);
         System.out.println(integers);
+        Integer[] array = integers.toArray(new Integer[0]);
+        int[] intArray = integers.stream().filter(Objects::nonNull).mapToInt(Integer::intValue).toArray();
     }
 }

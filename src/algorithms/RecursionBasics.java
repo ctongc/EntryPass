@@ -85,7 +85,7 @@ public class RecursionBasics {
         /* base case
          * size = 1: 1 element left on the last spiral
          * size = 0: nothing left */
-        if(size <= 1) {
+        if (size <= 1) {
             if (size == 1) {
                 result.add(matrix[offset][offset]);
             }
@@ -96,19 +96,19 @@ public class RecursionBasics {
         /* offset is the [x] and [y] coordinates of the upper left corner of current box */
 
         // top row
-        for(int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             result.add(matrix[offset][offset + i]);
         }
         // right column
-        for(int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             result.add(matrix[offset + i][offset + size - 1]);
         }
         // bottom row
-        for(int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             result.add(matrix[offset + size - 1][offset + size - 1 - i]);
         }
         // left column
-        for(int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             result.add(matrix[offset + size - 1 - i][offset]);
         }
 
@@ -145,19 +145,19 @@ public class RecursionBasics {
 
         while (left < right && top < bottom) {
             // top row
-            for(int i = left; i < right; i++) {
+            for (int i = left; i < right; i++) {
                 result.add(matrix[top][i]);
             }
             // right column
-            for(int i = top; i < bottom; i++) {
+            for (int i = top; i < bottom; i++) {
                 result.add(matrix[i][right]);
             }
             // bottom row
-            for(int i = right; i > left; i--) {
+            for (int i = right; i > left; i--) {
                 result.add(matrix[bottom][i]);
             }
             // left column
-            for(int i = bottom; i > top; i--) {
+            for (int i = bottom; i > top; i--) {
                 result.add(matrix[i][left]);
             }
             left++;
@@ -183,6 +183,7 @@ public class RecursionBasics {
                 result.add(matrix[top][i]);
             }
         }
+        
         return result;
     }
 

@@ -499,7 +499,7 @@ public class BinarySearch {
     /**
      * Peak Index in a Mountain Array
      */
-    public int maxInPeekLikeArray(int[] array) {
+    public int maxInMountainArray(int[] array) {
         if (array == null || array.length == 0) {
             return -1;
         }

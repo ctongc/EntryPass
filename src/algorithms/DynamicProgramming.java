@@ -294,18 +294,14 @@ public class DynamicProgramming {
             return 0;
         }
 
-        // M[i] represent the value of largest sum [from 0-th element to the i-th element]
+        // M[i] represents the value of the largest sum [from 0-th element to the i-th element]
         // including the i-th element
         int[] M = new int[array.length];
-
         M[0] = array[0]; // base case
         int globalMax = array[0];
 
-        /*
-         * M[i] = M[i-1] + input[i]        if M[i-1] >= 0
-         *        input[i]                 otherwise
-         */
-
+        /* M[i] = M[i-1] + input[i]        if M[i-1] >= 0
+         *        input[i]                 otherwise */
         for (int i = 1; i < array.length; i++) {
             if (M[i - 1] >= 0) {
                 M[i] = M[i - 1] + array[i];
@@ -314,13 +310,13 @@ public class DynamicProgramming {
             }
             globalMax = Math.max(globalMax, M[i]);
         }
+
         return globalMax;
     }
 
     /**
      * DP solution but reduce Space to O(1)
      */
-
     public int largestSubarraySum2(int[] array) {
         if (array == null || array.length == 0) {
             return 0;
@@ -333,6 +329,7 @@ public class DynamicProgramming {
             curMax = Math.max(curMax + array[i], array[i]);
             globalMax = Math.max(globalMax, curMax);
         }
+
         return globalMax;
     }
 

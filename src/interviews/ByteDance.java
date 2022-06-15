@@ -313,6 +313,50 @@ public class ByteDance {
         return sb.reverse().toString();
     }
 
+    /**
+     * 已知一天内用户登录登出的日志（数据量较大）, 求这一天用户在线的最大峰值和持续时间段
+     * 日志包含字段（userid, login_time, logout_time, 登录登出时间精确到秒 */
+    static class Log {
+        String id;
+        int loginTime;
+        int logoutTime;
+    }
+
+    public int[] getPeakUsersAndDuration(Log[] logs) {
+        if (logs == null || logs.length < 1) {
+            return new int[]{0, 0, 0};
+        }
+
+        int[] loginLogoutCount = new int[86400]; // user log in and log out at each second
+
+        // pre-process
+        for (Log log : logs) {
+            loginLogoutCount[log.loginTime]++;
+            loginLogoutCount[log.logoutTime]--;
+        }
+
+        int curMax = 0;
+        int globalMax = 0;
+        int globalMaxStart = 0;
+        int globalMaxEnd = 0;
+
+        for (int i = 0; i < loginLogoutCount.length; i++) {
+            curMax = Math.max(curMax, curMax + loginLogoutCount[i]);
+
+            if (curMax > globalMax) {
+                globalMax = curMax;
+                globalMaxStart = i;
+                globalMaxEnd = i;
+            }
+            
+            if (globalMax == curMax) {
+                globalMaxEnd = i;
+            }
+        }
+
+        return new int[]{globalMax, globalMaxStart + 1, globalMaxEnd + 1};
+    }
+
     public static void main(String[] args) {
         ByteDance ins = new ByteDance();
         int[] nums = {1,4,2,8,5,7,9,10,15,3,1};

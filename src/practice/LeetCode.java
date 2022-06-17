@@ -297,6 +297,25 @@ public class LeetCode {
     }
 
     /**
+     * 459. Repeated Substring Pattern
+     * https://leetcode.com/problems/repeated-substring-pattern/
+     * Given a string s, check if it can be constructed by taking a substring of it and
+     * appending multiple copies of the substring together.
+     */
+    public boolean repeatedSubstringPattern(String s) {
+        // pattern =   'abcabc'
+        // s = 'abcabcabcabc'
+
+        // 'abcabcabcabc'
+        //   abcabc
+        // ...
+        // 'abcabcabcabc'
+        //     abcabc
+        int idx = (s + s).indexOf(s, 1);
+        return idx < s.length();
+    }
+
+    /**
      * 554. Brick Wall
      * https://leetcode.com/problems/brick-wall/
      * There is a rectangular brick wall in front of you with n rows of bricks.
@@ -510,6 +529,7 @@ public class LeetCode {
             counter1[i] -= occ;
             counter2[j] -= occ;
         }
+
         return sum;
     }
 }

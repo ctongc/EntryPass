@@ -196,7 +196,7 @@ public class LinkedListBasics {
         }
         ListNode slow = head;
         ListNode fast = head;
-        // 如果fast已经移到null了，slow就过中点了，所以不能 fast != null && fast.next != null
+        // if fast != null && fast.next != null, slow will be the second mid
         while (fast.next != null && fast.next.next != null) {
             fast = fast.next.next;
             slow = slow.next;

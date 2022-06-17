@@ -51,5 +51,13 @@ public class Practice {
         System.out.println(integers);
         Integer[] array = integers.toArray(new Integer[0]);
         int[] intArray = integers.stream().filter(Objects::nonNull).mapToInt(Integer::intValue).toArray();
+
+        int numDigits = String.valueOf(1000).length();
+
+        String s = new String("  hello  world  ");
+        String[] words = s.split(" ");
+        System.out.println(Arrays.toString(words));
+        System.out.println(s);
+        System.out.println(s.trim());
     }
 }

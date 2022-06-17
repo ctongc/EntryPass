@@ -52,26 +52,26 @@ public class DepthFirstSearch {
      * Time = O(2 ^ (2n)) // branch 2, depth 2n (2n levels)
      * Space = O(2 * n) // 2n levels, but need another n to form the StringBuilder
      */
-    public List<String> findAllValidPermutationsOfParentheses(int n) {
-        List<String> result = new ArrayList<>();
-        if (n < 0) {
-            return result;
+    public List<String> findValidPermutationsOfParentheses(int n) {
+        if (n < 1) {
+            return Collections.emptyList();
         }
+
+        List<String> result = new ArrayList<>();
         StringBuilder prefix = new StringBuilder();
-        findPermutationsOfParentheses(n, 0, 0, prefix, result);
+        generateParenthesis(n, n, prefix, result);
         return result;
     }
 
     /**
      * n stores total number of "pair of ()" need to add
      * So total levels == 2 * n  (2n positions)
-     * leftCount stores the number of left parenthesis '(' added so far
-     * rightCount stores the number of right parenthesis ')' added so far
+     * leftRemain stores the number of left parenthesis '(' need to be added
+     * rightRemain stores the number of right parenthesis ')' need to be added
      * prefix stores the solution so far
      */
-    private void findPermutationsOfParentheses(
-            int n, int leftCount, int rightCount, StringBuilder prefix, List<String> result) {
-        if (leftCount == n && rightCount == n) {
+    private void generateParenthesis(int leftRemain, int rightRemain, StringBuilder prefix, List<String> result) {
+        if (leftRemain == 0 && rightRemain == 0) {
             result.add(prefix.toString());
             // formatAndPrint(prefix.toString().toCharArray()); this is for print indent
             return; // MUST HAVE 触底反弹
@@ -81,18 +81,18 @@ public class DepthFirstSearch {
          * 每层每个node两个杈，考虑当前位置加什么括号, 左杈加左括号, 右杈加右括号. */
 
         // case 1: add '(' on this level
-        if (leftCount < n) {
+        if (leftRemain > 0) {
             prefix.append('(');
-            findPermutationsOfParentheses(n, leftCount + 1, rightCount, prefix, result);
+            generateParenthesis(leftRemain - 1, rightRemain, prefix, result);
             prefix.deleteCharAt(prefix.length() - 1); // reset
         }
 
         // case 2: add ')' on this level
         /* Restriction: whenever we want to insert a new ')', we need to make sure the
          * number of '(' added so far is larger than the number of ')' added so far. */
-        if (leftCount > rightCount) { // no need to check if rightCount < n
+        if (rightRemain > leftRemain) {
             prefix.append(')');
-            findPermutationsOfParentheses(n, leftCount, rightCount + 1, prefix, result);
+            generateParenthesis(leftRemain, rightRemain - 1, prefix, result);
             prefix.deleteCharAt(prefix.length() - 1); // reset
         }
     }
@@ -616,7 +616,7 @@ public class DepthFirstSearch {
         DepthFirstSearch dfs = new DepthFirstSearch();
         String s = "abc";
         System.out.println(dfs.findAllSubSets(s));
-        dfs.findAllValidPermutationsOfParentheses(3);
+        dfs.findValidPermutationsOfParentheses(3);
 
         dfs.getCombinationOf99Cents(99,new int[]{25, 10, 5, 1},0,new int[4]);
         dfs.getAllPermutations("abc");

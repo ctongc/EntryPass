@@ -1,7 +1,5 @@
 package datastructures;
 
-import org.junit.runner.notification.RunListener;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -12,7 +10,6 @@ import java.util.Objects;
  * containsKey(K key), containsValue(V value) // check if the desired value is in the map. O(n)
  * remove(K key) - 麻烦 不提别写了
  */
-@RunListener.ThreadSafe
 class MyHashMap<K, V> {
     /**
      * MyEntry is a static class of MyHashMap, since it is:
@@ -100,8 +97,10 @@ class MyHashMap<K, V> {
     /**
      * get
      * if the key does not exist in the HashMap, return null
+     * get doesn't need synchronized
+     * in concurrent hashmap, it's 锁分段(hash表分1 6个桶) + CAS (+ volatile)
      */
-    public synchronized V get(final K key) {
+    public V get(final K key) {
         // same as containsKey
         // get the index of the key
         int index = getIndex(key);

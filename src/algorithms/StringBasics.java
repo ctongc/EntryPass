@@ -709,5 +709,7 @@ public class StringBasics {
         System.out.println(sss.indexOf(102)); // f
         System.out.println(sss.indexOf("i"));
         System.out.println(sss.indexOf("i", 3));
+
+        System.out.println(ins.reverseWords("  hello  world  "));
     }
 }

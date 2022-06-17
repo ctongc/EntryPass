@@ -348,7 +348,8 @@ public class ByteDance {
                 globalMaxStart = i;
                 globalMaxEnd = i;
             }
-            
+
+            // not correct here
             if (globalMax == curMax) {
                 globalMaxEnd = i;
             }

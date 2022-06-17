@@ -118,7 +118,7 @@ public class MicrosoftCn {
      * 1. N is an integer within the range [1..100,000]
      * 2. each element of array A is an integer within the range [−1,000,000..1,000,000]
      */
-    public int solution(int[] A) {
+    public int smallestPositiveInteger(int[] A) {
         if (A == null || A.length == 0) {
             return 1;
         }
@@ -150,16 +150,16 @@ public class MicrosoftCn {
     /**
      * Bing团队: 先增后减的数组，求最大的index
      */
-    public int maxInPeekLikeArray(int[] array) {
+    public int peakIndexInMountainArray(int[] array) {
         if (array == null || array.length == 0) {
             return -1;
         }
 
         int left = 0;
         int right = array.length - 1;
-        while (left <= right) {
+        while (left < right) {
             int mid = left + (right - left) / 2;
-            if (array[mid] < array[mid + 1]) {
+            if (array[mid] <= array[mid + 1]) {
                 left = mid + 1;
             } else {
                 right = mid;
@@ -998,7 +998,7 @@ public class MicrosoftCn {
         System.out.println(ins.minStep("BBAABBBB"));
         System.out.println(ins.minStep("BAAABAB"));
 
-        ins.solution(new int[]{1,3,6,4,1,2});
+        ins.smallestPositiveInteger(new int[]{1,3,6,4,1,2});
         System.out.println(ins.validTree(3, new int[][]{{1,0},{0,2},{2,1}}));
 
         List<List<String>> nChooseK = ins.nChooseK(new String[]{"a","b","c","d","e","f","g"}, 3);

@@ -7,7 +7,8 @@ import java.util.Set;
 
 public class Amazon {
     /**
-     * Word Search
+     * 79. Word Search
+     * https://leetcode.com/problems/word-search/
      * Given a 2D board and a word, find if the word exists in the grid.
      *
      * Time = O(n * m * 4 ^ k) (n m is the row/col numbers, k is the length of the word)
@@ -17,10 +18,12 @@ public class Amazon {
         if (word == null || word.isEmpty()) {
             return true;
         }
+
         if (board == null || board.length == 0
                 || board[0] == null || board[0].length == 0) {
             return false;
         }
+
         int row = board.length;
         int col = board[0].length;
         boolean[][] visited = new boolean[row][col];
@@ -31,6 +34,7 @@ public class Amazon {
                 }
             }
         }
+
         return false;
     }
 
@@ -38,10 +42,12 @@ public class Amazon {
         if (index == word.length()) { // base case 1
             return true;
         }
+
         if(r < 0 || r >= board.length || c < 0 || c >= board[0].length || visited[r][c]
                 || board[r][c] != word.charAt(index)) { // base case 2
             return false;
         }
+
         visited[r][c] = true;
         if (findWord(r + 1, c, board, visited, word, index + 1) ||
                 findWord(r - 1, c, board, visited, word, index + 1) ||
@@ -50,44 +56,42 @@ public class Amazon {
             return true;
         }
         visited[r][c] = false; // restore
+
         return false;
     }
 
     /**
-     * Longest subarray without repeating characters
-     * Given a string, find the length of the longest substring without repeating characters.
-     *
-     * */
+     * 3. Longest subarray without repeating characters
+     * Given a string s, find the length of the longest substring without repeating characters.
+     * Time = O(2n)
+     * Space = O(n)
+     */
     public int lengthOfLongestSubstring(String s) {
-        // slow - start of current substring
-        // fast - end of current substring
-        // globalMax - res
-        // set, current substring chars
-        // initial
-        // slow 0, fast 0, globalMax -inf, set {}
-        // for each step
-        //   add fast to set
-        //     can add, fast++
-        //        update globalMax
-        //     can't add, set.remove(s[slow++]), till can add
-        // sanity check
         if (s == null || s.isEmpty()) {
             return 0;
         }
+
+        int result = 0;
         int slow = 0;
-        int globalMax = Integer.MIN_VALUE;
         Set<Character> set = new HashSet<>();
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) { // i is the fast pointer
             if (set.add(s.charAt(i))) {
-                globalMax = Math.max(globalMax, i + 1 - slow);
+                result = Math.max(result, i + 1 - slow);
             } else {
-                while (!set.add(s.charAt(i))) {
+                // detected duplicate
+                while (s.charAt(slow) != s.charAt(i)) {
                     set.remove(s.charAt(slow++));
                 }
+                // now s.charAt(slow) == s.charAt(i)
+                // keep the char in set since it's s.charAt(i)
+                // add char i and remove chat slow from sliding window
+                slow++;
             }
         }
-        return globalMax;
+
+        return result;
     }
+
     public int gcd(int a, int b) {
         if (a > b) {
             int temp = a;

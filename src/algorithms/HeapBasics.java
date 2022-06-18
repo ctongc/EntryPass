@@ -2,16 +2,6 @@ package algorithms;
 
 import java.util.*;
 
-class ReverseComparator implements Comparator<Integer> {
-    @Override
-    public int compare(Integer c1, Integer c2) {
-        if (c1.equals(c2)) {
-            return 0;
-        }
-        return c1 > c2 ? -1 : 1;
-    }
-}
-
 public class HeapBasics {
     /**
      * K Smallest In Unsorted Array
@@ -35,7 +25,7 @@ public class HeapBasics {
          *  - Case 1: New element >= Top, ignore
          *  - Case 2: New element < top, poll(), insert(new element)
          * All elements remaining in the maxHeap are the final solution */
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new ReverseComparator()); // Collections.reverseOrder()
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
 
         for (int i = 0; i < array.length; i++) {
             if (i < k) {
@@ -113,7 +103,7 @@ public class HeapBasics {
         int pivot = array[pivotIndex];
         int last = high;
         // move pivot to the last
-        SortingAlgorithms.swap(array, pivotIndex, high--);
+        swap(array, pivotIndex, high--);
         while (low <= high) {
             // find elements on left that should be on right
             if (array[low] < pivot) {
@@ -123,12 +113,18 @@ public class HeapBasics {
                 high--;
             } else {
                 // swap elements and move both indices
-                SortingAlgorithms.swap(array, low++, high--);
+                swap(array, low++, high--);
             }
         }
-        SortingAlgorithms.swap(array, low, last);
+        swap(array, low, last);
         // low is the in place pivot
         return low;
+    }
+
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 
     /**

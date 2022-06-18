@@ -20,14 +20,14 @@ public class SortingAlgorithms {
 
         // iterate除了最后一个元素外的所有元素, 所以要length - 1
         for (int i = 0; i < array.length - 1; i++) {
-            int min = i;
+            int minIndex = i;
             // find the min element in unsorted sub-array of (i, array.length - 1]
             for (int j = i + 1; j < array.length; j++) {
-                if (array[j] < array[min]) {
-                    min = j;
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
                 }
             }
-            swap(array, i, min);
+            swap(array, i, minIndex);
         }
     }
 
@@ -256,10 +256,32 @@ public class SortingAlgorithms {
     }
 
     /**
+     * Bubble Sort
+     * 比较相邻的元素, 把大的换到后面, 每轮都能把倒数第i个最大值放到倒数第i个位置上
+     * Time = O(n^2)
+     * Space = O(1)
+     */
+    public static void bubbleSort(int[] array) {
+        boolean swapped = true;
+
+        for (int i = 0; i < array.length - 1 && swapped; i++) {
+            // if no swapping happen in one iteration, means it's already sorted (ascending)
+            swapped = false;
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                // if current element is greater than the next element, it is swapped
+                if (array[j] > array[j + 1]) {
+                    swap(array, j, j + 1);
+                    swapped = true;
+                }
+            }
+        }
+    }
+
+    /**
      * Swap Two Elements
      * note that i and j are INDEX, not the element itself
      */
-    public static void swap(int[] array, int i, int j) {
+    private static void swap(int[] array, int i, int j) {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;

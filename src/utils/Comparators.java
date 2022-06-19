@@ -19,11 +19,11 @@ class CellComparator implements Comparator<Cell> {
 
     @Override
     public int compare(Cell c1, Cell c2) {
-        if (c1.value == c2.value) {
-            return 0;
-        }
-
-        return c1.value < c2.value ? -1 : 1;
+        // if (c1.value == c2.value) {
+        //     return 0;
+        // }
+        // return c1.value < c2.value ? -1 : 1;
+        return Integer.compare(c1.value, c2.value);
     }
 }
 
@@ -40,12 +40,12 @@ class ComparableCell implements Comparable<ComparableCell> {
     }
 
     @Override
-    public int compareTo(ComparableCell c2) {
-        if (this.value == c2.value) {
-            return 0;
-        }
-
-        return this.value > c2.value ? -1 : 1;
+    public int compareTo(ComparableCell cell) {
+        // if (this.value == c2.value) {
+        //     return 0;
+        // }
+        // return this.value > c2.value ? -1 : 1;
+        return Integer.compare(cell.value, value);
     }
 }
 
@@ -77,10 +77,7 @@ public class Comparators {
 
         @Override
         public int compare(Student s1, Student s2) {
-            if (s1.getAge() == s2.getAge()) {
-                return 0;
-            }
-            return s1.getAge() < s1.getAge() ? -1 : 1;
+            return Integer.compare(s1.getAge(), s2.getAge());
         }
     }
 
@@ -107,10 +104,11 @@ public class Comparators {
         PriorityQueue<Cell> maxHeap = new PriorityQueue<>(new Comparator<Cell>() {
             @Override
             public int compare(Cell c1, Cell c2) {
-                if (c1.value == c2.value) {
-                    return 0;
-                }
-                return c1.value > c2.value ? -1 : 1;
+                // if (c1.value == c2.value) {
+                //     return 0;
+                // }
+                // return c1.value > c2.value ? -1 : 1;
+                return Integer.compare(c2.value, c1.value);
             }
         });
         List<Student> students2 = new ArrayList<>();
@@ -198,14 +196,12 @@ public class Comparators {
             return dis1 < dis2 ? -1 : 1;
         });
         PriorityQueue<List<Integer>> pq3 = new PriorityQueue<>(
-                Comparator.comparing(
-                        (List<Integer> list) ->
-                                Math.sqrt(list.get(0)*list.get(0)
-                                        + list.get(0)*list.get(0)
-                                        + list.get(0)*list.get(0))));
+                Comparator.comparing(list -> Math.sqrt(list.get(0) * list.get(0)
+                                                        + list.get(0)*list.get(0)
+                                                        + list.get(0)*list.get(0))));
 
         int[][] intervals = new int[0][0];
-        Arrays.sort(intervals, Comparator.comparingInt((int[] a) -> a[0]));
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
         List<int[]> a = Arrays.asList(intervals);
 
         String[] strs = {"c", "bb", "aaa"};

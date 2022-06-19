@@ -1,5 +1,7 @@
 package crosstraining;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 class Point {
@@ -83,7 +85,7 @@ public class C3KWayMergeCommonElements {
      * Space = O(k) // heap大小, k个element(value, arrayIndex, indexInArray)
      */
     public int[] mergeKSortedArray(int[][] arrayOfArrays) {
-        PriorityQueue<Element> minHeap = new PriorityQueue<>(new KArrayComparator());
+        PriorityQueue<Element> minHeap = new PriorityQueue<>(Comparator.comparingInt((Element e) -> e.value));
         int resultLength = 0;
         /* stored the first element to be merged in each array */
         for (int i = 0; i < arrayOfArrays.length; i++) {
@@ -123,16 +125,6 @@ public class C3KWayMergeCommonElements {
         }
     }
 
-    public static class KArrayComparator implements Comparator<Element> {
-        @Override
-        public int compare(Element c1, Element c2) {
-            if (c1.value == c2.value) {
-                return 0;
-            }
-            return c1.value < c2.value ? -1 : 1;
-        }
-    }
-
     /**
      * Merge K Sorted Linked List
      * Merge K sorted lists into one big sorted list in ascending order.
@@ -142,7 +134,8 @@ public class C3KWayMergeCommonElements {
      */
     public ListNode mergeKSortedLinkedList(List<ListNode> listOfLists) {
         // assumption listOfLists is not null, and none of the lists is null
-        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(new KLinkedListComparator());
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(
+                Comparator.comparingInt((ListNode node) -> node.value));
         ListNode dummy = new ListNode(0);
         ListNode cur = dummy;
         for (ListNode n : listOfLists) {
@@ -158,16 +151,6 @@ public class C3KWayMergeCommonElements {
             cur = cur.next;
         }
         return dummy.next;
-    }
-
-    private static class KLinkedListComparator implements Comparator<ListNode> {
-        @Override
-        public int compare(ListNode n1, ListNode n2) {
-            if (n1.value == n2.value) {
-                return 0;
-            }
-            return n1.value < n2.value ? -1 : 1;
-        }
     }
 
     /**

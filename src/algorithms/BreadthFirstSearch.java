@@ -3,6 +3,7 @@ package algorithms;
 import java.util.*;
 
 class GraphNode {
+
     public int key;
     public List<GraphNode> neighbors;
 
@@ -13,6 +14,7 @@ class GraphNode {
 }
 
 class KthSmallestCell {
+
     int row;
     int column;
     int value;
@@ -25,6 +27,7 @@ class KthSmallestCell {
 }
 
 class ProductStringPair implements Comparable<ProductStringPair> {
+
     final String s1;
     final String s2;
     final int product;
@@ -464,11 +467,9 @@ public class BreadthFirstSearch {
      */
     public List<Integer> kthClosestPointToOrigin(int[] a, int[] b, int[] c, int k) {
         PriorityQueue<List<Integer>> closestPoint = new PriorityQueue<>(
-                Comparator.comparing(
-                        (List<Integer> list) ->
-                                Math.sqrt(a[list.get(0)]*a[list.get(0)]
-                                        + b[list.get(1)]*b[list.get(1)]
-                                        + c[list.get(2)]*c[list.get(2)])));
+                Comparator.comparing(list -> Math.sqrt(a[list.get(0)] * a[list.get(0)]
+                                                        + b[list.get(1)] * b[list.get(1)]
+                                                        + c[list.get(2)] * c[list.get(2)])));
         // use index not actual element to dedup, since {1,2} and {2,1} are same list but different point
         Set<List<Integer>> visited = new HashSet<>();
         List<Integer> cur = Arrays.asList(0, 0, 0);

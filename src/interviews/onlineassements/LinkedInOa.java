@@ -58,7 +58,6 @@ public class LinkedInOa {
     /**
      * 求所有由按顺序元素组成的subarray sum
      */
-
     public int getSubarraySum(int[] arr) {
         int[] sum = new int[1];
         List<Integer> prefix = new ArrayList<>();
@@ -104,20 +103,20 @@ public class LinkedInOa {
             arr[i] = arr2[i];
         }
 
-
         Arrays.sort(arr2, new IntComparator(map));
     }
 
-    class IntComparator implements Comparator<Integer> {
+    static class IntComparator implements Comparator<Integer> {
 
         Map<Integer, Integer> map;
 
         public IntComparator(Map<Integer, Integer> map) {
             this.map = map;
         }
+
         @Override
         public int compare(Integer e1, Integer e2) {
-            if (e1 != e2) {
+            if (!e1.equals(e2)) {
                 return e1 - e2;
             } else {
                 Integer v1 = map.get(e1);

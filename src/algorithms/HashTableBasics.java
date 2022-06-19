@@ -2,16 +2,6 @@ package algorithms;
 
 import java.util.*;
 
-class TopKComparator implements Comparator<Map.Entry<String, Integer>> {
-    @Override
-    public int compare(Map.Entry<String, Integer> s1, Map.Entry<String, Integer> s2) {
-        if (s1.getValue() == s2.getValue()) {
-            return 0;
-        }
-        return s1.getValue() < s2.getValue()? -1 : 1;
-    }
-}
-
 public class HashTableBasics {
     /**
      * Top K Frequent Words
@@ -21,7 +11,7 @@ public class HashTableBasics {
      * Time = O(nlogk) if we don't use heapify
      * Space = O(n)
      */
-    public String[] topKFrequent(String[] combo, int k) {
+    public String[] topKFrequentWords(String[] combo, int k) {
         if (combo == null || combo.length == 0) {
             return new String[0];
         }
@@ -31,7 +21,8 @@ public class HashTableBasics {
             lookup.put(s, lookup.getOrDefault(s, 0) + 1);
         }
         // elements in the minHeap is the answer
-        PriorityQueue<Map.Entry<String, Integer>> minHeap = new PriorityQueue<>(k, new TopKComparator());
+        PriorityQueue<Map.Entry<String, Integer>> minHeap = new PriorityQueue<>(k,
+                Comparator.comparingInt(Map.Entry::getValue));
         for (Map.Entry<String, Integer> e : lookup.entrySet()) {
             if (minHeap.size() < k) {
                 minHeap.offer(e);
@@ -261,7 +252,7 @@ public class HashTableBasics {
     public static void main(String[] args) {
         HashTableBasics solution = new HashTableBasics();
         String[] s = new String[]{"d","a","c","b","d","a","b","b","a","d","d","a","d"};
-        solution.topKFrequent(s,3);
+        String[] topK = solution.topKFrequentWords(s,3);
         int[] array = {1, 2, 3, 4, 6};
         System.out.println(solution.findMissingNumber(array));
         System.out.println(solution.findMissingNumber2(array));

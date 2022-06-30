@@ -352,6 +352,37 @@ public class LeetCode {
     }
 
     /**
+     * 560. Subarray Sum Equals K
+     * https://leetcode.com/problems/subarray-sum-equals-k/
+     * Given an array of integers nums and an integer k, return the total number of subarrays whose
+     * sum equals to k. A subarray is a contiguous non-empty sequence of elements within an array.
+     *
+     * Time = O(n)
+     * Space = O(n)
+     */
+    public int subarraySumToK(int[] nums, int k) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int count = 0;
+        int sum = 0;
+        HashMap<Integer, Integer> lookup = new HashMap<>(); // <sum, corresponding frequency>
+        lookup.put(0, 1); // zero-sum of 1 frequency
+
+        for (int num : nums) {
+            sum += num;
+            // increment count by the number of times the sum(sum − k) has occurred already
+            // since it will determine the number of times a subarray with sum (k) has occurred
+            // up to the current index
+            count += lookup.getOrDefault(sum - k, 0);
+            lookup.put(sum, lookup.getOrDefault(sum, 0) + 1);
+        }
+
+        return count;
+    }
+
+    /**
      * 581. Shortest Unsorted Continuous Subarray
      * https://leetcode.com/problems/shortest-unsorted-continuous-subarray/
      * Given an integer array nums, you need to find one continuous subarray that if you
@@ -391,6 +422,39 @@ public class LeetCode {
         }
 
         return Math.max(0, right - left + 1);
+    }
+
+    /**
+     * 605. Can Place Flowers
+     * 种花问题
+     * You have a long flowerbed in which some plots are planted, and some are not.
+     * However, flowers cannot be planted in adjacent plots.
+     *
+     * Given an integer array flowerbed containing 0's and 1's, where 0 means empty
+     * and 1 means not empty, and an integer n, return if n new flowers can be planted
+     * in the flowerbed without violating the no-adjacent-flowers rule.
+     *
+     * Time = O(n)
+     */
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int count = 0;
+        for (int i = 0; i < flowerbed.length; i++) {
+            if (isValid(i, flowerbed)) {
+                flowerbed[i] = 1; // place the flower
+                count++;
+            }
+            if (count >= n) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isValid(int i, int[] flowerbed) {
+        boolean isLeftValid = i == 0 || flowerbed[i - 1] == 0;
+        boolean isRightValid = i == flowerbed.length - 1 || flowerbed[i + 1] == 0;
+        return isLeftValid && isRightValid && flowerbed[i] == 0;
     }
 
     /**
@@ -482,6 +546,47 @@ public class LeetCode {
         }
 
         return root;
+    }
+
+    /**
+     * 695. Max Area of Island
+     * https://leetcode.com/problems/max-area-of-island/
+     * 给定一个二维数组, 0表示海, 1表示岛屿, 岛屿的上下左右任意一个方向有1就表示岛屿连接, 否则不连接, 求最大岛屿面积
+     * Time = O(row * col)
+     * Space = O(row * col)
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+        int max = 0;
+        int numOfRow = grid.length;
+        int numOfCol = grid[0].length;
+
+        boolean[][] visited = new boolean[numOfRow][numOfCol]; // mark grid[i][j] to 0 could save this
+
+        for (int i = 0; i < numOfRow; i++) {
+            for (int j = 0; j < numOfCol; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    int cur = getArea(i, j, grid, visited);
+                    max = Math.max(cur, max);
+                }
+            }
+        }
+        return max;
+    }
+
+    private int getArea(int row, int col, int[][] grid, boolean[][] visited) {
+        if (row < 0 || row >= grid.length
+                || col < 0 || col >= grid[0].length
+                || grid[row][col] != 1 || visited[row][col]) {
+            return 0;
+        }
+
+        visited[row][col] = true;
+        int up = getArea(row - 1, col, grid, visited);
+        int down = getArea(row + 1, col, grid, visited);
+        int left = getArea(row, col - 1, grid, visited);
+        int right = getArea(row, col + 1, grid, visited);
+
+        return 1 + up + down + left + right;
     }
 
     /**

@@ -62,7 +62,7 @@ class MyHashMap<K, V> {
         this.loadFactor = loadFactor;
     }
 
-    public synchronized boolean containsKey(final K key) {
+    public boolean containsKey(final K key) {
         // get the index of the key
         int index = getIndex(key);
         MyEntry<K, V> entry = array[index];
@@ -77,7 +77,7 @@ class MyHashMap<K, V> {
         return false;
     }
 
-    public synchronized boolean containsValue(final V value) {
+    public boolean containsValue(final V value) {
         if (isEmpty()) { // special case
             return false;
         }
@@ -121,7 +121,7 @@ class MyHashMap<K, V> {
      * if the key already exists in the HashMap, return the old corresponding value
      * if key does not exist in the HashMap, return null
      */
-    public synchronized V put(final K key, final V value) {
+    public V put(final K key, final V value) {
         int index = getIndex(key);
         MyEntry<K, V> head = array[index];
         MyEntry<K, V> cur = head;
@@ -147,15 +147,15 @@ class MyHashMap<K, V> {
         return null;
     }
 
-    public synchronized int size() {
+    public int size() {
         return size;
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return size == 0;
     }
 
-    public synchronized void clear() {
+    public void clear() {
         Arrays.fill(array, null);
         size = 0;
     }
@@ -226,7 +226,7 @@ class MyHashMap<K, V> {
      * if the key exists, remove the <key, value> from the HashMap and return the value
      * if key does not exist in the HashMap, return null
      */
-    private synchronized V remove(final K key) {
+    private V remove(final K key) {
         // 1. get index
         // 2. delete operation on the linked list
         // 3. size--

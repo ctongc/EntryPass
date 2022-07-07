@@ -2,6 +2,7 @@ package ood.designpatterns;
 
 import ood.designpatterns.singleton.EagerSingleton;
 import ood.designpatterns.singleton.LazySingleton;
+import ood.designpatterns.singleton.LazySingletonStaticInnerClass;
 
 /**
  * Singleton Pattern
@@ -15,8 +16,10 @@ public class SingletonPatternDemo {
     public static void main(String[] args) {
         EagerSingleton eagerIns = EagerSingleton.getInstance();
         LazySingleton lazyIns = LazySingleton.getInstance();
+        LazySingletonStaticInnerClass lazyIns2 = LazySingletonStaticInnerClass.getInstance();
 
         eagerIns.print();
         lazyIns.print();
+        lazyIns2.print();
     }
 }

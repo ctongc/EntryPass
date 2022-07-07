@@ -1,6 +1,7 @@
 package practice;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 class TreeNode {
     int val;
@@ -217,12 +218,12 @@ public class LeetCode {
             return Collections.emptyList();
         }
         List<List<Integer>> result = new ArrayList<>();
-        List<Integer> numsList = new ArrayList<>();
+        List<Integer> numList = new ArrayList<>();
         Arrays.sort(nums);
         for (int n : nums) {
-            numsList.add(n);
+            numList.add(n);
         }
-        permutation(numsList, 0, result);
+        permutation(numList, 0, result);
         return result;
     }
 
@@ -246,6 +247,48 @@ public class LeetCode {
         int temp = nums.get(i);
         nums.set(i, nums.get(j));
         nums.set(j, temp);
+    }
+
+    /**
+     * 128. Longest Consecutive Sequence
+     * https://leetcode.com/problems/longest-consecutive-sequence/
+     * Given an unsorted array of integers nums, return the length of the
+     * longest consecutive elements sequence.
+     *
+     * You must write an algorithm that runs in O(n) time.
+     *
+     * e.g. Input: nums = [100,4,200,1,3,2]
+     * Output: 4, The longest consecutive elements sequence is [1, 2, 3, 4].
+     */
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int max = 0;
+        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
+
+        for (int num : nums) {
+            int count = 1;
+
+            // check how many consecutive smaller
+            int candidate = num;
+            while (set.contains(--candidate)) {
+                count++;
+                set.remove(candidate);
+            }
+
+            // check how many consecutive smaller
+            candidate = num; // reset candidate
+            while (set.contains(++candidate)) {
+                count++;
+                set.remove(candidate);
+            }
+
+            max = Math.max(max, count);
+        }
+
+        return max;
     }
 
     /**

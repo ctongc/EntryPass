@@ -1,6 +1,7 @@
 package com.ctong.entrypass.ood.designpatterns;
 
 import com.ctong.entrypass.ood.designpatterns.builder.User;
+import com.ctong.entrypass.ood.designpatterns.builder.UserLombok;
 
 /**
  * Builder Pattern
@@ -16,7 +17,19 @@ public class BuilderPatternDemo {
                             .address("some where cali")
                             .build();
 
-        System.out.println(user.getFirstName() + " " + user.getLastName()
-                            + ", live in " + user.getAddress());
+        System.out.println(user.getFirstName() + " " + user.getLastName() + ", live in " + user.getAddress());
+
+
+        UserLombok userLombok = UserLombok.builder()
+                .firstName("Miranda")
+                .lastName("Kerr")
+                .age(35)
+                .phone("1234567890")
+                .address("some where cali")
+                .child("Hart")
+                .child("Myles")
+                .build();
+
+        System.out.println(userLombok);
     }
 }

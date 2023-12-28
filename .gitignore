@@ -1,6 +1,9 @@
-build
-out
+target/
+bin/
+build/
+out/
 *.iml
 .idea/
 .DS_Store
 *.class
+.classpath
